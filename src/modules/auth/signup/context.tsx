@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { ISignUp } from "./model";
 
 interface ISignUpState {
+  loading: boolean;
   handleSignUp: (user: any) => Promise<void>;
 }
 
 const SignUpContext = React.createContext<ISignUpState>({
+  loading: false,
   handleSignUp(user) {
     return null as any;
   },
@@ -24,7 +26,10 @@ interface IProps {
   children: React.ReactNode;
 }
 export const SignUpContextProvider: React.FC<IProps> = ({ children }) => {
+  const [loading, setLoading] = useState<boolean>(false);
+
   const handleSignUp = async (user: ISignUp) => {
+    setLoading(true);
     console.log(JSON.stringify(user));
     try {
       const res = await fetch("http://localhost:2000/auth/signup", {
@@ -32,6 +37,7 @@ export const SignUpContextProvider: React.FC<IProps> = ({ children }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(user),
       });
+      setLoading(false);
       const data = await res.json();
       console.log(data);
     } catch (error) {
@@ -39,7 +45,7 @@ export const SignUpContextProvider: React.FC<IProps> = ({ children }) => {
     }
   };
   return (
-    <SignUpContext.Provider value={{ handleSignUp }}>
+    <SignUpContext.Provider value={{ handleSignUp, loading }}>
       {children}
     </SignUpContext.Provider>
   );

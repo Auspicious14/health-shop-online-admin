@@ -1,4 +1,5 @@
 import { Form, Formik, FormikProps } from "formik";
+import { useRouter } from "next/router";
 import React from "react";
 import * as Yup from "yup";
 import { ApTextInput } from "../../../components";
@@ -13,9 +14,14 @@ const FormSchema = Yup.object().shape({
 });
 
 export const SignUpPage = () => {
-  const { handleSignUp } = useSignUpState();
-  const handleSubmit = async (values: ISignUp) => {
-    await handleSignUp(values);
+  const { handleSignUp, loading } = useSignUpState();
+  const router = useRouter();
+  const handleSubmit = async (values: any) => {
+    const res = handleSignUp(values);
+    res.then((res) => {
+      console.log(res);
+      router.push("/auth/login");
+    });
   };
   return (
     <div>
