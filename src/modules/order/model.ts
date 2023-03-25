@@ -1,6 +1,7 @@
 import { IProduct } from "../product/model";
 
 export interface IOrder {
+  id: string;
   userId: string;
   products: IProduct[];
   amount: string;

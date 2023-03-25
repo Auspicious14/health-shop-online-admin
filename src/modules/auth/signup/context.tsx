@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
-import { json } from "stream/consumers";
+import React from "react";
 import { ISignUp } from "./model";
 
 interface ISignUpState {
@@ -30,7 +29,6 @@ export const SignUpContextProvider: React.FC<IProps> = ({ children }) => {
     try {
       const res = await fetch("http://localhost:2000/auth/signup", {
         method: "POST",
-        // mode: "no-cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(user),
       });

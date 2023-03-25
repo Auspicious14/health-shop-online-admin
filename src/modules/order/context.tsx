@@ -4,21 +4,27 @@ import { IOrder } from "./model";
 interface IOrderState {
   loading: boolean;
   order: IOrder;
-  placeOrder: (payload: IOrder) => Promise<void>;
-  updateOrderItem: (payload: IOrder, cartId: string) => Promise<void>;
-  getOrder: (userId: string) => Promise<void>;
+  orders: IOrder[];
+  createOrder: (payload: IOrder) => Promise<void>;
+  updateOrderItem: (payload: IOrder, orderId: string) => Promise<void>;
+  deleteOrderItem: (orderId: string) => Promise<void>;
+  getAllOrders: (userId: string) => Promise<void>;
 }
 
 const OrderContext = React.createContext<IOrderState>({
   loading: false,
   order: {} as any,
-  getOrder(payload) {
+  orders: [],
+  getAllOrders(payload) {
     return null as any;
   },
-  placeOrder(cartId) {
+  createOrder(payload) {
     return null as any;
   },
   updateOrderItem(payload, cartId) {
+    return null as any;
+  },
+  deleteOrderItem(orderId) {
     return null as any;
   },
 });
@@ -37,13 +43,13 @@ interface IProps {
 }
 export const OrderContextProvider: React.FC<IProps> = ({ children }) => {
   const [order, setOrder] = useState<IOrder>() as any;
+  const [orders, setOrders] = useState<IOrder[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const getOrder = async (userId: string) => {
+  const getAllOrders = async () => {
     setLoading(true);
-    console.log(JSON.stringify(userId));
     try {
-      const res = await fetch(`http://localhost:2000/order/:${userId}`, {
+      const res = await fetch(`http://localhost:2000/orders`, {
         method: "GET",
       });
       setLoading(false);
@@ -55,19 +61,33 @@ export const OrderContextProvider: React.FC<IProps> = ({ children }) => {
     }
   };
 
-  const placeOrder = async (payload: IOrder) => {
+  const createOrder = async (payload: IOrder) => {
     setLoading(true);
     console.log(JSON.stringify(payload));
     try {
-      const res = await fetch(`http://localhost:2000/order`, {
+      const res = await fetch(`http://localhost:2000/order}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-
       setLoading(false);
       const data = await res.json();
-      setOrder(data);
+      setOrders([...data, orders]);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteOrderItem = async (orderId: string) => {
+    setLoading(true);
+    try {
+      const res = await fetch(`http://localhost:2000/product/:${orderId}}`, {
+        method: "DELETE",
+      });
+      setLoading(false);
+      const data = await res.json();
+      setOrders(data.filter((del: IOrder, i: number) => del.id !== orderId));
       console.log(data);
     } catch (error) {
       console.log(error);
@@ -85,7 +105,7 @@ export const OrderContextProvider: React.FC<IProps> = ({ children }) => {
 
       setLoading(false);
       const data = await res.json();
-      setOrder(data);
+      setOrders(data);
       console.log(data);
     } catch (error) {
       console.log(error);
@@ -97,9 +117,11 @@ export const OrderContextProvider: React.FC<IProps> = ({ children }) => {
       value={{
         loading,
         order,
-        getOrder,
-        placeOrder,
+        orders,
+        getAllOrders,
+        createOrder,
         updateOrderItem,
+        deleteOrderItem,
       }}
     >
       {children}
