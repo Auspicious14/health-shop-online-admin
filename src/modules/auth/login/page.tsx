@@ -1,5 +1,6 @@
 import { Form, Formik, FormikProps } from "formik";
 import { useRouter } from "next/router";
+import { signIn } from "next-auth/react";
 import React from "react";
 import * as Yup from "yup";
 import { ApTextInput } from "../../../components";
@@ -15,8 +16,12 @@ export const SignInPage = () => {
   const router = useRouter();
   const { handleSignUp, loading } = useSignInState();
   const handleSubmit = async (values: ISignIn) => {
-    const res = handleSignUp(values);
-    res.then((res) => {
+    await signIn("credentials", {
+      redirect: false,
+      email: values.email,
+      password: values.password,
+    }).then((res) => {
+      console.log(res);
       router.push("/");
     });
   };
