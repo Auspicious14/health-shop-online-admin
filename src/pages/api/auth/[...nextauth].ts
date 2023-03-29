@@ -2,64 +2,62 @@ import jwt from "jsonwebtoken";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
-const authOptions: NextAuthOptions = {
+import { apiReqHandler } from "../../../components";
+// const authOptions: NextAuthOptions =
+export default NextAuth({
   session: {
     strategy: "jwt",
   },
   secret: process.env.TOKEN_SECRET,
-  jwt: {
-    secret: process.env.TOKEN_SECRET,
-    async encode(data: any) {
-      const { secret, token, user } = data;
-      const jwtClaims = {
-        sub: token.sub,
-        name: token.name,
-      };
+  // jwt: {
+  //   secret: process.env.TOKEN_SECRET,
+  //   async encode(data: any) {
+  //     const { secret, token, user } = data;
+  //     const jwtClaims = {
+  //       sub: token.sub,
+  //       name: token.name,
+  //     };
 
-      const encodedToken = jwt.sign(jwtClaims, secret, {
-        expiresIn: "60 days",
-        algorithm: "HS512",
-      });
-      return encodedToken;
-    },
-    async decode(data: any) {
-      const { secret, token, maxAge } = data;
-      const verify = jwt.verify(token, secret) as JWT;
+  //     const encodedToken = jwt.sign(jwtClaims, secret, {
+  //       expiresIn: "60 days",
+  //       algorithm: "HS512",
+  //     });
+  //     return encodedToken;
+  //   },
+  //   async decode(data: any) {
+  //     const { secret, token, maxAge } = data;
+  //     const verify = jwt.verify(token, secret) as JWT;
 
-      return verify;
-    },
-  },
+  //     return verify;
+  //   },
+  // },
   providers: [
     CredentialsProvider({
       type: "credentials",
-      name: "credentials",
       credentials: {
         email: { label: "Email", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials: any, req: any) {
-        const { email, password } = credentials;
-        return await fetch("localhost:2000/auth/login", {
+        const payload = {
+          email: credentials.email,
+          password: credentials.password,
+        };
+
+        const { res } = await apiReqHandler({
+          endPoint: `${process.env.API_ROUTE}/auth/login`,
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        })
-          .then((res: any) => {
-            const { _id, email, firstName, lastName, isAdmin } = res.data;
-            return {
-              _id,
-              email,
-              firstName,
-              lastName,
-              isAdmin,
-            } as any;
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+          payload,
+        });
+        const data = await res?.data;
+        if (res?.status !== 200) {
+          throw new Error(data.message);
+        }
+        if (res.status === 200 && data.user) {
+          console.log(data);
+          return data.user;
+        }
+        return null;
       },
     }),
   ],
@@ -67,5 +65,33 @@ const authOptions: NextAuthOptions = {
     signIn: "/auth/login",
     signOut: "/",
   },
-};
-export default NextAuth(authOptions);
+  // callbacks: {
+  //   async jwt(params: any) {
+  //     const { token, user, account, profile, isNewUser } = params;
+  //     if (account?.accessToken) {
+  //       token.accessToken = account.accessToken;
+  //     }
+  //     return token;
+  //   },
+  //   async session(params: any) {
+  //     const { session, token } = params;
+
+  //     const user = session.user._id && { account: session.user };
+
+  //     const encodedToken = jwt.sign(token, process.env.TOKEN_SECRET as any, {
+  //       algorithm: "HS256",
+  //     });
+
+  //     session.id = token.sub;
+  //     session.token = encodedToken;
+  //     session.user = {
+  //       // ...user.account,
+  //       firstName: user.firstName,
+  //       email: user.email,
+  //       lastName: user.lastName,
+  //       isAdmin: user.isAdmin,
+  //     };
+  //     return Promise.resolve(session);
+  //   },
+  // },
+});

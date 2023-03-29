@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { useSession, signOut } from "next-auth/react";
+import { HomePage } from "../modules/home/page";
 export default function Home() {
   const session: any = useSession();
   console.log(session);
@@ -10,6 +11,7 @@ export default function Home() {
       </h1>
       {session && <div>{session.name}</div>}
       <button onClick={() => signOut()}>Sign Out</button>
+      {/* <HomePage /> */}
     </>
   );
 }

@@ -1,11 +1,13 @@
 import { Form, Formik, FormikProps } from "formik";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
-import React from "react";
+import React, { useEffect } from "react";
 import * as Yup from "yup";
 import { ApTextInput } from "../../../components";
 import { useSignInState } from "./context";
 import { ISignIn } from "./model";
+import axios from "axios";
+import { getCookie, setCookie } from "../../../helper";
 
 const FormSchema = Yup.object().shape({
   email: Yup.string().required("email is required").email(),
@@ -16,15 +18,32 @@ export const SignInPage = () => {
   const router = useRouter();
   const { handleSignUp, loading } = useSignInState();
   const handleSubmit = async (values: ISignIn) => {
-    await signIn("credentials", {
-      redirect: false,
-      email: values.email,
-      password: values.password,
-    }).then((res) => {
-      console.log(res);
-      router.push("/");
-    });
+    console.log(values);
+    try {
+      const { data } = await axios({
+        method: "POST",
+        url: `http://localhost:2000/auth/login`,
+        data: values,
+      });
+      setCookie("user_id", data?.user?._id, 3);
+    } catch (error: any) {
+      // const { data } = error?.response;
+      console.log(error);
+    }
+    // handleSignUp(values)
+    // await signIn("credentials", {
+    //   redirect: false,
+    //   email: values.email,
+    //   password: values.password,
+    // }).then((res) => {
+    //   console.log(res);
+    //   router.push("/");
+    // });
   };
+  useEffect(() => {
+    if (!getCookie("user_id")) return;
+    router.push("/");
+  }, []);
   return (
     <div>
       <Formik
