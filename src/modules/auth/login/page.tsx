@@ -23,10 +23,7 @@ export const SignInPage = () => {
       router.push("/");
     });
   };
-  useEffect(() => {
-    if (!getCookie("user_id")) return;
-    router.push("/");
-  }, []);
+
   return (
     <div>
       <Formik

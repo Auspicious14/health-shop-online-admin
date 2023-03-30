@@ -11,19 +11,19 @@ const Login = () => {
   );
 };
 
-export async function getServerSideProps() {
-  const userId = getCookie("user_id");
-  if (!userId) {
-    return {
-      redirect: {
-        destination: "/auth/login",
-        permanent: false,
-      },
-    };
-  }
+// export async function getServerSideProps() {
+//   const userId = getCookie("user_id");
+//   if (!userId) {
+//     return {
+//       redirect: {
+//         destination: "/auth/login",
+//         permanent: false,
+//       },
+//     };
+//   }
 
-  return {
-    props: {},
-  };
-}
+//   return {
+//     props: {},
+//   };
+// }
 export default Login;

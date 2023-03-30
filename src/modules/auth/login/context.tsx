@@ -40,7 +40,8 @@ export const SignInContextProvider: React.FC<IProps> = ({ children }) => {
         payload: JSON.stringify(user),
       });
       setLoading(false);
-      const { data } = await response.res?.data;
+      const data = await response.res?.data;
+      console.log(data);
       setCookie("user_id", data?.user?._id, 3);
       console.log(data);
     } catch (error) {

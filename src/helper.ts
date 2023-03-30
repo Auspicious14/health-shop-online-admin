@@ -1,14 +1,27 @@
-export function setCookie(name: any, value: any, days: any) {
+export function setCookie(name: string, value: any, days: number) {
   var expires = "";
   if (days) {
     var date = new Date();
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
     expires = "; expires=" + date.toUTCString();
   }
-  document.cookie = name + "=" + (value || "") + expires + "; path=/";
+  if (typeof document !== "undefined") {
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+  }
+}
+export function deleteCookie(name: string, days: number) {
+  var expires = "";
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    expires = "; expires=" + date.toUTCString();
+  }
+  if (typeof document !== "undefined") {
+    document.cookie = name + "=" + expires + "; path=/";
+  }
 }
 
-export function getCookie(name: any) {
+export function getCookie(name: string) {
   var nameEQ = name + "=";
   if (typeof document !== "undefined") {
     var ca: any = document.cookie.split(";");
