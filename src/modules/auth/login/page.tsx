@@ -18,27 +18,10 @@ export const SignInPage = () => {
   const router = useRouter();
   const { handleSignUp, loading } = useSignInState();
   const handleSubmit = async (values: ISignIn) => {
-    console.log(values);
-    try {
-      const { data } = await axios({
-        method: "POST",
-        url: `http://localhost:2000/auth/login`,
-        data: values,
-      });
-      setCookie("user_id", data?.user?._id, 3);
-    } catch (error: any) {
-      // const { data } = error?.response;
-      console.log(error);
-    }
-    // handleSignUp(values)
-    // await signIn("credentials", {
-    //   redirect: false,
-    //   email: values.email,
-    //   password: values.password,
-    // }).then((res) => {
-    //   console.log(res);
-    //   router.push("/");
-    // });
+    const res = handleSignUp(values);
+    res.then(() => {
+      router.push("/");
+    });
   };
   useEffect(() => {
     if (!getCookie("user_id")) return;

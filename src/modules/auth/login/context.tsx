@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { apiReqHandler } from "../../../components";
+import { setCookie } from "../../../helper";
 import { ISignIn } from "./model";
 
 interface ISignInState {
@@ -32,13 +34,14 @@ export const SignInContextProvider: React.FC<IProps> = ({ children }) => {
     setLoading(true);
     console.log(JSON.stringify(user));
     try {
-      const res = await fetch("http://localhost:2000/auth/login", {
+      const response = await apiReqHandler({
+        endPoint: `http://${process.env.NEXT_PUBLIC_API_ROUTE}/auth/login`,
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(user),
+        payload: JSON.stringify(user),
       });
       setLoading(false);
-      const data = await res.json();
+      const { data } = await response.res?.data;
+      setCookie("user_id", data?.user?._id, 3);
       console.log(data);
     } catch (error) {
       console.log(error);
