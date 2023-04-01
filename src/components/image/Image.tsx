@@ -1,6 +1,6 @@
-import Image, { ImageProps } from "next/image";
+import Image, { ImageProps, StaticImageData } from "next/image";
 import React from "react";
-import Section from "../../../public/images/unsplash_MU70DTGr7d0.png";
+
 interface IProps extends ImageProps {}
 
 export const ApImage: React.FC<IProps> = (props: IProps) => {
@@ -20,16 +20,18 @@ export const ApImage: React.FC<IProps> = (props: IProps) => {
 interface IImageProps {
   children?: React.ReactNode;
   className?: string;
+  src: string | StaticImageData;
 }
 export const ApBackgroundImage: React.FC<IImageProps> = ({
   children,
   className,
+  src,
 }) => {
   return (
     <>
       <div
         style={{
-          backgroundImage: `url(${Section.src})`,
+          backgroundImage: `url(${src})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           width: "50%",

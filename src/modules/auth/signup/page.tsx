@@ -2,12 +2,9 @@ import { Form, Formik, FormikProps } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
 import * as Yup from "yup";
-import { ApBackgroundImage, ApImage, ApTextInput } from "../../../components";
+import { ApBackgroundImage, ApTextInput } from "../../../components";
 import { useSignUpState } from "./context";
-import { ISignUp } from "./model";
-import Star from "../../../../public/images/Stars.png";
-import Vector from "../../../../public/images/Vector.png";
-import Link from "next/link";
+import Section from "../../../../public/images/Section.png";
 import { Button } from "antd";
 
 const FormSchema = Yup.object().shape({
@@ -103,6 +100,8 @@ export const SignUpPage = () => {
               <Button
                 type="primary"
                 size="large"
+                htmlType="submit"
+                loading={loading}
                 className="group relative flex w-full justify-center rounded-md bg-[#2158E8] px-3 py-2 my-4 text-sm font-semibold text-white hover:bg-blue-500"
               >
                 Sign up
@@ -118,8 +117,8 @@ export const SignUpPage = () => {
           )}
         </Formik>
       </div>
-      {/* <ApBackgroundImage /> */}
-      <div className="bg-gray-700  text-left text-gray-100 w-1/2 h-screen">
+      <ApBackgroundImage src={Section.src} />
+      {/* <div className="bg-gray-700  text-left text-gray-100 w-1/2 h-screen">
         <ApImage
           src={Star}
           width={100}
@@ -143,7 +142,7 @@ export const SignUpPage = () => {
           alt={"star"}
           className="relative right-48"
         />
-      </div>
+      </div> */}
     </div>
   );
 };

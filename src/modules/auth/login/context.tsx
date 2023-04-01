@@ -5,12 +5,12 @@ import { ISignIn } from "./model";
 
 interface ISignInState {
   loading: boolean;
-  handleSignUp: (user: any) => Promise<void>;
+  handleSignIn: (user: any) => Promise<void>;
 }
 
 const SignInContext = React.createContext<ISignInState>({
   loading: false,
-  handleSignUp(user) {
+  handleSignIn(user) {
     return null as any;
   },
 });
@@ -30,7 +30,7 @@ interface IProps {
 export const SignInContextProvider: React.FC<IProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleSignUp = async (user: ISignIn) => {
+  const handleSignIn = async (user: ISignIn) => {
     setLoading(true);
     console.log(JSON.stringify(user));
     try {
@@ -49,7 +49,7 @@ export const SignInContextProvider: React.FC<IProps> = ({ children }) => {
     }
   };
   return (
-    <SignInContext.Provider value={{ handleSignUp, loading }}>
+    <SignInContext.Provider value={{ handleSignIn, loading }}>
       {children}
     </SignInContext.Provider>
   );
