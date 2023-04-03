@@ -29,14 +29,14 @@ interface IProps {
 export const VerifyOTPContextProvider: React.FC<IProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleVerifyOTP = async (otp: number) => {
+  const handleVerifyOTP = async (params: any) => {
     setLoading(true);
-    console.log(JSON.stringify(otp));
+    console.log(JSON.stringify(params));
     try {
       const response = await apiReqHandler({
         endPoint: `http://${process.env.NEXT_PUBLIC_API_ROUTE}/auth/verify`,
         method: "POST",
-        payload: JSON.stringify(otp),
+        payload: JSON.stringify(params),
       });
       setLoading(false);
       const data = await response.res?.data;
