@@ -2,20 +2,20 @@ import React, { useState } from "react";
 import { apiReqHandler } from "../../../components";
 import { setCookie } from "../../../helper";
 
-interface IForgetPasswordState {
+interface IVerifyState {
   loading: boolean;
-  handleForgetPassword: (user: any) => Promise<void>;
+  handleVerifyOTP: (user: any) => Promise<void>;
 }
 
-const ForgetPasswordContext = React.createContext<IForgetPasswordState>({
+const VerifyOTPContext = React.createContext<IVerifyState>({
   loading: false,
-  handleForgetPassword(user) {
+  handleVerifyOTP(user) {
     return null as any;
   },
 });
 
-export const useForgetPasswordState = () => {
-  const context = React.useContext(ForgetPasswordContext);
+export const useVerifyOTPState = () => {
+  const context = React.useContext(VerifyOTPContext);
   if (context === undefined) {
     throw new Error("app dispatch must be used within app global provider");
   }
@@ -26,19 +26,17 @@ export const useForgetPasswordState = () => {
 interface IProps {
   children: React.ReactNode;
 }
-export const ForgetPasswordContextProvider: React.FC<IProps> = ({
-  children,
-}) => {
+export const VerifyOTPContextProvider: React.FC<IProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleForgetPassword = async (email: string) => {
+  const handleVerifyOTP = async (otp: number) => {
     setLoading(true);
-    console.log(JSON.stringify(email));
+    console.log(JSON.stringify(otp));
     try {
       const response = await apiReqHandler({
-        endPoint: `http://${process.env.NEXT_PUBLIC_API_ROUTE}/auth/forget`,
+        endPoint: `http://${process.env.NEXT_PUBLIC_API_ROUTE}/auth/verify`,
         method: "POST",
-        payload: JSON.stringify(email),
+        payload: JSON.stringify(otp),
       });
       setLoading(false);
       const data = await response.res?.data;
@@ -49,8 +47,8 @@ export const ForgetPasswordContextProvider: React.FC<IProps> = ({
     }
   };
   return (
-    <ForgetPasswordContext.Provider value={{ handleForgetPassword, loading }}>
+    <VerifyOTPContext.Provider value={{ handleVerifyOTP, loading }}>
       {children}
-    </ForgetPasswordContext.Provider>
+    </VerifyOTPContext.Provider>
   );
 };

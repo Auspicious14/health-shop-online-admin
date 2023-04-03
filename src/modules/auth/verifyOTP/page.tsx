@@ -1,24 +1,22 @@
 import { Form, Formik, FormikProps } from "formik";
 import { useRouter } from "next/router";
-import { signIn } from "next-auth/react";
 import React, { useEffect } from "react";
 import * as Yup from "yup";
-import { ApBackgroundImage, ApTextInput } from "../../../components";
-import { useForgetPasswordState } from "./context";
+import { useVerifyOTPState } from "./context";
 import { Button } from "antd";
-import Vector from "../../../../public/images/unsplash_MU70DTGr7d0.png";
+import { ApTextInput } from "../../../components";
 
 const FormSchema = Yup.object().shape({
-  email: Yup.string().required("email is required").email(),
+  otp: Yup.string().required("otp is required").max(6),
 });
 
-export const ForgetPasswordPage = () => {
+export const VerifyOTPPage = () => {
   const router = useRouter();
-  const { handleForgetPassword, loading } = useForgetPasswordState();
+  const { handleVerifyOTP, loading } = useVerifyOTPState();
   const handleSubmit = async (values: any) => {
-    const res = handleForgetPassword(values);
+    const res = handleVerifyOTP(values);
     res.then(() => {
-      router.push("/auth/verify");
+      router.push("/auth/reset");
     });
   };
 
@@ -27,15 +25,15 @@ export const ForgetPasswordPage = () => {
       <div>
         <div className="my-6 mx-4 text-left">
           <h2 className=" text-3xl font-bold tracking-tight text-gray-900">
-            Forgot Password?
+            Check your email
           </h2>
           <p className="text-[#475467] my-2">
-            No worries, we'll send you reset instructions
+            We've sent verification code to your mail
           </p>
         </div>
         <Formik
           initialValues={{
-            email: "",
+            otp: "",
           }}
           validationSchema={FormSchema}
           onSubmit={handleSubmit}
@@ -44,10 +42,10 @@ export const ForgetPasswordPage = () => {
             <Form className=" Form card px-4 ">
               <ApTextInput
                 className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
-                label="Email"
-                name="email"
-                type="email"
-                placeHolder="email"
+                label="otp"
+                name="otp"
+                type="number"
+                placeHolder="otp"
               />
 
               <Button
@@ -57,7 +55,7 @@ export const ForgetPasswordPage = () => {
                 loading={loading}
                 className="group relative flex w-full justify-center rounded-md bg-[#2158E8] px-3 py-2 my-4 text-sm font-semibold text-white hover:bg-blue-500"
               >
-                Get OTP
+                Verify otp
               </Button>
               <div className="flex justify-center items-center">
                 <Button type="link" href={"/auth/signup"} icon={""}>
