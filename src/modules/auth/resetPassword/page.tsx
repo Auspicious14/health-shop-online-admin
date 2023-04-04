@@ -40,6 +40,7 @@ export const ResetPasswordPage = () => {
         </div>
         <Formik
           initialValues={{
+            email: "",
             newPassword: "",
             confirmNewPassword: "",
           }}
@@ -48,6 +49,13 @@ export const ResetPasswordPage = () => {
         >
           {(props: FormikProps<any>) => (
             <Form className=" Form card px-4 ">
+              <ApTextInput
+                className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
+                label="email"
+                name="email"
+                type="text"
+                placeHolder="enter your email"
+              />
               <ApTextInput
                 className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
                 label="New password"
@@ -70,10 +78,10 @@ export const ResetPasswordPage = () => {
                 loading={loading}
                 className="group relative flex w-full justify-center rounded-md bg-[#2158E8] px-3 py-2 my-4 text-sm font-semibold text-white hover:bg-blue-500"
               >
-                Get OTP
+                Reset Password
               </Button>
               <div className="flex justify-center items-center">
-                <Button type="link" href={"/auth/signup"} icon={""}>
+                <Button type="link" href={"/auth/login"} icon={""}>
                   Back to log in
                 </Button>
               </div>

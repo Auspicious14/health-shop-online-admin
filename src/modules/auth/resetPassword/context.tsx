@@ -36,7 +36,7 @@ export const ResetPasswordContextProvider: React.FC<IProps> = ({
     console.log(JSON.stringify(params));
     try {
       const response = await apiReqHandler({
-        endPoint: `http://${process.env.NEXT_PUBLIC_API_ROUTE}/auth/forget`,
+        endPoint: `http://${process.env.NEXT_PUBLIC_API_ROUTE}/auth/reset`,
         method: "POST",
         payload: JSON.stringify(params),
       });
