@@ -1,14 +1,15 @@
 import { Card, Col, Divider, Menu, MenuProps, Row } from "antd";
 import Search from "antd/es/input/Search";
+// import Search from "antd/es/input/Search";
 import { Chart } from "chart.js";
 import { CategoryScale, registerables } from "chart.js";
 import Link from "next/link";
 import React from "react";
 import { Bar, Doughnut } from "react-chartjs-2";
-import HeaderImage from "../../../public/headerImg.svg";
 import { SideNav } from "../../components";
-Chart.register(CategoryScale, ...registerables);
+
 export const HomePage = () => {
+  Chart.register(CategoryScale, ...registerables);
   const time = new Date().getHours();
   console.log(time);
   let hour;
@@ -117,7 +118,9 @@ export const HomePage = () => {
               <Doughnut
                 data={{
                   labels: ["new customer", "old customer"],
-                  datasets: [{ data: "15", borderWidth: 1, borderRadius: 15 }],
+                  datasets: [
+                    { data: ["15", "85"], borderWidth: 1, borderRadius: 15 },
+                  ],
                 }}
               />
             </div>
