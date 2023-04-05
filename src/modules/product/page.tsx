@@ -1,9 +1,12 @@
 import { DeleteFilled, EditFilled, PlusOutlined } from "@ant-design/icons";
-import { Button, Card, Space, Table, Input, Tag } from "antd";
+import { Button, Card, Space, Table, Input, Tag, Modal } from "antd";
 import { ColumnsType } from "antd/es/table";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SideNav } from "../../components";
+import CreateProduct from "../../pages/createProduct";
+import { useProductState } from "./context";
+import CreateProductPage from "./detail";
 const Search = Input;
 interface DataType {
   key: React.Key;
@@ -82,13 +85,20 @@ for (let i = 0; i < 5; i++) {
 }
 
 export const ProductPage = () => {
+  const [modal, setModal] = useState<{ show: boolean; data?: any }>({
+    show: false,
+  });
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [loading, setLoading] = useState(false);
+  const { product, getProducts } = useProductState();
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     console.log("selectedRowKeys changed: ", newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
+  useEffect(() => {
+    getProducts();
+  }, []);
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
@@ -112,6 +122,7 @@ export const ProductPage = () => {
             type="primary"
             icon={<PlusOutlined />}
             className="bg-blue-600 items-center flex"
+            onClick={() => setModal({ show: true })}
           >
             Add product
           </Button>
@@ -128,6 +139,18 @@ export const ProductPage = () => {
           />
         </div>
       </div>
+
+      <Modal
+        title="Add new product"
+        open={modal.show}
+        centered
+        onOk={() => setModal({ show: true })}
+        // confirmLoading={true}
+        width={1000}
+        onCancel={() => setModal({ show: false })}
+      >
+        <CreateProductPage product={product} />
+      </Modal>
     </div>
   );
 };

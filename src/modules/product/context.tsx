@@ -5,7 +5,7 @@ interface IProductState {
   loading: boolean;
   product: IProduct;
   products: IProduct[];
-  getProducts: (payload: IProduct) => Promise<void>;
+  getProducts: () => Promise<void>;
   getOneProduct: (productId: string) => Promise<void>;
   createProduct: (payload: IProduct) => Promise<void>;
   updateProduct: (payload: IProduct, productId: string) => Promise<void>;
@@ -16,7 +16,7 @@ const ProductContext = React.createContext<IProductState>({
   loading: false,
   product: {} as any,
   products: [],
-  getProducts(payload) {
+  getProducts() {
     return null as any;
   },
   getOneProduct(productId) {
@@ -50,9 +50,8 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const getProducts = async (payload: IProduct) => {
+  const getProducts = async () => {
     setLoading(true);
-    console.log(JSON.stringify(payload));
     try {
       const res = await fetch("http://localhost:2000/products", {
         method: "GET",
