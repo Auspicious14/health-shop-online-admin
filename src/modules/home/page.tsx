@@ -1,5 +1,5 @@
-import { Card, Col, Divider, Menu, MenuProps, Row } from "antd";
-import Search from "antd/es/input/Search";
+import { Card, Col, Divider, Menu, MenuProps, Row, Input } from "antd";
+// import Search from "antd/es/input/Search";
 // import Search from "antd/es/input/Search";
 import { Chart } from "chart.js";
 import { CategoryScale, registerables } from "chart.js";
@@ -7,7 +7,7 @@ import Link from "next/link";
 import React from "react";
 import { Bar, Doughnut } from "react-chartjs-2";
 import { SideNav } from "../../components";
-
+const Search = Input;
 export const HomePage = () => {
   Chart.register(CategoryScale, ...registerables);
   const time = new Date().getHours();
