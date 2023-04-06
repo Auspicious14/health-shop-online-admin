@@ -4,14 +4,20 @@ export interface IProduct {
   description: string;
   images?: IProductImage[];
   price: number;
-  size: string;
-  categories: [string];
+  size: { label: string; value: string };
+  categories: ICategory[];
   color: string;
   quantity: string;
+  brand: string;
+  rating: number;
 }
 
 export interface IProductImage {
   uri: string;
   type: string;
+  name: string;
+}
+
+export interface ICategory {
   name: string;
 }

@@ -35,7 +35,7 @@ export const SignInContextProvider: React.FC<IProps> = ({ children }) => {
     console.log(JSON.stringify(user));
     try {
       const response = await apiReqHandler({
-        endPoint: `http://${process.env.NEXT_PUBLIC_API_ROUTE}/auth/login`,
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/auth/login`,
         method: "POST",
         payload: JSON.stringify(user),
       });
@@ -44,6 +44,9 @@ export const SignInContextProvider: React.FC<IProps> = ({ children }) => {
       console.log(data);
       setCookie("user_id", data?.user?._id, 3);
       console.log(data);
+      if (response.res?.status) {
+        console.log(data.error);
+      }
     } catch (error) {
       console.log(error);
     }
