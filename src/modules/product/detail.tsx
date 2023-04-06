@@ -50,17 +50,15 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
   }, [product]);
 
   const handleProductImage = (res: any) => {
-    console.log(res);
     setFiles([
       ...files,
       {
-        uri: res[0].file.uri,
+        uri: res[0].uri,
         name: res[0].file.name,
         type: res[0].file.type,
       },
     ]);
   };
-  console.log(files, "before send images");
   const handleCreateProduct = async (values: any) => {
     console.log(values);
     const id = getCookie("user_id");
@@ -196,7 +194,9 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
                     <ApFileInput
                       accept={"image/*"}
                       onSelected={(res: any) => {
-                        handleProductImage(res);
+                        if (res) {
+                          handleProductImage(res);
+                        }
                       }}
                     />
                   </Card>
