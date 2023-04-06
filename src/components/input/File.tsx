@@ -42,7 +42,7 @@ export const ApFileInput: React.FC<IProps> = (props: IProps) => {
       <label className="btn secondary" htmlFor={inputId}>
         {props.title || "Upload Images"}
       </label>
-      {/* <input
+      <input
         id={inputId}
         type="file"
         name="file"
@@ -50,15 +50,15 @@ export const ApFileInput: React.FC<IProps> = (props: IProps) => {
         accept={accept}
         className="hide"
         onChange={handleOnChange}
-      /> */}
-      <Upload
+      />
+      {/* <Upload
         name={props.title}
         listType="picture-card"
         onChange={handleOnChange}
         accept={accept}
       >
         <Button icon={<UploadOutlined />}>Click to upload</Button>
-      </Upload>
+      </Upload> */}
     </div>
   );
 };
