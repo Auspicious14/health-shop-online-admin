@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { apiReqHandler } from "../../components";
+import { getCookie } from "../../helper";
 import { IProduct } from "./model";
 
 interface IProductState {
@@ -59,8 +60,8 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
       });
       setLoading(false);
       const data = await res.json();
-      setProduct(data);
-      console.log(data);
+      setProducts(data.data);
+      console.log(data.data);
     } catch (error) {
       console.log(error);
     }
@@ -123,15 +124,19 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
 
   const deleteProduct = async (productId: string) => {
     setLoading(true);
+    const id = getCookie("user_id");
+    console.log(id);
     try {
-      const res = await fetch(`http://localhost:2000/product/:${productId}}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_ROUTE}/product/:${productId}`,
+        {
+          method: "DELETE",
+          body: JSON.stringify(id),
+        }
+      );
       setLoading(false);
       const data = await res.json();
-      setProducts(
-        data.filter((del: IProduct, i: number) => del.id !== productId)
-      );
+      setProducts(data);
       console.log(data);
     } catch (error) {
       console.log(error);

@@ -5,92 +5,19 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { SideNav } from "../../components";
 import CreateProduct from "../../pages/createProduct";
+import { ProductListItem } from "./components/listitem";
 import { useProductState } from "./context";
 import CreateProductPage from "./detail";
+import { IProduct } from "./model";
 const Search = Input;
-interface DataType {
-  key: React.Key;
-  productName: string;
-  status: string;
-  price: number;
-  qty: number;
-  Status: "instock" | "soldout";
-  date: number;
-  rating: number;
-}
-
-const columns: ColumnsType<DataType> = [
-  {
-    title: "id",
-    dataIndex: "key",
-  },
-
-  {
-    title: "Product Name",
-    dataIndex: "productName",
-  },
-  {
-    title: "Rating",
-    dataIndex: "rating",
-  },
-  {
-    title: "Qty",
-    dataIndex: "qty",
-  },
-
-  {
-    title: "Price",
-    dataIndex: "price",
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
-    render: (_, { status }) => {
-      let color = status === "instock" ? "blue" : "red";
-      return <Tag color={color}>{status}</Tag>;
-    },
-  },
-  {
-    title: "",
-    key: "action",
-    render: (_, record) => (
-      <Space size="middle">
-        <DeleteFilled />
-      </Space>
-    ),
-  },
-  {
-    title: "",
-    key: "edit",
-    render: (_, record) => (
-      <Space size="middle">
-        <EditFilled />
-      </Space>
-    ),
-  },
-];
-
-const data: DataType[] = [];
-for (let i = 0; i < 5; i++) {
-  data.push({
-    key: i,
-    productName: "NikeAir Max",
-    price: 3000,
-    qty: 5,
-    status: "soldout" || "instock",
-    date: new Date().getDate(),
-    Status: "instock",
-    rating: 4,
-  });
-}
 
 export const ProductPage = () => {
+  const { products, getProducts, deleteProduct } = useProductState();
   const [modal, setModal] = useState<{ show: boolean; data?: any }>({
     show: false,
   });
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [loading, setLoading] = useState(false);
-  const { product, getProducts } = useProductState();
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     console.log("selectedRowKeys changed: ", newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
@@ -103,7 +30,63 @@ export const ProductPage = () => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  const hasSelected = selectedRowKeys.length > 0;
+  const columns: ColumnsType<IProduct> = [
+    {
+      title: "id",
+      dataIndex: "_id",
+    },
+    {
+      title: "",
+      dataIndex: "images",
+    },
+
+    {
+      title: "Product Name",
+      dataIndex: "name",
+    },
+    {
+      title: "Rating",
+      dataIndex: "rating",
+    },
+    {
+      title: "Qty",
+      dataIndex: "quantity",
+    },
+    {
+      title: "Color",
+      dataIndex: "color",
+    },
+    {
+      title: "Price",
+      dataIndex: "price",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      render: (_, { status }) => {
+        let color = status === "instock" ? "blue" : "red";
+        return <Tag color={color}>{status}</Tag>;
+      },
+    },
+    {
+      title: "",
+      key: "action",
+      render: (_, { _id }) => (
+        <Space size="middle">
+          <DeleteFilled onClick={() => deleteProduct(_id)} />
+        </Space>
+      ),
+    },
+    {
+      title: "",
+      key: "edit",
+      render: (_, record) => (
+        <Space size="middle">
+          <EditFilled />
+        </Space>
+      ),
+    },
+  ];
   return (
     <div className="flex w-full gap-4">
       <div className="w-[20%] h-screen border ">
@@ -135,7 +118,7 @@ export const ProductPage = () => {
           <Table
             rowSelection={rowSelection}
             columns={columns}
-            dataSource={data}
+            dataSource={products}
           />
         </div>
       </div>
@@ -149,7 +132,7 @@ export const ProductPage = () => {
         width={1000}
         onCancel={() => setModal({ show: false })}
       >
-        <CreateProductPage product={product} />
+        <CreateProductPage product={modal.data} />
       </Modal>
     </div>
   );

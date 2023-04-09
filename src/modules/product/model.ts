@@ -1,5 +1,5 @@
 export interface IProduct {
-  id: string;
+  _id: string;
   name: string;
   description: string;
   images?: IProductImage[];
@@ -10,6 +10,8 @@ export interface IProduct {
   quantity: string;
   brand: string;
   rating: number;
+  createdAt: string;
+  status: string;
 }
 
 export interface IProductImage {
