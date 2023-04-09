@@ -82,6 +82,7 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
       });
   };
 
+  console.log(product);
   return (
     <div>
       <div className="w-full mx-4">
@@ -103,13 +104,14 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
           initialValues={{
             name: product?.name || "",
             categories: [{ label: "", value: "" }],
-            quantity: qty || 1,
+            quantity: product?.quantity || 1,
             description: product?.description || "",
             price: product?.price || "",
             color: product?.color || "",
             size: product?.size || { label: "", value: "" },
             brand: product?.brand || "",
-            // rating: product?.rating || NaN
+            soldout: product?.soldout || "",
+            instock: product?.instock || "",
           }}
           onSubmit={handleCreateProduct}
         >
@@ -200,26 +202,21 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
                       }}
                     />
                   </Card>
-                  {/* <Card className="m-3 w-full">
+                  <Card className="m-3 w-full">
                     <h1>Availability</h1>
                     <div className="flex gap-4">
                       <ApCheckbox
-                        name="vvv"
+                        name="soldout"
                         label="Soldout"
                         labelClassName="text-sm"
                       />
                       <ApCheckbox
-                        name="vvv1"
+                        name="instock"
                         label="In stock"
                         labelClassName="text-sm"
                       />
-                      <ApCheckbox
-                        name="vvv2"
-                        label="Soldout"
-                        labelClassName="text-sm"
-                      />
                     </div>
-                  </Card> */}
+                  </Card>
                   <Button
                     htmlType="submit"
                     type="primary"

@@ -34,35 +34,43 @@ export const ProductPage = () => {
     {
       title: "id",
       dataIndex: "_id",
+      key: "_id",
     },
-    {
-      title: "",
-      dataIndex: "images",
-    },
+    // {
+    //   title: "",
+    //   dataIndex: "images",
+    //   key: "images",
+    // },
 
     {
       title: "Product Name",
       dataIndex: "name",
+      key: "name",
     },
     {
       title: "Rating",
       dataIndex: "rating",
+      key: "rating",
     },
     {
       title: "Qty",
       dataIndex: "quantity",
+      key: "quantity",
     },
     {
       title: "Color",
       dataIndex: "color",
+      key: "color",
     },
     {
       title: "Price",
       dataIndex: "price",
+      key: "price",
     },
     {
       title: "Status",
       dataIndex: "status",
+      key: "status",
       render: (_, { status }) => {
         let color = status === "instock" ? "blue" : "red";
         return <Tag color={color}>{status}</Tag>;
@@ -80,13 +88,20 @@ export const ProductPage = () => {
     {
       title: "",
       key: "edit",
-      render: (_, record) => (
+      render: (_, product) => (
         <Space size="middle">
-          <EditFilled />
+          <EditFilled onClick={() => setModal({ show: true, data: product })} />
         </Space>
       ),
     },
   ];
+
+  const handleSearch = (e: any) => {
+    console.log(e.target.value);
+    getProducts(e.target.value);
+  };
+
+  console.log(modal.data);
   return (
     <div className="flex w-full gap-4">
       <div className="w-[20%] h-screen border ">
@@ -105,20 +120,25 @@ export const ProductPage = () => {
             type="primary"
             icon={<PlusOutlined />}
             className="bg-blue-600 items-center flex"
-            onClick={() => setModal({ show: true })}
+            onClick={() => setModal({ show: true, data: null })}
           >
             Add product
           </Button>
         </div>
         <div className="shadow-sm p-4 flex items-center justify-between">
           <h1 className=" font-bold">All Orders</h1>
-          <Search className="w-60" placeholder="Search product" />
+          <Search
+            className="w-60"
+            placeholder="Search product"
+            onChange={handleSearch}
+          />
         </div>
         <div>
           <Table
             rowSelection={rowSelection}
             columns={columns}
             dataSource={products}
+            rowKey={(p) => p._id}
           />
         </div>
       </div>
@@ -127,7 +147,7 @@ export const ProductPage = () => {
         title="Add new product"
         open={modal.show}
         centered
-        onOk={() => setModal({ show: true })}
+        onOk={() => setModal({ show: false })}
         // confirmLoading={true}
         width={1000}
         onCancel={() => setModal({ show: false })}

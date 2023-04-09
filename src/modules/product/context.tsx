@@ -7,7 +7,7 @@ interface IProductState {
   loading: boolean;
   product: IProduct;
   products: IProduct[];
-  getProducts: () => Promise<void>;
+  getProducts: (query?: any) => Promise<void>;
   getOneProduct: (productId: string) => Promise<void>;
   createProduct: (payload: IProduct) => Promise<void>;
   updateProduct: (payload: IProduct, productId: string) => Promise<void>;
@@ -52,14 +52,17 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const getProducts = async () => {
+  const getProducts = async (query?: any) => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:2000/products", {
+      const res = await apiReqHandler({
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/products`,
         method: "GET",
+        // headers: { "Content-Type": "application/json" },
+        // body: JSON.stringify(payload),
       });
       setLoading(false);
-      const data = await res.json();
+      const data = await res.res?.data;
       setProducts(data.data);
       console.log(data.data);
     } catch (error) {
@@ -124,14 +127,14 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
 
   const deleteProduct = async (productId: string) => {
     setLoading(true);
-    const id = getCookie("user_id");
-    console.log(id);
+    // const id = getCookie("user_id");
+    // console.log(id);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_ROUTE}/product/:${productId}`,
+        `${process.env.NEXT_PUBLIC_API_ROUTE}/product/${productId}`,
         {
           method: "DELETE",
-          body: JSON.stringify(id),
+          // body: JSON.stringify(id),
         }
       );
       setLoading(false);

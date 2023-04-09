@@ -27,5 +27,8 @@ export const getServerSideProps = async ({
     };
   }
   // console.log(id);
+  return {
+    props: {},
+  };
 };
 export default Product;

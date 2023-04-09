@@ -12,9 +12,12 @@ export interface IProduct {
   rating: number;
   createdAt: string;
   status: string;
+  soldout: boolean;
+  instock: boolean;
 }
 
 export interface IProductImage {
+  _id?: string;
   uri: string;
   type: string;
   name: string;
