@@ -18,8 +18,7 @@ export const getServerSideProps = async ({
   req: any;
   query: any;
 }) => {
-  console.log(req.cookies, "requesttttt");
-  if (!req?.cookies("user_id")) {
+  if (!req?.cookies.user_id) {
     return {
       redirect: {
         destination: "/auth/login",
