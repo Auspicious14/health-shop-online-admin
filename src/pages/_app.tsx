@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
 import type { Session } from "next-auth";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { ChakraProvider } from "@chakra-ui/react";
 
 import { extendTheme } from "@chakra-ui/react";

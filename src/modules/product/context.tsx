@@ -104,7 +104,7 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
       }
       const data = await res.res?.data.data;
       setProducts([...data, products]);
-      // console.log(res);
+      return data;
     } catch (error: any) {
       console.log(error);
       toast.error(error);
@@ -117,7 +117,7 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
     try {
       const res = await apiReqHandler({
         endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/product/${productId}`,
-        method: "POST",
+        method: "PUT",
         // headers: { "Content-Type": "application/json" },
         // body: JSON.stringify(payload),
         payload: JSON.stringify(payload),
@@ -128,11 +128,10 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
         toast.error("Error");
       }
       setProducts(
-        data.map((p: IProduct, i: number) =>
-          p._id !== product._id ? product : data
-        )
+        products.map((p: IProduct, i: number) => (p._id == data._id ? data : p))
       );
-      console.log(data);
+
+      return data;
     } catch (error) {
       console.log(error);
     }
@@ -152,6 +151,10 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
       );
       setLoading(false);
       const data = await res.json();
+
+      if (data) {
+        toast.success(data.message);
+      }
       setProducts(data);
       console.log(data);
     } catch (error) {

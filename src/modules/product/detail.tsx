@@ -62,12 +62,7 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
     ]);
   };
   const handleProduct = async (values: any) => {
-    console.log(values);
     const id = getCookie("user_id");
-    // if (!id) {
-    //   router.push("/auth/login");
-    //   toast.success("Please log in");
-    // }
     if (product?._id) {
       updateProduct({ ...values, id }, product._id).then((res: any) => {
         console.log(res, "updateeeeeee");
@@ -88,8 +83,6 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
     }
   };
 
-  console.log(product);
-  console.log(instock);
   return (
     <div>
       <div className="w-full mx-4">
