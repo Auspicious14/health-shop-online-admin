@@ -4,12 +4,7 @@ import { Form, Formik, FormikProps } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  ApCheckbox,
-  ApFileInput,
-  ApTextInput,
-  SideNav,
-} from "../../components";
+import { ApCheckbox, ApFileInput, ApTextInput } from "../../components";
 import { useBlogState } from "./context";
 import { IBlog, IBlogImage } from "./model";
 import * as Yup from "yup";

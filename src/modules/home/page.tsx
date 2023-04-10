@@ -49,9 +49,6 @@ export const HomePage = () => {
     <>
       <div className="flex w-full gap-4">
         <div className="w-[20%] h-screen border ">
-          <div className="pb-8">
-            <Link href={"/"}>Logo</Link>
-          </div>
           <SideNav />
         </div>
         <div className="w-[80%] mx-4">

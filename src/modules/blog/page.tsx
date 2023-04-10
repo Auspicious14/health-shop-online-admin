@@ -74,11 +74,16 @@ export const BlogPage = () => {
   console.log(modal.data);
   return (
     <div className="flex w-full gap-4">
-      <div className="w-[20%] h-screen border ">
-        <div className="pb-8">
+      <div className="w-[20%] h-screen border bg-red-400">
+        {/* <div className="pb-8">
           <Link href={"/"}>Logo</Link>
+        </div> */}
+        <div>
+          <SideNav />
+          {/* <div className="bg-gray-100 px-4 w-full relative bottom-0">
+            <Link href={"/profile"}>Profile</Link>
+          </div> */}
         </div>
-        <SideNav />
       </div>
       <div className="w-[80%] mx-4">
         <div className="flex justify-between items-center shadow-sm p-4 ">
