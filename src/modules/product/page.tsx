@@ -3,7 +3,7 @@ import { Button, Card, Space, Table, Input, Tag, Modal } from "antd";
 import { ColumnsType } from "antd/es/table";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { SideNav } from "../../components";
+import { ApModal, SideNav } from "../../components";
 import CreateProduct from "../../pages/createProduct";
 import { ProductListItem } from "./components/listitem";
 import { useProductState } from "./context";
@@ -143,17 +143,20 @@ export const ProductPage = () => {
         </div>
       </div>
 
-      <Modal
+      <ApModal
         title="Add new product"
-        open={modal.show}
-        centered
-        onOk={() => setModal({ show: false })}
+        show={modal.show}
+        // centered
+        // onOk={() => setModal({ show: false })}
         // confirmLoading={true}
-        width={1000}
-        onCancel={() => setModal({ show: false })}
+        // width={1000}
+        onDimiss={() => setModal({ show: false })}
       >
-        <CreateProductPage product={modal.data} />
-      </Modal>
+        <CreateProductPage
+          product={modal.data}
+          onUpdate={() => setModal({ show: false })}
+        />
+      </ApModal>
     </div>
   );
 };

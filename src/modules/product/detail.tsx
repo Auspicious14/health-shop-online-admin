@@ -1,5 +1,5 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Card, Select } from "antd";
+import { Button, Card, Radio, Select } from "antd";
 import { Form, Formik, FormikProps } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -24,18 +24,20 @@ const FormSchema = Yup.object().shape({
   // categories: Yup.string().required("category is required"),
 });
 interface IProps {
-  product?: IProduct;
+  product: IProduct;
   onDissmiss?: () => void;
   onUpdate?: (product: IProduct) => void;
 }
 
 const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
-  const { createProduct, loading } = useProductState();
+  const { createProduct, loading, updateProduct } = useProductState();
   const router = useRouter();
   const formRef = useRef<FormikProps<any>>();
   const [qty, setQty] = useState<number>();
   const [files, setFiles] = useState<IProductImage[]>([]);
-  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [size, setSize] = useState<string>("");
+  const [instock, setInstock] = useState<string>("");
 
   useEffect(() => {
     if (product?.images && !!product.images.length) {
@@ -59,61 +61,54 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
       },
     ]);
   };
-  const handleCreateProduct = async (values: any) => {
+  const handleProduct = async (values: any) => {
     console.log(values);
     const id = getCookie("user_id");
-    if (!id) {
-      router.push("/auth/login");
-      toast.success("Please log in");
-    }
-    const res = createProduct({
-      ...values,
-      images: files,
-      id,
-      categories: values.categories.map((c: any) => c.value),
-      size: values.size.value,
-    });
-    res
-      .then((res) => {
-        console.log(res);
-      })
-      .finally(() => {
-        // if (onUpdate) onUpdate(product);
+    // if (!id) {
+    //   router.push("/auth/login");
+    //   toast.success("Please log in");
+    // }
+    if (product?._id) {
+      updateProduct({ ...values, id }, product._id).then((res: any) => {
+        console.log(res, "updateeeeeee");
+        if (res && onUpdate) onUpdate(res);
       });
+    } else {
+      createProduct({
+        ...values,
+        images: files,
+        id,
+        categories,
+        size,
+        instock,
+      }).then((res: any) => {
+        console.log(res, "responseeeeeee");
+        if (res && onUpdate) onUpdate(res);
+      });
+    }
   };
 
   console.log(product);
+  console.log(instock);
   return (
     <div>
       <div className="w-full mx-4">
-        <div className="flex justify-end items-center shadow-sm p-4 ">
-          {/* <div>
-            <h1 className="text-3xl font-bold">Add new product</h1>
-          </div> */}
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            className="bg-blue-600 items-center flex"
-          >
-            Publish now
-          </Button>
-        </div>
         <Formik
           innerRef={formRef as any}
           validationSchema={FormSchema}
           initialValues={{
             name: product?.name || "",
-            categories: [{ label: "", value: "" }],
-            quantity: product?.quantity || 1,
+            categories: product?.categories || categories,
+            quantity: product?.quantity || "",
             description: product?.description || "",
             price: product?.price || "",
             color: product?.color || "",
-            size: product?.size || { label: "", value: "" },
+            size: product?.size || size,
             brand: product?.brand || "",
-            soldout: product?.soldout || "",
-            instock: product?.instock || "",
+            // soldout: product?.soldout || "",
+            // instock: product?.instock || "",
           }}
-          onSubmit={handleCreateProduct}
+          onSubmit={handleProduct}
         >
           {({ values, setFieldValue }) => (
             <Form>
@@ -139,6 +134,7 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
                     <div>Categories</div>
                     <Select
                       mode="multiple"
+                      onChange={(value: string[]) => setCategories(value)}
                       allowClear
                       options={[
                         { value: "jack", label: "Jack" },
@@ -164,6 +160,7 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
                     <div>Size</div>
                     <Select
                       allowClear
+                      onChange={(value: string) => setSize(value)}
                       options={[
                         { value: "sm", label: "sm" },
                         { value: "base", label: "base" },
@@ -175,7 +172,7 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
                   <Card className="m-3 ">
                     <ApTextInput
                       name="quantity"
-                      type="number"
+                      type="text"
                       placeHolder="3"
                       label="Quantity"
                       className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
@@ -205,16 +202,13 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
                   <Card className="m-3 w-full">
                     <h1>Availability</h1>
                     <div className="flex gap-4">
-                      <ApCheckbox
-                        name="soldout"
-                        label="Soldout"
-                        labelClassName="text-sm"
-                      />
-                      <ApCheckbox
-                        name="instock"
-                        label="In stock"
-                        labelClassName="text-sm"
-                      />
+                      <Radio.Group
+                        onChange={(e) => setInstock(e.target.value)}
+                        value={instock}
+                      >
+                        <Radio value={"instock"}>Instock</Radio>
+                        <Radio value={"soldout"}>Soldout</Radio>
+                      </Radio.Group>
                     </div>
                   </Card>
                   <Button
