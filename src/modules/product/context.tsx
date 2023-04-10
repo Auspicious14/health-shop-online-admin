@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import { apiReqHandler } from "../../components";
 import { getCookie } from "../../helper";
 import { IProduct } from "./model";
@@ -98,12 +99,15 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
         payload: JSON.stringify(payload),
       });
       setLoading(false);
-      const data = await res.res?.data;
-
+      if (res.res?.status !== 200) {
+        toast.error("Error");
+      }
+      const data = await res.res?.data.data;
       setProducts([...data, products]);
-      console.log(data);
-    } catch (error) {
+      // console.log(res);
+    } catch (error: any) {
       console.log(error);
+      toast.error(error);
     }
   };
 
@@ -111,14 +115,23 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
     setLoading(true);
     console.log(JSON.stringify(payload));
     try {
-      const res = await fetch(`http://localhost:2000/product/:${productId}}`, {
+      const res = await apiReqHandler({
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/product/${productId}`,
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        // headers: { "Content-Type": "application/json" },
+        // body: JSON.stringify(payload),
+        payload: JSON.stringify(payload),
       });
       setLoading(false);
-      const data = await res.json();
-      setProducts(data);
+      const data = await res.res?.data.data;
+      if (res.res?.status !== 200) {
+        toast.error("Error");
+      }
+      setProducts(
+        data.map((p: IProduct, i: number) =>
+          p._id !== product._id ? product : data
+        )
+      );
       console.log(data);
     } catch (error) {
       console.log(error);
