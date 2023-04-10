@@ -63,7 +63,7 @@ export const SideNav = () => {
           style={{ background: "none" }}
           className="w-[19%] fixed z-50 bottom-0 border border-t"
         >
-          Profile
+          <Link href={"/profile"}>Profile</Link>
         </Footer>
       </>
     </Layout>
