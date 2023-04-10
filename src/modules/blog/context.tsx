@@ -2,42 +2,42 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { apiReqHandler } from "../../components";
 import { getCookie } from "../../helper";
-import { IProduct } from "./model";
+import { IBlog } from "./model";
 
-interface IProductState {
+interface IBlogState {
   loading: boolean;
-  product: IProduct;
-  products: IProduct[];
-  getProducts: (query?: any) => Promise<void>;
-  getOneProduct: (productId: string) => Promise<void>;
-  createProduct: (payload: IProduct) => Promise<void>;
-  updateProduct: (payload: IProduct, productId: string) => Promise<void>;
-  deleteProduct: (productId: string) => Promise<void>;
+  blog: IBlog;
+  blogs: IBlog[];
+  getBlogs: (query?: any) => Promise<void>;
+  getOneblog: (blogId: string) => Promise<void>;
+  createBlog: (payload: IBlog) => Promise<void>;
+  updateBlog: (payload: IBlog, blogId: string) => Promise<void>;
+  deleteBlog: (blogId: string) => Promise<void>;
 }
 
-const ProductContext = React.createContext<IProductState>({
+const BlogContext = React.createContext<IBlogState>({
   loading: false,
-  product: {} as any,
-  products: [],
-  getProducts() {
+  blog: {} as any,
+  blogs: [],
+  getBlogs() {
     return null as any;
   },
-  getOneProduct(productId) {
+  getOneblog(blogId) {
     return null as any;
   },
-  createProduct(payload) {
+  createBlog(payload) {
     return null as any;
   },
-  updateProduct(payload, productId) {
+  updateBlog(payload, blogId) {
     return null as any;
   },
-  deleteProduct(productId) {
+  deleteBlog(blogId) {
     return null as any;
   },
 });
 
-export const useProductState = () => {
-  const context = React.useContext(ProductContext);
+export const useBlogState = () => {
+  const context = React.useContext(BlogContext);
   if (context === undefined) {
     throw new Error("app dispatch must be used within app global provider");
   }
@@ -48,49 +48,50 @@ export const useProductState = () => {
 interface IProps {
   children: React.ReactNode;
 }
-export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
-  const [product, setProduct] = useState<IProduct>() as any;
-  const [products, setProducts] = useState<IProduct[]>([]);
+export const BlogContextProvider: React.FC<IProps> = ({ children }) => {
+  const [blog, setBlog] = useState<IBlog>() as any;
+  const [blogs, setBlogs] = useState<IBlog[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const getProducts = async (query?: any) => {
+  const getBlogs = async (query?: any) => {
     setLoading(true);
     try {
       const res = await apiReqHandler({
-        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/products`,
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/blogs`,
         method: "GET",
       });
       setLoading(false);
       const data = await res.res?.data;
-      setProducts(data.data);
+      setBlogs(data.data);
       console.log(data.data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getOneProduct = async (productId: string) => {
+  const getOneblog = async (blogId: string) => {
     setLoading(true);
-    console.log(JSON.stringify(productId));
+    console.log(JSON.stringify(blogId));
     try {
-      const res = await fetch(`http://localhost:2000/product/:${productId}`, {
+      const res = await fetch(`http://localhost:2000/blog/:${blogId}`, {
         method: "GET",
       });
       setLoading(false);
       const data = await res.json();
-      setProduct(data);
+      setBlog(data);
       console.log(data);
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      toast.error(error);
     }
   };
 
-  const createProduct = async (payload: IProduct) => {
+  const createBlog = async (payload: IBlog) => {
     setLoading(true);
     console.log(JSON.stringify(payload));
     try {
       const res = await apiReqHandler({
-        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/product`,
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/blog`,
         method: "POST",
         payload: JSON.stringify(payload),
       });
@@ -99,7 +100,8 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
         toast.error("Error");
       }
       const data = await res.res?.data.data;
-      setProducts([...data, products]);
+      setBlogs([...blogs, ...data]);
+      console.log(data);
       return data;
     } catch (error: any) {
       console.log(error);
@@ -107,12 +109,12 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
     }
   };
 
-  const updateProduct = async (payload: IProduct, productId: string) => {
+  const updateBlog = async (payload: IBlog, blogId: string) => {
     setLoading(true);
     console.log(JSON.stringify(payload));
     try {
       const res = await apiReqHandler({
-        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/product/${productId}`,
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/blog/${blogId}`,
         method: "PUT",
         payload: JSON.stringify(payload),
       });
@@ -121,8 +123,8 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
       if (res.res?.status !== 200) {
         toast.error("Error");
       }
-      setProducts(
-        products.map((p: IProduct, i: number) => (p._id == data._id ? data : p))
+      setBlogs(
+        blogs.map((p: IBlog, i: number) => (p._id == data._id ? data : p))
       );
 
       return data;
@@ -132,11 +134,11 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
     }
   };
 
-  const deleteProduct = async (productId: string) => {
+  const deleteBlog = async (blogId: string) => {
     setLoading(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_ROUTE}/product/${productId}`,
+        `${process.env.NEXT_PUBLIC_API_ROUTE}/blog/${blogId}`,
         {
           method: "DELETE",
         }
@@ -147,7 +149,7 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
       if (data) {
         toast.success(data.message);
       }
-      setProducts(data);
+      setBlogs(data);
       console.log(data);
     } catch (error: any) {
       console.log(error);
@@ -156,19 +158,19 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
   };
 
   return (
-    <ProductContext.Provider
+    <BlogContext.Provider
       value={{
         loading,
-        products,
-        product,
-        getProducts,
-        getOneProduct,
-        createProduct,
-        updateProduct,
-        deleteProduct,
+        blogs,
+        blog,
+        getBlogs,
+        getOneblog,
+        createBlog,
+        updateBlog,
+        deleteBlog,
       }}
     >
       {children}
-    </ProductContext.Provider>
+    </BlogContext.Provider>
   );
 };
