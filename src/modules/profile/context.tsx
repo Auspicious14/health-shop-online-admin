@@ -62,12 +62,12 @@ export const ProfileContextProvider: React.FC<IProps> = ({ children }) => {
     console.log(JSON.stringify(payload));
     try {
       const res = await apiReqHandler({
-        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/auth/update/${id}}`,
-        method: "POST",
-        payload: JSON.stringify(payload),
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/auth/update/${id}`,
+        method: "PUT",
+        payload,
       });
       setLoading(false);
-      const data = await res.res?.data.data;
+      const data = await res.res?.data.user;
       if (res.res?.status !== 200) {
         toast.error("Error");
       }

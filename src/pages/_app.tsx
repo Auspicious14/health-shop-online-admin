@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ChakraProvider } from "@chakra-ui/react";
 
 import { extendTheme } from "@chakra-ui/react";
-import { ProfileContextProvider } from "../modules/product copy/context";
+import { ProfileContextProvider } from "../modules/profile/context";
 
 // 2. Extend the theme to include custom colors, fonts, etc
 const colors = {

@@ -3,7 +3,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Divider, Input, Menu, MenuProps, Layout, Tooltip, Avatar } from "antd";
 import Link from "next/link";
 import { MenuFoldOutlined, UserOutlined } from "@ant-design/icons";
-import { useProfileState } from "../../modules/product copy/context";
+import { useProfileState } from "../../modules/profile/context";
 import { getCookie } from "../../helper";
 const { Sider, Footer } = Layout;
 export const SideNav = () => {
