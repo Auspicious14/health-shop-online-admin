@@ -1,5 +1,5 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Card, Radio, Select } from "antd";
+import { Button, Card, Radio, Select, UploadProps } from "antd";
 import { Form, Formik, FormikProps } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -8,6 +8,7 @@ import {
   ApCheckbox,
   ApFileInput,
   ApTextInput,
+  Files,
   SideNav,
 } from "../../components";
 import { useProductState } from "./context";
@@ -34,7 +35,7 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
   const router = useRouter();
   const formRef = useRef<FormikProps<any>>();
   const [qty, setQty] = useState<number>();
-  const [files, setFiles] = useState<IProductImage[]>([]);
+  const [files, setFiles] = useState<IProductImage[]>([]) as any;
   const [categories, setCategories] = useState<string[]>([]);
   const [size, setSize] = useState<string>("");
   const [instock, setInstock] = useState<string>("");
@@ -51,21 +52,28 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
     }
   }, [product]);
 
-  const handleProductImage = (res: any) => {
-    setFiles([
-      ...files,
-      {
-        uri: res[0].uri,
-        name: res[0].file.name,
-        type: res[0].file.type,
-      },
-    ]);
+  const handleProductImage: UploadProps["onChange"] = ({
+    fileList: newFileList,
+  }: any) => {
+    console.log(newFileList);
+    setFiles(newFileList);
   };
   const handleProduct = async (values: any) => {
     const id = getCookie("user_id");
     if (product?._id) {
       updateProduct(
-        { ...values, id, images: files, categories, size, instock },
+        {
+          ...values,
+          id,
+          images: files.map((f: any) => ({
+            uri: f?.thumbUrl,
+            type: f?.type,
+            name: f?.name,
+          })),
+          categories,
+          size,
+          instock,
+        },
         product._id
       ).then((res: any) => {
         console.log(res, "updateeeeeee");
@@ -74,7 +82,11 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
     } else {
       createProduct({
         ...values,
-        images: files,
+        images: files.map((f: any) => ({
+          uri: f?.thumbUrl,
+          type: f?.type,
+          name: f?.name,
+        })),
         id,
         categories,
         size,
@@ -186,13 +198,17 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
                     />
                   </Card>
                   <Card className="m-3 w-full">
-                    <ApFileInput
+                    {/* <ApFileInput
                       accept={"image/*"}
                       onSelected={(res: any) => {
                         if (res) {
                           handleProductImage(res);
                         }
                       }}
+                    /> */}
+                    <Files
+                      fileList={files}
+                      handleChange={(res: any) => handleProductImage(res)}
                     />
                   </Card>
                   <Card className="m-3 w-full">

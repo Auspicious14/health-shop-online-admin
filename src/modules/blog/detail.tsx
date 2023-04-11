@@ -58,13 +58,6 @@ export const CreateBlog: React.FC<IProps> = ({ blog, onUpdate }) => {
   }));
   const handleBlog = async (values: any) => {
     const id = getCookie("user_id");
-    console.log(
-      files.map((f: any) => ({
-        uri: f?.thumbUrl,
-        type: f?.type,
-        name: f?.name,
-      }))
-    );
     if (blog?._id) {
       updateBlog(
         {

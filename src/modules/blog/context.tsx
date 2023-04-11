@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { apiReqHandler } from "../../components";
-import { getCookie } from "../../helper";
 import { IBlog } from "./model";
 
 interface IBlogState {
@@ -100,6 +99,7 @@ export const BlogContextProvider: React.FC<IProps> = ({ children }) => {
         toast.error("Error");
       }
       const data = await res.res?.data.data;
+      toast.success("Blog created successfully");
       setBlogs(
         blogs?.map((b, i) => (b._id !== data?._id ? { ...data, b } : b))
       );
@@ -121,6 +121,7 @@ export const BlogContextProvider: React.FC<IProps> = ({ children }) => {
       });
       setLoading(false);
       const data = await res.res?.data.data;
+      toast.success("Blog updated successfully");
       if (res.res?.status !== 200) {
         toast.error("Error");
       }

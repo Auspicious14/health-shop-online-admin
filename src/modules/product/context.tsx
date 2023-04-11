@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { apiReqHandler } from "../../components";
-import { getCookie } from "../../helper";
 import { IProduct } from "./model";
 
 interface IProductState {
@@ -99,6 +98,7 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
         toast.error("Error");
       }
       const data = await res.res?.data.data;
+      toast.success("Product created successfully");
       setProducts([...data, products]);
       return data;
     } catch (error: any) {
@@ -118,6 +118,7 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
       });
       setLoading(false);
       const data = await res.res?.data.data;
+      toast.success("Product updated successfully");
       if (res.res?.status !== 200) {
         toast.error("Error");
       }
