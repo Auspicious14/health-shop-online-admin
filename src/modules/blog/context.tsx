@@ -100,8 +100,9 @@ export const BlogContextProvider: React.FC<IProps> = ({ children }) => {
         toast.error("Error");
       }
       const data = await res.res?.data.data;
-      setBlogs([...blogs, ...data]);
-      console.log(data);
+      setBlogs(
+        blogs?.map((b, i) => (b._id !== data?._id ? { ...data, b } : b))
+      );
       return data;
     } catch (error: any) {
       console.log(error);

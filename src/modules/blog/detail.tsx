@@ -1,10 +1,10 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Card, Radio, Select } from "antd";
+import { Button, Card, Radio, Select, UploadProps } from "antd";
 import { Form, Formik, FormikProps } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
-import { ApCheckbox, ApFileInput, ApTextInput } from "../../components";
+import { ApCheckbox, ApFileInput, ApTextInput, Files } from "../../components";
 import { useBlogState } from "./context";
 import { IBlog, IBlogImage } from "./model";
 import * as Yup from "yup";
@@ -28,7 +28,7 @@ export const CreateBlog: React.FC<IProps> = ({ blog, onUpdate }) => {
   const { createBlog, loading, updateBlog } = useBlogState();
   const router = useRouter();
   const formRef = useRef<FormikProps<any>>();
-  const [files, setFiles] = useState<IBlogImage[]>([]);
+  const [files, setFiles] = useState<IBlogImage[]>([]) as any;
 
   useEffect(() => {
     if (blog?.images && !!blog.images.length) {
@@ -42,27 +42,53 @@ export const CreateBlog: React.FC<IProps> = ({ blog, onUpdate }) => {
     }
   }, [blog]);
 
-  const handleBlogImage = (res: any) => {
-    setFiles([
-      ...files,
-      {
-        uri: res[0].uri,
-        name: res[0].file.name,
-        type: res[0].file.type,
-      },
-    ]);
+  const handleBlogImage: UploadProps["onChange"] = ({
+    fileList: newFileList,
+  }: any) => {
+    console.log(newFileList);
+    setFiles(newFileList);
   };
+
+  // console.log(files.map((f: any, i: any) => console.log(f.thumbUrl)));
+  console.log(files[0]?.name);
+  files.forEach((f: any) => ({
+    uri: f?.thumbUrl,
+    name: f?.name,
+    type: f?.type,
+  }));
   const handleBlog = async (values: any) => {
     const id = getCookie("user_id");
+    console.log(
+      files.map((f: any) => ({
+        uri: f?.thumbUrl,
+        type: f?.type,
+        name: f?.name,
+      }))
+    );
     if (blog?._id) {
-      updateBlog({ ...values, id }, blog._id).then((res: any) => {
+      updateBlog(
+        {
+          ...values,
+          id,
+          images: files.map((f: any) => ({
+            uri: f?.thumbUrl,
+            type: f?.type,
+            name: f?.name,
+          })),
+        },
+        blog._id
+      ).then((res: any) => {
         console.log(res, "updateeeeeee");
         if (res && onUpdate) onUpdate(res);
       });
     } else {
       createBlog({
         ...values,
-        images: files,
+        images: files.map((f: any) => ({
+          uri: f?.thumbUrl,
+          type: f?.type,
+          name: f?.name,
+        })),
         id,
       }).then((res: any) => {
         console.log(res, "responseeeeeee");
@@ -106,13 +132,17 @@ export const CreateBlog: React.FC<IProps> = ({ blog, onUpdate }) => {
                 </div>
                 <div className="m-3 w-full">
                   <Card className="m-3 w-full">
-                    <ApFileInput
+                    {/* <ApFileInput
                       accept={"image/*"}
                       onSelected={(res: any) => {
                         if (res) {
                           handleBlogImage(res);
                         }
                       }}
+                    /> */}
+                    <Files
+                      fileList={files}
+                      handleChange={(res: any) => handleBlogImage(res)}
                     />
                   </Card>
 

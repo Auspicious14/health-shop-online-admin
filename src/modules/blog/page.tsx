@@ -11,7 +11,11 @@ const Search = Input;
 const { Text } = Typography;
 export const BlogPage = () => {
   const { getBlogs, loading, deleteBlog, blogs } = useBlogState();
-  const [modal, setModal] = useState<{ show: boolean; data?: any }>({
+  const [modal, setModal] = useState<{
+    show: boolean;
+    data?: any;
+    type?: "Add Blog" | "Update Blog";
+  }>({
     show: false,
   });
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
@@ -60,7 +64,11 @@ export const BlogPage = () => {
       key: "edit",
       render: (_, blog) => (
         <Space size="middle">
-          <EditFilled onClick={() => setModal({ show: true, data: blog })} />
+          <EditFilled
+            onClick={() =>
+              setModal({ show: true, data: blog, type: "Update Blog" })
+            }
+          />
         </Space>
       ),
     },
@@ -95,7 +103,9 @@ export const BlogPage = () => {
             type="primary"
             icon={<PlusOutlined />}
             className="bg-blue-600 items-center flex"
-            onClick={() => setModal({ show: true, data: null })}
+            onClick={() =>
+              setModal({ show: true, data: null, type: "Add Blog" })
+            }
           >
             Add Blog
           </Button>
@@ -119,7 +129,7 @@ export const BlogPage = () => {
       </div>
 
       <ApModal
-        title="Add new blog"
+        title={modal.type}
         show={modal.show}
         onDimiss={() => setModal({ show: false })}
       >

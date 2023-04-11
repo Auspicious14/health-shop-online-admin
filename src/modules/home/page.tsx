@@ -10,8 +10,8 @@ import { SideNav } from "../../components";
 const Search = Input;
 export const HomePage = () => {
   Chart.register(CategoryScale, ...registerables);
-  const time = new Date().getHours();
-  console.log(time);
+
+  const time: number = new Date().getHours();
   let hour;
   if (time <= 11) {
     hour = "Morning";
@@ -82,14 +82,14 @@ export const HomePage = () => {
             <div className="w-[65%] p-4 border rounded-md">
               <div className="flex justify-between">
                 <h1 className="font-bold">Sales</h1>
-                <div className="flex items-center">
+                <div className="flex gap-2 items-center">
                   <Card.Grid className="px-4 text-center w-[25%] border">
                     <h1 className="text-sm ">Today</h1>
                   </Card.Grid>
-                  <Card.Grid className="px-4 text-center w-[25%] border">
+                  <Card.Grid className="px-3 text-center w-[25%] border">
                     <h1 className="text-sm">Weekly</h1>
                   </Card.Grid>
-                  <Card.Grid className="px-4 text-center w-[25%] border">
+                  <Card.Grid className="px-2 text-center w-[25%] border">
                     <h1 className="text-sm">Monthly</h1>
                   </Card.Grid>
                   <Card.Grid className="px-4 text-center w-[25%] border">

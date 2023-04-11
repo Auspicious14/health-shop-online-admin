@@ -13,7 +13,11 @@ const Search = Input;
 
 export const ProductPage = () => {
   const { products, getProducts, deleteProduct } = useProductState();
-  const [modal, setModal] = useState<{ show: boolean; data?: any }>({
+  const [modal, setModal] = useState<{
+    show: boolean;
+    data?: any;
+    type?: "Add Product" | "Update Product";
+  }>({
     show: false,
   });
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
@@ -85,7 +89,11 @@ export const ProductPage = () => {
       key: "edit",
       render: (_, product) => (
         <Space size="middle">
-          <EditFilled onClick={() => setModal({ show: true, data: product })} />
+          <EditFilled
+            onClick={() =>
+              setModal({ show: true, data: product, type: "Update Product" })
+            }
+          />
         </Space>
       ),
     },
@@ -96,7 +104,6 @@ export const ProductPage = () => {
     getProducts(e.target.value);
   };
 
-  console.log(modal.data);
   return (
     <div className="flex w-full gap-4">
       <div className="w-[20%] h-screen border ">
@@ -112,13 +119,15 @@ export const ProductPage = () => {
             type="primary"
             icon={<PlusOutlined />}
             className="bg-blue-600 items-center flex"
-            onClick={() => setModal({ show: true, data: null })}
+            onClick={() =>
+              setModal({ show: true, data: null, type: "Add Product" })
+            }
           >
             Add product
           </Button>
         </div>
         <div className="shadow-sm p-4 flex items-center justify-between">
-          <h1 className=" font-bold">All Orders</h1>
+          <h1 className=" font-bold">All Products</h1>
           <Search
             className="w-60"
             placeholder="Search product"
@@ -136,7 +145,7 @@ export const ProductPage = () => {
       </div>
 
       <ApModal
-        title="Add new product"
+        title={modal.type}
         show={modal.show}
         // centered
         // onOk={() => setModal({ show: false })}

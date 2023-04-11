@@ -64,7 +64,10 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
   const handleProduct = async (values: any) => {
     const id = getCookie("user_id");
     if (product?._id) {
-      updateProduct({ ...values, id }, product._id).then((res: any) => {
+      updateProduct(
+        { ...values, id, images: files, categories, size, instock },
+        product._id
+      ).then((res: any) => {
         console.log(res, "updateeeeeee");
         if (res && onUpdate) onUpdate(res);
       });
