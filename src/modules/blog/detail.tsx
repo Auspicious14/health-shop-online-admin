@@ -28,7 +28,7 @@ export const CreateBlog: React.FC<IProps> = ({ blog, onUpdate }) => {
   const { createBlog, loading, updateBlog } = useBlogState();
   const router = useRouter();
   const formRef = useRef<FormikProps<any>>();
-  const [files, setFiles] = useState<IBlogImage[]>([]) as any;
+  const [files, setFiles] = useState<IBlogImage[]>([]);
 
   useEffect(() => {
     if (blog?.images && !!blog.images.length) {
@@ -42,20 +42,26 @@ export const CreateBlog: React.FC<IProps> = ({ blog, onUpdate }) => {
     }
   }, [blog]);
 
-  const handleBlogImage: UploadProps["onChange"] = ({
-    fileList: newFileList,
-  }: any) => {
-    console.log(newFileList);
-    setFiles(newFileList);
+  const handleBlogImage = (res: any) => {
+    // console.log(newFileList);
+    console.log(res);
+    setFiles([
+      ...files,
+      {
+        uri: res[0].uri,
+        name: res[0].file.name,
+        type: res[0].file.type,
+      },
+    ]);
   };
 
   // console.log(files.map((f: any, i: any) => console.log(f.thumbUrl)));
-  console.log(files[0]?.name);
-  files.forEach((f: any) => ({
-    uri: f?.thumbUrl,
-    name: f?.name,
-    type: f?.type,
-  }));
+  // console.log(files[0]?.name);
+  // files?.map((f: any) => ({
+  //   uri: f?.thumbUrl,
+  //   name: f?.name,
+  //   type: f?.type,
+  // }));
   const handleBlog = async (values: any) => {
     const id = getCookie("user_id");
     if (blog?._id) {
@@ -77,11 +83,7 @@ export const CreateBlog: React.FC<IProps> = ({ blog, onUpdate }) => {
     } else {
       createBlog({
         ...values,
-        images: files.map((f: any) => ({
-          uri: f?.thumbUrl,
-          type: f?.type,
-          name: f?.name,
-        })),
+        images: files,
         id,
       }).then((res: any) => {
         console.log(res, "responseeeeeee");
@@ -125,18 +127,18 @@ export const CreateBlog: React.FC<IProps> = ({ blog, onUpdate }) => {
                 </div>
                 <div className="m-3 w-full">
                   <Card className="m-3 w-full">
-                    {/* <ApFileInput
+                    <ApFileInput
                       accept={"image/*"}
                       onSelected={(res: any) => {
                         if (res) {
                           handleBlogImage(res);
                         }
                       }}
-                    /> */}
-                    <Files
+                    />
+                    {/* <Files
                       fileList={files}
                       handleChange={(res: any) => handleBlogImage(res)}
-                    />
+                    /> */}
                   </Card>
 
                   <Button

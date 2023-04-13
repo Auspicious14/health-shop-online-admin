@@ -43,10 +43,7 @@ export const SignInContextProvider: React.FC<IProps> = ({ children }) => {
       const data = await response.res?.data;
       console.log(data);
       setCookie("user_id", data?.user?._id, 3);
-      console.log(data);
-      if (response.res?.status) {
-        console.log(data.error);
-      }
+      return data;
     } catch (error) {
       console.log(error);
     }

@@ -17,9 +17,9 @@ export const ForgetPasswordPage = () => {
   const { handleForgetPassword, loading } = useForgetPasswordState();
   const handleSubmit = async (values: any) => {
     const res = handleForgetPassword(values);
-    res.then(() => {
-      router.push("/auth/verify");
-    });
+    // res.then(() => {
+    //   router.push("/auth/verify");
+    // });
   };
 
   return (

@@ -50,7 +50,8 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
         }))
       );
     }
-  }, [product]);
+    console.log(product?.images);
+  }, []);
 
   const handleProductImage: UploadProps["onChange"] = ({
     fileList: newFileList,
@@ -65,14 +66,21 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
         {
           ...values,
           id,
-          images: files.map((f: any) => ({
-            uri: f?.thumbUrl,
-            type: f?.type,
-            name: f?.name,
-          })),
-          categories,
-          size,
-          instock,
+          images: [
+            ...product?.images?.map((f: any) => ({
+              uri: f?.uri,
+              name: f?.name,
+              type: f?.type,
+            })),
+            ...files.map((f: any) => ({
+              uri: f?.thumbUrl,
+              type: f?.type,
+              name: f?.name,
+            })),
+          ],
+          categories: product?.categories || categories,
+          size: product?.size || size,
+          instock: product?.instock || instock,
         },
         product._id
       ).then((res: any) => {

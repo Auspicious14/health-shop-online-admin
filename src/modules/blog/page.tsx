@@ -45,7 +45,7 @@ export const BlogPage = () => {
       // responsive: ["md"],
       render: (_, { description }) => (
         <Space size="middle">
-          <Text>{description.substring(0, 70)}</Text>
+          <Text>{description?.substring(0, 70)}</Text>
         </Space>
       ),
     },

@@ -8,6 +8,7 @@ import { useSignInState } from "./context";
 import { ISignIn } from "./model";
 import { Button } from "antd";
 import Vector from "../../../../public/images/unsplash_MU70DTGr7d0.png";
+import { toast } from "react-toastify";
 
 const FormSchema = Yup.object().shape({
   email: Yup.string().required("email is required").email(),
@@ -19,7 +20,8 @@ export const SignInPage = () => {
   const { handleSignIn, loading } = useSignInState();
   const handleSubmit = async (values: ISignIn) => {
     const res = handleSignIn(values);
-    res.then(() => {
+    res.then((rs: any) => {
+      if (!rs) return toast.error("Error");
       router.push("/");
     });
   };
