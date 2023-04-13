@@ -1,12 +1,13 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Card, Radio, Select, UploadProps } from "antd";
-import { Form, Formik, FormikProps } from "formik";
+import { Form, Formik, FormikProps, useField } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import {
   ApCheckbox,
   ApFileInput,
+  ApSelectInput,
   ApTextInput,
   Files,
   SideNav,
@@ -16,6 +17,7 @@ import { ICategory, IProduct, IProductImage } from "./model";
 import * as Yup from "yup";
 import { getCookie } from "../../helper";
 import { toast } from "react-toastify";
+import { ProductImg } from "./components/img";
 
 const FormSchema = Yup.object().shape({
   // name: Yup.string().required("Product name is required"),
@@ -36,7 +38,7 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
   const formRef = useRef<FormikProps<any>>();
   const [qty, setQty] = useState<number>();
   const [files, setFiles] = useState<IProductImage[]>([]) as any;
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<ICategory[]>([]);
   const [size, setSize] = useState<string>("");
   const [instock, setInstock] = useState<string>("");
 
@@ -60,25 +62,20 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
     setFiles(newFileList);
   };
   const handleProduct = async (values: any) => {
+    console.log(values, "valuessssss");
     const id = getCookie("user_id");
     if (product?._id) {
       updateProduct(
         {
           ...values,
           id,
-          images: [
-            ...product?.images?.map((f: any) => ({
-              uri: f?.uri,
-              name: f?.name,
-              type: f?.type,
-            })),
-            ...files.map((f: any) => ({
-              uri: f?.thumbUrl,
-              type: f?.type,
-              name: f?.name,
-            })),
-          ],
-          categories: product?.categories || categories,
+          images: files.map((f: any) => ({
+            uri: f?.uri || f?.thumbUrl,
+            type: f?.type,
+            name: f?.name,
+          })),
+
+          categories: values.categories.map((c: any) => c.value),
           size: product?.size || size,
           instock: product?.instock || instock,
         },
@@ -96,8 +93,8 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
           name: f?.name,
         })),
         id,
-        categories,
-        size,
+        categories: values.categories.map((c: any) => c.value),
+        size: values.size.value,
         instock,
       }).then((res: any) => {
         console.log(res, "responseeeeeee");
@@ -105,7 +102,8 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
       });
     }
   };
-
+  product?.categories.map((c) => console.log(c));
+  console.log(product.size);
   return (
     <div>
       <div className="w-full mx-4">
@@ -114,12 +112,14 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
           validationSchema={FormSchema}
           initialValues={{
             name: product?.name || "",
-            categories: product?.categories || categories,
+            categories: product?.categories
+              ? product?.categories.map((c) => ({ value: c, label: c }))
+              : [{ value: "jack", label: "jack" }],
             quantity: product?.quantity || "",
             description: product?.description || "",
             price: product?.price || "",
             color: product?.color || "",
-            size: product?.size || size,
+            size: product?.size || { label: "base", value: "base" },
             brand: product?.brand || "",
             // soldout: product?.soldout || "",
             // instock: product?.instock || "",
@@ -148,15 +148,17 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
                   </Card>
                   <Card className="m-3">
                     <div>Categories</div>
-                    <Select
-                      mode="multiple"
-                      onChange={(value: string[]) => setCategories(value)}
-                      allowClear
+                    <ApSelectInput
+                      isMulti
+                      name={"categories"}
                       options={[
                         { value: "jack", label: "Jack" },
                         { value: "lucy", label: "Lucy" },
                         { value: "Yiminghe", label: "yiminghe" },
                       ]}
+                      addOnChange={(val: any) => {
+                        console.log(val);
+                      }}
                       className="my-4 relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
                     />
                     <ApTextInput
@@ -174,13 +176,13 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
                       className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
                     />
                     <div>Size</div>
-                    <Select
-                      allowClear
-                      onChange={(value: string) => setSize(value)}
+                    <ApSelectInput
+                      name="size"
                       options={[
-                        { value: "sm", label: "sm" },
-                        { value: "base", label: "base" },
-                        { value: "xl", label: "xl" },
+                        { label: "sm", value: "sm" },
+                        { label: "base", value: "base" },
+                        { label: "lg", value: "lg" },
+                        { label: "xl", value: "xl" },
                       ]}
                       className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
                     />
@@ -214,6 +216,15 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
                         }
                       }}
                     /> */}
+                    {/* {files?.length > 0
+                      ? files?.map((img: any, i: any) => (
+                          <ProductImg
+                            img={img}
+                            key={img?._id}
+                            deleteImage={() => {}}
+                          />
+                        ))
+                      : null} */}
                     <Files
                       fileList={files}
                       handleChange={(res: any) => handleProductImage(res)}

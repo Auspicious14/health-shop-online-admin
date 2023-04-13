@@ -5,7 +5,7 @@ export interface IProduct {
   images: IProductImage[];
   price: number;
   size: string;
-  categories: string[];
+  categories: [string];
   color: string;
   quantity: string;
   brand: string;
@@ -24,5 +24,6 @@ export interface IProductImage {
 }
 
 export interface ICategory {
-  name: string;
+  label: string;
+  value: string;
 }

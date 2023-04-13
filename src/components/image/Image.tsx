@@ -6,13 +6,10 @@ interface IProps extends ImageProps {}
 export const ApImage: React.FC<IProps> = (props: IProps) => {
   return (
     <Image
-      style={{
-        backgroundImage: "url(public/images/subtract.png)",
-      }}
-      // alt={'healthshop'}
-      width={200}
-      height={200}
+      width={props.width || 200}
+      height={props.width || 200}
       {...props}
+      alt="image"
     />
   );
 };

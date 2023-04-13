@@ -48,7 +48,6 @@ export const Files: React.FC<IProps> = ({ fileList, handleChange }) => {
   return (
     <>
       <Upload
-        action={fileList[0]?.url}
         listType="picture-card"
         fileList={fileList}
         onPreview={handlePreview}
