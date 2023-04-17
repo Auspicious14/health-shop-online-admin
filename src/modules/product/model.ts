@@ -4,7 +4,7 @@ export interface IProduct {
   description: string;
   images: IProductImage[];
   price: number;
-  size: string;
+  size: { label: string; value: string };
   categories: [string];
   color: string;
   quantity: string;

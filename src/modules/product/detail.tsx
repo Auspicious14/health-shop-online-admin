@@ -49,11 +49,12 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
           uri: i.uri,
           name: i.name,
           type: i.type,
+          uid: i._id,
         }))
       );
     }
     console.log(product?.images);
-  }, []);
+  }, [product]);
 
   const handleProductImage: UploadProps["onChange"] = ({
     fileList: newFileList,
@@ -76,7 +77,7 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
           })),
 
           categories: values.categories.map((c: any) => c.value),
-          size: product?.size || size,
+          size: values?.size.value,
           instock: product?.instock || instock,
         },
         product._id
@@ -119,7 +120,9 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
             description: product?.description || "",
             price: product?.price || "",
             color: product?.color || "",
-            size: product?.size || { label: "base", value: "base" },
+            size: product?.size.value
+              ? product?.size.value
+              : { label: "lg", value: "lg" },
             brand: product?.brand || "",
             // soldout: product?.soldout || "",
             // instock: product?.instock || "",
@@ -184,6 +187,9 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
                         { label: "lg", value: "lg" },
                         { label: "xl", value: "xl" },
                       ]}
+                      addOnChange={(val: any) => {
+                        console.log(val);
+                      }}
                       className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
                     />
                   </Card>
