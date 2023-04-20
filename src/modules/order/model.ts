@@ -1,17 +1,28 @@
-import { IProduct } from "../product/model";
+import { ICart } from "../cart/model";
 
 export interface IOrder {
-  id: string;
+  _id: string;
   userId: string;
-  products: IProduct[];
+  cart: ICart[];
   amount: string;
-  address: string;
+  address: IAddress;
   status: IOrderStatus;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export enum IOrderStatus {
   pending = "pending",
   confirmed = "confirmed",
-  packed = "packed",
-  shipped = "shipped",
+  delivered = "delivered",
+  cancelled = "cancelled",
+}
+
+export interface IAddress {
+  name: string;
+  email: string;
+  phoneNumber: string;
+  postalCode: string;
+  city: string;
+  address: string;
 }

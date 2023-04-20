@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { IOrder } from "./model";
+import { apiReqHandler } from "../../components";
 
 interface IOrderState {
   loading: boolean;
@@ -8,14 +9,14 @@ interface IOrderState {
   createOrder: (payload: IOrder) => Promise<void>;
   updateOrderItem: (payload: IOrder, orderId: string) => Promise<void>;
   deleteOrderItem: (orderId: string) => Promise<void>;
-  getAllOrders: (userId: string) => Promise<void>;
+  getAllOrders: () => Promise<void>;
 }
 
 const OrderContext = React.createContext<IOrderState>({
   loading: false,
   order: {} as any,
   orders: [],
-  getAllOrders(payload) {
+  getAllOrders() {
     return null as any;
   },
   createOrder(payload) {
@@ -49,13 +50,17 @@ export const OrderContextProvider: React.FC<IProps> = ({ children }) => {
   const getAllOrders = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:2000/orders`, {
+      const res = await apiReqHandler({
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/orders`,
         method: "GET",
       });
       setLoading(false);
-      const data = await res.json();
-      setOrder(data);
-      console.log(data);
+      const data = await res.res?.data;
+      if (data) {
+        setOrders(data.data);
+        console.log(data);
+      }
+      return data;
     } catch (error) {
       console.log(error);
     }
@@ -87,7 +92,7 @@ export const OrderContextProvider: React.FC<IProps> = ({ children }) => {
       });
       setLoading(false);
       const data = await res.json();
-      setOrders(data.filter((del: IOrder, i: number) => del.id !== orderId));
+      setOrders(data.filter((del: IOrder, i: number) => del._id !== orderId));
       console.log(data);
     } catch (error) {
       console.log(error);
