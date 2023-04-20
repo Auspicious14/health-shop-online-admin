@@ -1,11 +1,8 @@
 import { DeleteFilled, EditFilled, PlusOutlined } from "@ant-design/icons";
 import { Button, Card, Space, Table, Input, Tag, Modal } from "antd";
 import { ColumnsType } from "antd/es/table";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { ApModal, SideNav } from "../../components";
-import CreateProduct from "../../pages/createProduct";
-import { ProductListItem } from "./components/listitem";
 import { useProductState } from "./context";
 import CreateProductPage from "./detail";
 import { IProduct } from "./model";
@@ -40,11 +37,19 @@ export const ProductPage = () => {
       dataIndex: "_id",
       key: "_id",
     },
-    // {
-    //   title: "",
-    //   dataIndex: "images",
-    //   key: "images",
-    // },
+    {
+      title: "Image",
+      key: "images",
+      render: (_, { images }) => (
+        <Space className="w-20 h-20">
+          <img
+            src={images?.[0]?.uri}
+            alt={images?.[0]?.uri}
+            className="w-full h-full object-cover"
+          />
+        </Space>
+      ),
+    },
 
     {
       title: "Product Name",
@@ -71,8 +76,8 @@ export const ProductPage = () => {
       dataIndex: "status",
       key: "status",
       render: (_, { status }) => {
-        let color = status === "instock" ? "blue" : "red";
-        return <Tag color={color}>{status}</Tag>;
+        // let color = status === "instock" ? "blue" : "red";
+        return <Tag>{status}</Tag>;
       },
     },
     {
