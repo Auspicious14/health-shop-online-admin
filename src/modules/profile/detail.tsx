@@ -1,46 +1,31 @@
-import { PlusOutlined } from "@ant-design/icons";
-import { Button, Card, Radio, Select } from "antd";
+import { Button, Card } from "antd";
 import { Form, Formik, FormikProps } from "formik";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  ApCheckbox,
-  ApFileInput,
-  ApTextInput,
-  SideNav,
-} from "../../components";
+import { ApTextInput } from "../../components";
 import * as Yup from "yup";
 import { getCookie } from "../../helper";
 import { toast } from "react-toastify";
-import { IProfile } from "./model";
 import { useProfileState } from "./context";
 
 const FormSchema = Yup.object().shape({
-  // name: Yup.string().required("Product name is required"),
-  // description: Yup.string().required("Description is required"),
-  // price: Yup.string().required("Product price is required"),
-  // // price: Yup.string().required("Color is required"),
-  // categories: Yup.string().required("category is required"),
+  firstName: Yup.string().required("first name is required"),
+  lastName: Yup.string().required("Last Name is required"),
+  email: Yup.string().required("email is required").email(),
+  password: Yup.string().required("password is required").min(6),
 });
-interface IProps {
-  product?: IProfile;
-  onDissmiss?: () => void;
-  onUpdate?: (product: IProfile) => void;
-}
 
-export const UpdateProfile: React.FC<IProps> = ({ product, onUpdate }) => {
+export const UpdateProfile = () => {
   const { profile, loading, updateProfile, getProfile } = useProfileState();
-  const router = useRouter();
   const formRef = useRef<FormikProps<any>>();
 
   useEffect(() => {
     getProfile(getCookie("user_id"));
   }, []);
   const handleSubmit = (values: any) => {
-    console.log(values);
     const id = getCookie("user_id");
-    updateProfile(values, id).then((res) => console.log(res));
+    updateProfile(values, id).then((res: any) => {
+      if (res) toast.success("Profile Updated");
+    });
   };
 
   console.log(profile, "profileeeee");
@@ -48,6 +33,7 @@ export const UpdateProfile: React.FC<IProps> = ({ product, onUpdate }) => {
     <div>
       <div className="w-full mx-4">
         <Formik
+          innerRef={formRef as any}
           initialValues={{
             firstName: profile?.firstName || "",
             lastName: profile?.lastName || "",
@@ -61,7 +47,6 @@ export const UpdateProfile: React.FC<IProps> = ({ product, onUpdate }) => {
             <Form className=" Form card px-4 ">
               <Card>
                 <Card
-                  // className="w-full flex justify-between"
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   <ApTextInput

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { apiReqHandler } from "../../components";
-import { getCookie } from "../../helper";
 import { IProfile } from "./model";
 
 interface IProfileState {
@@ -48,8 +47,7 @@ export const ProfileContextProvider: React.FC<IProps> = ({ children }) => {
       });
       setLoading(false);
       const data = await res.res?.data.user;
-      setProfile(data);
-      console.log(data);
+      if (data) setProfile(data);
 
       return data;
     } catch (error) {
