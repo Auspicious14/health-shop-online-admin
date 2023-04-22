@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { ISignUp } from "./model";
+import { apiReqHandler } from "../../../components";
+import { toast } from "react-toastify";
 
 interface ISignUpState {
   loading: boolean;
@@ -32,16 +34,23 @@ export const SignUpContextProvider: React.FC<IProps> = ({ children }) => {
     setLoading(true);
     console.log(JSON.stringify(user));
     try {
-      const res = await fetch("http://localhost:2000/auth/signup", {
+      const res = await apiReqHandler({
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/auth/login`,
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(user),
+        payload: JSON.stringify(user),
       });
       setLoading(false);
-      const data = await res.json();
+      const data = await res.res?.data;
       console.log(data);
-    } catch (error) {
+      if (res?.res?.status === 200) {
+        if (data.error) {
+          toast.error(data.error);
+        }
+      }
+      return data;
+    } catch (error: any) {
       console.log(error);
+      toast.error(error);
     }
   };
   return (

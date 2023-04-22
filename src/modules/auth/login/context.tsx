@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { apiReqHandler } from "../../../components";
 import { setCookie } from "../../../helper";
 import { ISignIn } from "./model";
+import { toast } from "react-toastify";
 
 interface ISignInState {
   loading: boolean;
@@ -42,10 +43,16 @@ export const SignInContextProvider: React.FC<IProps> = ({ children }) => {
       setLoading(false);
       const data = await response.res?.data;
       console.log(data);
-      setCookie("user_id", data?.user?._id, 3);
+      if (response?.res?.status === 200) {
+        if (data.error) {
+          toast.error(data.error);
+        }
+        setCookie("user_id", data?.user?._id, 3);
+      }
       return data;
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      toast.error(error);
     }
   };
   return (
