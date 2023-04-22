@@ -1,4 +1,4 @@
-import { Button, Card, Space, Table, Input, Typography } from "antd";
+import { Button, Card, Space, Table, Input, Typography, Dropdown } from "antd";
 import { ColumnsType } from "antd/es/table";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -31,8 +31,8 @@ const columns: ColumnsType<IOrder> = [
     key: "productName",
     render: (_, { cart }) => (
       <Space className="block capitalize">
-        {cart?.map((c) => (
-          <Text>{c?.product?.product?.name}</Text>
+        {cart?.map((c, i) => (
+          <Text key={i}>{c?.product?.product?.name}</Text>
         ))}
       </Space>
     ),
@@ -51,8 +51,8 @@ const columns: ColumnsType<IOrder> = [
     key: "quantity",
     render: (_, { cart }) => (
       <Space className="block ">
-        {cart?.map((c) => (
-          <Text>{`x${c?.product?.quantity}`}</Text>
+        {cart?.map((c, i) => (
+          <Text key={i}>{`x${c?.product?.quantity}`}</Text>
         ))}
       </Space>
     ),
@@ -62,19 +62,26 @@ const columns: ColumnsType<IOrder> = [
     key: "price",
     render: (_, { cart }) => (
       <Space className="block capitalize ">
-        {cart?.map((c) => (
-          <Text>{c?.product?.product?.price}</Text>
+        {cart?.map((c, i) => (
+          <Text key={i}>{c?.product?.product?.price}</Text>
         ))}
       </Space>
     ),
   },
   {
     title: "Status",
-    dataIndex: "status",
+    // dataIndex: "status",
     key: "status",
-    render: (_, { status }) => (
-      <Text className={`block uppercase ${statusColor[status]}`}>{status}</Text>
-    ),
+    render: (_, { status, _id }) => {
+      const items = [{ key: _id, value: status }];
+      return (
+        <Dropdown menu={{ items }}>
+          <Text className={`block uppercase ${statusColor[status]}`}>
+            {status}
+          </Text>
+        </Dropdown>
+      );
+    },
   },
 ];
 
@@ -87,10 +94,11 @@ export const OrderPage = () => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
-  console.log(orders);
+  const pendingOrders = orders?.map((ord) => ord.status === "pending").length;
+  console.log(pendingOrders);
   useEffect(() => {
     getAllOrders();
-  }, []);
+  }, [getAllOrders]);
 
   const rowSelection = {
     selectedRowKeys,
@@ -118,7 +126,7 @@ export const OrderPage = () => {
           </Card.Grid>
           <Card.Grid className="text-center w-[25%] shadow-md py-5 inset-3">
             <h1 className="text-sm">Pending Orders</h1>
-            <h1 className="font-bold text-2xl">$200</h1>
+            <h1 className="font-bold text-2xl">{pendingOrders}</h1>
           </Card.Grid>
           <Card.Grid className="text-center w-[25%] shadow-md py-5 inset-3">
             <h1 className="text-sm">Delivered Orders</h1>
@@ -148,6 +156,8 @@ export const OrderPage = () => {
             columns={columns}
             dataSource={orders}
             rowKey={(ord) => ord._id}
+            pagination={{ pageSize: 50 }}
+            scroll={{ y: 500 }}
           />
         </div>
       </div>
