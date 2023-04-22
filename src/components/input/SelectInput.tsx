@@ -2,9 +2,9 @@ import { ErrorMessage, useField } from "formik";
 import React from "react";
 import Select from "react-select";
 import { StateManagerProps } from "react-select/dist/declarations/src/useStateManager";
-import makeAnimated from "react-select/animated";
+// import makeAnimated from "react-select/animated";
 
-const animatedComponents = makeAnimated();
+// const animatedComponents = makeAnimated();
 
 interface IProps extends StateManagerProps {
   label?: string;
@@ -31,7 +31,7 @@ export const ApSelectInput: React.FC<IProps> = (props) => {
         options={options}
         name={name}
         closeMenuOnSelect={false}
-        components={animatedComponents}
+        // components={animatedComponents}
         onChange={(val: any) => {
           setValue(val);
           if (addOnChange) addOnChange(val);
