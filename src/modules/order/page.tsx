@@ -1,4 +1,13 @@
-import { Button, Card, Space, Table, Input, Typography, Dropdown } from "antd";
+import {
+  Button,
+  Card,
+  Space,
+  Table,
+  Input,
+  Typography,
+  Dropdown,
+  MenuProps,
+} from "antd";
 import { ColumnsType } from "antd/es/table";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -15,78 +24,9 @@ const statusColor = {
   delivered: "text-green-600",
   cancelled: "text-red-600",
 };
-const columns: ColumnsType<IOrder> = [
-  {
-    title: "id",
-    dataIndex: "_id",
-    key: "id",
-  },
-  {
-    title: "Name",
-    key: "name",
-    render: (_, { address }) => <Text>{address?.name}</Text>,
-  },
-  {
-    title: "Product Name",
-    key: "productName",
-    render: (_, { cart }) => (
-      <Space className="block capitalize">
-        {cart?.map((c, i) => (
-          <Text key={i}>{c?.product?.product?.name}</Text>
-        ))}
-      </Space>
-    ),
-  },
-  {
-    title: "Order Date",
-    key: "createdAt",
-    render: (_, { createdAt }) => (
-      <Text className="block capitalize">
-        {new Date(createdAt).toDateString()}
-      </Text>
-    ),
-  },
-  {
-    title: "Qty",
-    key: "quantity",
-    render: (_, { cart }) => (
-      <Space className="block ">
-        {cart?.map((c, i) => (
-          <Text key={i}>{`x${c?.product?.quantity}`}</Text>
-        ))}
-      </Space>
-    ),
-  },
-  {
-    title: "Price",
-    key: "price",
-    render: (_, { cart }) => (
-      <Space className="block capitalize ">
-        {cart?.map((c, i) => (
-          <Text key={i}>{c?.product?.product?.price}</Text>
-        ))}
-      </Space>
-    ),
-  },
-  {
-    title: "Status",
-    // dataIndex: "status",
-    key: "status",
-    render: (_, { status, _id }) => {
-      const items = [{ key: _id, value: status }];
-      return (
-        <Dropdown menu={{ items }}>
-          <Text className={`block uppercase ${statusColor[status]}`}>
-            {status}
-          </Text>
-        </Dropdown>
-      );
-    },
-  },
-];
 
 export const OrderPage = () => {
-  const { orders, getAllOrders } = useOrderState();
+  const { orders, getAllOrders, updateOrderItem } = useOrderState();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [loading, setLoading] = useState(false);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
@@ -98,13 +38,105 @@ export const OrderPage = () => {
   console.log(pendingOrders);
   useEffect(() => {
     getAllOrders();
-  }, [getAllOrders]);
+  }, []);
 
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
   };
   const hasSelected = selectedRowKeys.length > 0;
+
+  const columns: ColumnsType<IOrder> = [
+    {
+      title: "id",
+      dataIndex: "_id",
+      key: "id",
+    },
+    {
+      title: "Name",
+      key: "name",
+      render: (_, { address }) => <Text>{address?.name}</Text>,
+    },
+    {
+      title: "Product Name",
+      key: "productName",
+      render: (_, { cart }) => (
+        <Space className="block capitalize">
+          {cart?.map((c, i) => (
+            <Text key={i}>{c?.product?.product?.name}</Text>
+          ))}
+        </Space>
+      ),
+    },
+    {
+      title: "Order Date",
+      key: "createdAt",
+      render: (_, { createdAt }) => (
+        <Text className="block capitalize">
+          {new Date(createdAt).toDateString()}
+        </Text>
+      ),
+    },
+    {
+      title: "Qty",
+      key: "quantity",
+      render: (_, { cart }) => (
+        <Space className="block ">
+          {cart?.map((c, i) => (
+            <Text key={i}>{`x${c?.product?.quantity}`}</Text>
+          ))}
+        </Space>
+      ),
+    },
+    {
+      title: "Price",
+      key: "price",
+      render: (_, { cart }) => (
+        <Space className="block capitalize ">
+          {cart?.map((c, i) => (
+            <Text key={i}>{c?.product?.product?.price}</Text>
+          ))}
+        </Space>
+      ),
+    },
+    {
+      title: "Status",
+      // dataIndex: "status",
+      key: "status",
+      render: (_, { _id, status, ...others }) => {
+        const items = [
+          { key: "1", label: "delivered" },
+          { key: "2", label: "pending" },
+          { key: "2", label: "confirmed" },
+          { key: "2", label: "cancelled" },
+        ];
+        const handleMenuClick: MenuProps["onClick"] = async (e: any) => {
+          // message.info('Click on menu item.');
+          console.log("click", e.domEvent.target.innerText);
+          const id = getCookie("user_id");
+          const res = await updateOrderItem(
+            { others, id, status: e.domEvent.target.innerText },
+            _id
+          );
+          console.log(res, "responseee");
+        };
+        const handleClick = async () => {
+          console.log(status);
+        };
+        return (
+          <Dropdown.Button
+            menu={{ items, onClick: handleMenuClick }}
+            onClick={handleClick}
+          >
+            <Text className={`block uppercase ${statusColor[status]}`}>
+              {status}
+            </Text>
+          </Dropdown.Button>
+        );
+      },
+    },
+  ];
+
   return (
     <div className="flex w-full gap-4">
       <div className="w-[20%] h-screen border ">
