@@ -41,7 +41,7 @@ export const ApTextInput: React.FC<IProps> = ({
           {...field}
           {...props}
           name={name}
-          rows={4}
+          rows={6}
           placeholder={placeHolder}
         ></textarea>
       ) : (

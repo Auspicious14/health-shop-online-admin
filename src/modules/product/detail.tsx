@@ -183,7 +183,7 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
                       className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
                     />
                   </Card>
-                  <Card className="m-3 ">
+                  <Card className="mx-3 ">
                     <ApTextInput
                       name="quantity"
                       type="text"
@@ -193,7 +193,7 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
                     />
                   </Card>
                 </div>
-                <div className="m-3 w-full">
+                <div className=" w-full">
                   <Card className="m-3 ">
                     <ApTextInput
                       name="price"
@@ -204,6 +204,7 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
                     />
                   </Card>
                   <Card className="m-3 w-full">
+                    <h1>Pictures</h1>
                     <Files
                       fileList={files}
                       handleChange={(res: any) => handleProductImage(res)}
@@ -226,7 +227,7 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
                     type="primary"
                     className="m-3 bg-blue-600 text-white"
                   >
-                    create
+                    {product?._id ? "Save Changes" : "Add Product"}
                   </Button>
                 </div>
               </div>

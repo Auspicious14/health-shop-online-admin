@@ -1,4 +1,10 @@
-import { DeleteFilled, EditFilled, PlusOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditFilled,
+  EditOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
+import { FiEdit2 } from "react-icons/fi";
 import {
   Button,
   Card,
@@ -41,11 +47,6 @@ export const ProductPage = () => {
     onChange: onSelectChange,
   };
   const columns: ColumnsType<IProduct> = [
-    {
-      title: "id",
-      dataIndex: "_id",
-      key: "_id",
-    },
     {
       title: "Image",
       key: "images",
@@ -92,24 +93,19 @@ export const ProductPage = () => {
     {
       title: "",
       key: "action",
-      render: (_, { _id }) => (
-        <Popconfirm
-          title="Sure to delete?"
-          onConfirm={() => deleteProduct(_id)}
-          okButtonProps={{
-            style: { background: "rgb(37 99 235)" },
-          }}
-        >
-          <DeleteFilled />
-        </Popconfirm>
-      ),
-    },
-    {
-      title: "",
-      key: "edit",
       render: (_, product) => (
-        <Space size="middle">
-          <EditFilled
+        <Space className="flex gap-8 items-center">
+          <Popconfirm
+            title="Sure to delete?"
+            onConfirm={() => deleteProduct(product?._id)}
+            okButtonProps={{
+              style: { background: "rgb(37 99 235)" },
+            }}
+          >
+            <DeleteOutlined />
+          </Popconfirm>
+          <FiEdit2
+            // size={20}
             onClick={() =>
               setModal({ show: true, data: product, type: "Update Product" })
             }
