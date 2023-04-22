@@ -1,17 +1,10 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Card, Radio, Select, UploadProps } from "antd";
-import { Form, Formik, FormikProps, useField } from "formik";
+import { Button, Card, Radio, UploadProps } from "antd";
+import { Form, Formik, FormikProps } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  ApCheckbox,
-  ApFileInput,
-  ApSelectInput,
-  ApTextInput,
-  Files,
-  SideNav,
-} from "../../components";
+import { ApSelectInput, ApTextInput, Files, SideNav } from "../../components";
 import { useProductState } from "./context";
 import { ICategory, IProduct, IProductImage } from "./model";
 import * as Yup from "yup";
@@ -20,11 +13,11 @@ import { toast } from "react-toastify";
 import { ProductImg } from "./components/img";
 
 const FormSchema = Yup.object().shape({
-  // name: Yup.string().required("Product name is required"),
-  // description: Yup.string().required("Description is required"),
-  // price: Yup.string().required("Product price is required"),
-  // // price: Yup.string().required("Color is required"),
-  // categories: Yup.string().required("category is required"),
+  name: Yup.string().required("Product name is required"),
+  description: Yup.string().required("Description is required"),
+  price: Yup.string().required("Product price is required"),
+  // price: Yup.string().required("Color is required"),
+  categories: Yup.string().required("category is required"),
 });
 interface IProps {
   product: IProduct;
@@ -37,7 +30,7 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
   const router = useRouter();
   const formRef = useRef<FormikProps<any>>();
   const [qty, setQty] = useState<number>();
-  const [files, setFiles] = useState<IProductImage[]>([]) as any;
+  const [files, setFiles] = useState(null) as any;
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [size, setSize] = useState<string>("");
   const [instock, setInstock] = useState<string>("");
@@ -50,6 +43,7 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
           name: i.name,
           type: i.type,
           uid: i._id,
+          preview: i.uri,
         }))
       );
     }
@@ -59,11 +53,10 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
   const handleProductImage: UploadProps["onChange"] = ({
     fileList: newFileList,
   }: any) => {
-    console.log(newFileList);
+    console.log(newFileList, "newFIleListt");
     setFiles(newFileList);
   };
   const handleProduct = async (values: any) => {
-    console.log(values, "valuessssss");
     const id = getCookie("user_id");
     if (product?._id) {
       updateProduct(
@@ -82,7 +75,6 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
         },
         product._id
       ).then((res: any) => {
-        console.log(res, "updateeeeeee");
         if (res && onUpdate) onUpdate(res);
       });
     } else {
@@ -98,13 +90,11 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
         size: values.size.value,
         instock,
       }).then((res: any) => {
-        console.log(res, "responseeeeeee");
         if (res && onUpdate) onUpdate(res);
       });
     }
   };
-  product?.categories.map((c) => console.log(c));
-  console.log(product.size);
+  console.log(files, "filessss");
   return (
     <div>
       <div className="w-full mx-4">
@@ -214,23 +204,6 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
                     />
                   </Card>
                   <Card className="m-3 w-full">
-                    {/* <ApFileInput
-                      accept={"image/*"}
-                      onSelected={(res: any) => {
-                        if (res) {
-                          handleProductImage(res);
-                        }
-                      }}
-                    /> */}
-                    {/* {files?.length > 0
-                      ? files?.map((img: any, i: any) => (
-                          <ProductImg
-                            img={img}
-                            key={img?._id}
-                            deleteImage={() => {}}
-                          />
-                        ))
-                      : null} */}
                     <Files
                       fileList={files}
                       handleChange={(res: any) => handleProductImage(res)}

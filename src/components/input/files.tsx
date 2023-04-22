@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, PlusOutlined, StarOutlined } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
-import type { RcFile, UploadFile, UploadProps } from "antd/es/upload";
-// import type { UploadFile } from 'antd/es/upload/interface';
+import type { RcFile } from "antd/es/upload";
 
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
+    console.log(file);
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result as string);
     reader.onerror = (error) => reject(error);
+    console.log(reader);
   });
 
 interface IProps {
@@ -24,20 +25,13 @@ export const Files: React.FC<IProps> = ({ fileList, handleChange }) => {
 
   const handleCancel = () => setPreviewOpen(false);
 
-  const handlePreview = async (file: UploadFile) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj as RcFile);
-    }
-
-    setPreviewImage(file.url || (file.preview as string));
+  const handlePreview = async (file: any) => {
+    setPreviewImage(file.uri || file.preview || file.thumbUrl);
     setPreviewOpen(true);
     setPreviewTitle(
-      file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
+      file.name || file.uri!.substring(file.uri!.lastIndexOf("/") + 1)
     );
   };
-
-  // const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) =>
-  //   setFileList(newFileList);
 
   const uploadButton = (
     <div>
@@ -48,12 +42,18 @@ export const Files: React.FC<IProps> = ({ fileList, handleChange }) => {
   return (
     <>
       <Upload
-        listType="picture-card"
+        listType="picture"
         fileList={fileList}
         onPreview={handlePreview}
         onChange={handleChange}
+        multiple={true}
+        showUploadList={{
+          showDownloadIcon: true,
+          downloadIcon: "Download",
+          showRemoveIcon: true,
+        }}
       >
-        {fileList.length >= 8 ? null : uploadButton}
+        {fileList?.length >= 8 ? null : uploadButton}
       </Upload>
       <Modal
         open={previewOpen}
