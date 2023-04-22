@@ -28,7 +28,7 @@ export const VerifyOTPPage = () => {
             Check your email
           </h2>
           <p className="text-[#475467] my-2">
-            We've sent verification code to your mail
+            {"We've sent verification code to your mail"}
           </p>
         </div>
         <Formik

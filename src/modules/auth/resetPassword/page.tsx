@@ -35,7 +35,7 @@ export const ResetPasswordPage = () => {
             Forgot Password?
           </h2>
           <p className="text-[#475467] my-2">
-            No worries, we'll send you reset instructions
+            {"No worries, we'll send you reset instructions"}
           </p>
         </div>
         <Formik

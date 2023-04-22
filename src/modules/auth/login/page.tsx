@@ -21,8 +21,7 @@ export const SignInPage = () => {
   const handleSubmit = async (values: ISignIn) => {
     const res = handleSignIn(values);
     res.then((rs: any) => {
-      if (!rs) return toast.error("Error");
-      router.push("/");
+      if (rs.user) router.push("/");
     });
   };
 
@@ -77,7 +76,7 @@ export const SignInPage = () => {
                 Sign in
               </Button>
               <div className="flex justify-center items-center">
-                <span>Don't have an account?</span>
+                <span>{"Don't have an account?"}</span>
                 <Button type="link" href={"/auth/signup"}>
                   Sign up
                 </Button>
