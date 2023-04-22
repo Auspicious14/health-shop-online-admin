@@ -1,8 +1,13 @@
 import React, { Fragment, useEffect, useState } from "react";
-
+import { FaBlog } from "react-icons/fa";
+import { BsCartCheck } from "react-icons/bs";
 import { Divider, Input, Menu, MenuProps, Layout, Tooltip, Avatar } from "antd";
 import Link from "next/link";
-import { MenuFoldOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  MailOutlined,
+  MenuFoldOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { useProfileState } from "../../modules/profile/context";
 import { getCookie } from "../../helper";
 const { Sider, Footer } = Layout;
@@ -31,7 +36,9 @@ export const SideNav = () => {
       "Logo",
       "sub0",
       <>
-        <Link className="relative" href={"/"}></Link>
+        <Link className="relative" href={"/"}>
+          {/* <RxDashboard /> */}
+        </Link>
       </>
     ),
     getItem(
@@ -48,9 +55,27 @@ export const SideNav = () => {
         <MenuFoldOutlined />
       </Link>
     ),
-    getItem("Order", "sub2", <Link href={"/order"}></Link>),
-    getItem("Product", "sub3", <Link href={"/product"}></Link>),
-    getItem("Blog", "sub4", <Link href={"/blog"}></Link>),
+    getItem(
+      "Order",
+      "sub2",
+      <Link href={"/order"}>
+        <BsCartCheck />
+      </Link>
+    ),
+    getItem(
+      "Product",
+      "sub3",
+      <Link href={"/product"}>
+        <MailOutlined />
+      </Link>
+    ),
+    getItem(
+      "Blog",
+      "sub4",
+      <Link href={"/blog"}>
+        <FaBlog />
+      </Link>
+    ),
   ];
   return (
     <Layout style={{ minHeight: "100vh" }}>
