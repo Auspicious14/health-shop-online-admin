@@ -19,9 +19,8 @@ export const SignUpPage = () => {
   const router = useRouter();
   const handleSubmit = async (values: any) => {
     const res = handleSignUp(values);
-    res.then((res) => {
-      console.log(res);
-      router.push("/auth/login");
+    res.then((rs: any) => {
+      if (rs.user) router.push("/auth/login");
     });
   };
   return (
