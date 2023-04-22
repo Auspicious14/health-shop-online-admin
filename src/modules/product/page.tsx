@@ -1,5 +1,14 @@
 import { DeleteFilled, EditFilled, PlusOutlined } from "@ant-design/icons";
-import { Button, Card, Space, Table, Input, Tag, Modal } from "antd";
+import {
+  Button,
+  Card,
+  Space,
+  Table,
+  Input,
+  Tag,
+  Modal,
+  Popconfirm,
+} from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useEffect, useState } from "react";
 import { ApModal, SideNav } from "../../components";
@@ -84,9 +93,15 @@ export const ProductPage = () => {
       title: "",
       key: "action",
       render: (_, { _id }) => (
-        <Space size="middle">
-          <DeleteFilled onClick={() => deleteProduct(_id)} />
-        </Space>
+        <Popconfirm
+          title="Sure to delete?"
+          onConfirm={() => deleteProduct(_id)}
+          okButtonProps={{
+            style: { background: "rgb(37 99 235)" },
+          }}
+        >
+          <DeleteFilled />
+        </Popconfirm>
       ),
     },
     {
@@ -145,6 +160,8 @@ export const ProductPage = () => {
             columns={columns}
             dataSource={products}
             rowKey={(p) => p._id}
+            pagination={{ pageSize: 50 }}
+            scroll={{ y: 500 }}
           />
         </div>
       </div>
