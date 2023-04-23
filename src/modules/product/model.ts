@@ -12,8 +12,7 @@ export interface IProduct {
   rating: number;
   createdAt: string;
   status: string;
-  soldout: boolean;
-  instock: boolean;
+  availability: IAvailability;
 }
 
 export interface IProductImage {
@@ -23,7 +22,8 @@ export interface IProductImage {
   name: string;
 }
 
-export interface ICategory {
-  label: string;
-  value: string;
+enum IAvailability {
+  soldout = "soldout",
+  soon = "soon",
+  instock = "instock",
 }

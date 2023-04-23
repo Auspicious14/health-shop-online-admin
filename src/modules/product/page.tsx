@@ -1,27 +1,24 @@
+import React, { useEffect, useState } from "react";
 import {
   DeleteOutlined,
   EditFilled,
-  EditOutlined,
   PlusOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
-import { FiEdit2 } from "react-icons/fi";
-import {
-  Button,
-  Card,
-  Space,
-  Table,
-  Input,
-  Tag,
-  Modal,
-  Popconfirm,
-} from "antd";
+import { Button, Space, Table, Input, Typography, Popconfirm } from "antd";
 import { ColumnsType } from "antd/es/table";
-import React, { useEffect, useState } from "react";
 import { ApModal, SideNav } from "../../components";
 import { useProductState } from "./context";
 import CreateProductPage from "./detail";
 import { IProduct } from "./model";
 const Search = Input;
+const { Text } = Typography;
+
+const productStatus = {
+  instock: "bg-green-100 px-3 py-0.5 rounded-lg text-green-600",
+  soldout: "bg-red-100 px-3 py-0.5 rounded-lg text-red-600",
+  soon: "bg-orange-100 px-3 py-0.5 rounded-lg text-orange-600",
+};
 
 export const ProductPage = () => {
   const { products, getProducts, deleteProduct } = useProductState();
@@ -33,7 +30,7 @@ export const ProductPage = () => {
     show: false,
   });
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState<string>("");
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     console.log("selectedRowKeys changed: ", newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
@@ -63,8 +60,8 @@ export const ProductPage = () => {
 
     {
       title: "Product Name",
-      dataIndex: "name",
       key: "name",
+      render: (_, { name }) => <Text className="capitalize">{name}</Text>,
     },
     {
       title: "Qty",
@@ -85,9 +82,12 @@ export const ProductPage = () => {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      render: (_, { status }) => {
-        // let color = status === "instock" ? "blue" : "red";
-        return <Tag>{status}</Tag>;
+      render: (_, { availability }) => {
+        return (
+          <Text className={`${productStatus[availability]}`}>
+            {availability}
+          </Text>
+        );
       },
     },
     {
@@ -104,22 +104,21 @@ export const ProductPage = () => {
           >
             <DeleteOutlined />
           </Popconfirm>
-          <FiEdit2
-            // size={20}
-            onClick={() =>
-              setModal({ show: true, data: product, type: "Update Product" })
-            }
-          />
+          <Space>
+            <EditFilled
+              onClick={() =>
+                setModal({ show: true, data: product, type: "Update Product" })
+              }
+            />
+          </Space>
         </Space>
       ),
     },
   ];
 
-  const handleSearch = (e: any) => {
-    console.log(e.target.value);
-    getProducts(e.target.value);
-  };
-
+  const filtered = products?.filter((p) =>
+    p.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+  );
   return (
     <div className="flex w-full gap-4">
       <div className="w-[20%] h-screen border ">
@@ -147,17 +146,18 @@ export const ProductPage = () => {
           <Search
             className="w-60"
             placeholder="Search product"
-            onChange={handleSearch}
+            prefix={<SearchOutlined className="text-gray-300" />}
+            onChange={(e) => setSearch(e.target.value.toLocaleLowerCase())}
           />
         </div>
         <div>
           <Table
             rowSelection={rowSelection}
             columns={columns}
-            dataSource={products}
+            dataSource={filtered}
             rowKey={(p) => p._id}
             pagination={{ pageSize: 50 }}
-            scroll={{ y: 500 }}
+            scroll={{ y: 350 }}
           />
         </div>
       </div>
@@ -165,10 +165,6 @@ export const ProductPage = () => {
       <ApModal
         title={modal.type}
         show={modal.show}
-        // centered
-        // onOk={() => setModal({ show: false })}
-        // confirmLoading={true}
-        // width={1000}
         onDimiss={() => setModal({ show: false })}
       >
         <CreateProductPage

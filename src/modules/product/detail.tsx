@@ -1,39 +1,33 @@
-import { PlusOutlined } from "@ant-design/icons";
-import { Button, Card, Radio, UploadProps } from "antd";
-import { Form, Formik, FormikProps } from "formik";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import { Button, Card, UploadProps } from "antd";
+import { Field, Form, Formik, FormikProps } from "formik";
 import React, { useEffect, useRef, useState } from "react";
 import { ApSelectInput, ApTextInput, Files, SideNav } from "../../components";
 import { useProductState } from "./context";
-import { ICategory, IProduct, IProductImage } from "./model";
+import { IProduct } from "./model";
 import * as Yup from "yup";
 import { getCookie } from "../../helper";
-import { toast } from "react-toastify";
-import { ProductImg } from "./components/img";
 
 const FormSchema = Yup.object().shape({
   name: Yup.string().required("Product name is required"),
   description: Yup.string().required("Description is required"),
   price: Yup.string().required("Product price is required"),
-  // price: Yup.string().required("Color is required"),
-  categories: Yup.string().required("category is required"),
+  quantity: Yup.string().required("Quantity is required"),
+  color: Yup.string().required("Color is required"),
+  brand: Yup.string().required("Brand is required"),
+  size: Yup.object().required("Size is required"),
+  categories: Yup.array().required("Category is required"),
+  availability: Yup.string().required("Choose  availability options"),
 });
 interface IProps {
   product: IProduct;
   onDissmiss?: () => void;
-  onUpdate?: (product: IProduct) => void;
+  onUpdate?: () => void;
 }
 
 const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
   const { createProduct, loading, updateProduct } = useProductState();
-  const router = useRouter();
   const formRef = useRef<FormikProps<any>>();
-  const [qty, setQty] = useState<number>();
   const [files, setFiles] = useState(null) as any;
-  const [categories, setCategories] = useState<ICategory[]>([]);
-  const [size, setSize] = useState<string>("");
-  const [instock, setInstock] = useState<string>("");
 
   useEffect(() => {
     if (product?.images && !!product.images.length) {
@@ -57,6 +51,7 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
     setFiles(newFileList);
   };
   const handleProduct = async (values: any) => {
+    console.log(values);
     const id = getCookie("user_id");
     if (product?._id) {
       updateProduct(
@@ -71,16 +66,16 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
 
           categories: values.categories.map((c: any) => c.value),
           size: values?.size.value,
-          instock: product?.instock || instock,
+          // instock: product?.instock || instock,
         },
         product._id
       ).then((res: any) => {
-        if (res && onUpdate) onUpdate(res);
+        if (res && onUpdate) onUpdate();
       });
     } else {
       createProduct({
         ...values,
-        images: files.map((f: any) => ({
+        images: files?.map((f: any) => ({
           uri: f?.thumbUrl,
           type: f?.type,
           name: f?.name,
@@ -88,9 +83,8 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
         id,
         categories: values.categories.map((c: any) => c.value),
         size: values.size.value,
-        instock,
       }).then((res: any) => {
-        if (res && onUpdate) onUpdate(res);
+        if (res && onUpdate) onUpdate();
       });
     }
   };
@@ -105,7 +99,7 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
             name: product?.name || "",
             categories: product?.categories
               ? product?.categories.map((c) => ({ value: c, label: c }))
-              : [{ value: "jack", label: "jack" }],
+              : [{ value: "men", label: "men" }],
             quantity: product?.quantity || "",
             description: product?.description || "",
             price: product?.price || "",
@@ -115,7 +109,7 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
               : { label: "lg", value: "lg" },
             brand: product?.brand || "",
             // soldout: product?.soldout || "",
-            // instock: product?.instock || "",
+            availability: product?.availability || "",
           }}
           onSubmit={handleProduct}
         >
@@ -145,9 +139,9 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
                       isMulti
                       name={"categories"}
                       options={[
-                        { value: "jack", label: "Jack" },
-                        { value: "lucy", label: "Lucy" },
-                        { value: "Yiminghe", label: "yiminghe" },
+                        { value: "men", label: "men" },
+                        { value: "women", label: "women" },
+                        { value: "kids", label: "kids" },
                       ]}
                       addOnChange={(val: any) => {
                         console.log(val);
@@ -212,20 +206,41 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
                   </Card>
                   <Card className="m-3 w-full">
                     <h1>Availability</h1>
-                    <div className="flex gap-4">
-                      <Radio.Group
-                        onChange={(e) => setInstock(e.target.value)}
-                        value={instock}
-                      >
-                        <Radio value={"instock"}>Instock</Radio>
-                        <Radio value={"soldout"}>Soldout</Radio>
-                      </Radio.Group>
+                    <div className="flex my-4 gap-4">
+                      <div className="flex gap-2 items-center">
+                        <Field
+                          type="radio"
+                          value="instock"
+                          name="availability"
+                          className=" text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                        />
+                        Instock
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <Field
+                          type="radio"
+                          value="soldout"
+                          name="availability"
+                          className=" text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                        />
+                        Soldout
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <Field
+                          type="radio"
+                          value="soon"
+                          name="availability"
+                          className=" text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                        />
+                        Soon
+                      </div>
                     </div>
                   </Card>
                   <Button
                     htmlType="submit"
                     type="primary"
                     className="m-3 bg-blue-600 text-white"
+                    loading={loading}
                   >
                     {product?._id ? "Save Changes" : "Add Product"}
                   </Button>
