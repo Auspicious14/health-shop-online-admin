@@ -1,5 +1,20 @@
-import { DeleteFilled, EditFilled, PlusOutlined } from "@ant-design/icons";
-import { Button, Space, Table, Input, Tag, Typography } from "antd";
+import {
+  DeleteFilled,
+  DeleteOutlined,
+  EditFilled,
+  PlusOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
+import {
+  Button,
+  Space,
+  Table,
+  Input,
+  Tag,
+  Typography,
+  Card,
+  Popconfirm,
+} from "antd";
 import { ColumnsType } from "antd/es/table";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -19,6 +34,7 @@ export const BlogPage = () => {
     show: false,
   });
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [search, setSearch] = useState<string>("");
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     console.log("selectedRowKeys changed: ", newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
@@ -52,18 +68,18 @@ export const BlogPage = () => {
 
     {
       title: "",
-      key: "action",
-      render: (_, { _id }) => (
-        <Space size="middle">
-          <DeleteFilled onClick={() => deleteBlog(_id)} />
-        </Space>
-      ),
-    },
-    {
-      title: "",
       key: "edit",
       render: (_, blog) => (
-        <Space size="middle">
+        <Space className="flex gap-8 items-center">
+          <Popconfirm
+            title="Sure to delete?"
+            onConfirm={() => deleteBlog(blog?._id)}
+            okButtonProps={{
+              style: { background: "rgb(37 99 235)" },
+            }}
+          >
+            <DeleteOutlined />
+          </Popconfirm>
           <EditFilled
             onClick={() =>
               setModal({ show: true, data: blog, type: "Update Blog" })
@@ -74,11 +90,9 @@ export const BlogPage = () => {
     },
   ];
 
-  const handleSearch = (e: any) => {
-    console.log(e.target.value);
-    getBlogs(e.target.value);
-  };
-
+  const filtered = blogs?.filter((p) =>
+    p.title.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+  );
   console.log(modal.data);
   return (
     <div className="flex w-full gap-4">
@@ -88,16 +102,13 @@ export const BlogPage = () => {
         </div> */}
         <div>
           <SideNav />
-          {/* <div className="bg-gray-100 px-4 w-full relative bottom-0">
-            <Link href={"/profile"}>Profile</Link>
-          </div> */}
         </div>
       </div>
       <div className="w-[80%] mx-4">
         <div className="flex justify-between items-center shadow-sm p-4 ">
           <div>
-            <h1 className="text-3xl font-bold">Products</h1>
-            <span>keep track of vendor</span>
+            <h1 className="text-3xl font-bold">Blogs</h1>
+            <span>Write about products</span>
           </div>
           <Button
             type="primary"
@@ -111,18 +122,19 @@ export const BlogPage = () => {
           </Button>
         </div>
         <div className="shadow-sm p-4 flex items-center justify-between">
-          <h1 className=" font-bold">All Orders</h1>
+          <h1 className=" font-bold">All Blogs</h1>
           <Search
             className="w-60"
-            placeholder="Search product"
-            onChange={handleSearch}
+            placeholder="Search blog"
+            prefix={<SearchOutlined className="text-gray-300" />}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
         <div>
           <Table
             rowSelection={rowSelection}
             columns={columns}
-            dataSource={blogs}
+            dataSource={filtered}
             rowKey={(p) => p._id}
           />
         </div>
