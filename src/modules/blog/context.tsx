@@ -139,20 +139,17 @@ export const BlogContextProvider: React.FC<IProps> = ({ children }) => {
   const deleteBlog = async (blogId: string) => {
     setLoading(true);
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_ROUTE}/blog/${blogId}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const res = await apiReqHandler({
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/blog/${blogId}`,
+        method: "DELETE",
+      });
       setLoading(false);
-      const data = await res.json();
-
+      const data = await res.res?.data;
       if (data) {
         toast.success(data.message);
+        setBlogs(data.data);
       }
-      setBlogs(data);
-      console.log(data);
+      return data;
     } catch (error: any) {
       console.log(error);
       toast.error(error);
