@@ -1,4 +1,4 @@
-import { Button, Card } from "antd";
+import { Button, Card, Space } from "antd";
 import { Form, Formik, FormikProps } from "formik";
 import React, { useEffect, useRef, useState } from "react";
 import { ApTextInput } from "../../components";
@@ -6,22 +6,27 @@ import * as Yup from "yup";
 import { getCookie } from "../../helper";
 import { toast } from "react-toastify";
 import { useProfileState } from "./context";
+import { IProfile } from "./model";
 
 const FormSchema = Yup.object().shape({
-  firstName: Yup.string().required("first name is required"),
+  firstName: Yup.string().required("First name is required"),
   lastName: Yup.string().required("Last Name is required"),
-  email: Yup.string().required("email is required").email(),
-  password: Yup.string().required("password is required").min(6),
+  email: Yup.string().required("Email is required").email(),
+  password: Yup.string().required("Password is required").min(6),
 });
 
-export const UpdateProfile = () => {
-  const { profile, loading, updateProfile, getProfile } = useProfileState();
+interface IProps {
+  profile: IProfile;
+}
+export const UpdateProfile: React.FC<IProps> = ({ profile }) => {
+  const { loading, updateProfile } = useProfileState();
   const formRef = useRef<FormikProps<any>>();
 
-  useEffect(() => {
-    getProfile(getCookie("user_id"));
-  }, []);
+  // useEffect(() => {
+  //   getProfile(getCookie("user_id"));
+  // }, []);
   const handleSubmit = (values: any) => {
+    console.log(values);
     const id = getCookie("user_id");
     updateProfile(values, id).then((res: any) => {
       if (res) toast.success("Profile Updated");
@@ -46,39 +51,57 @@ export const UpdateProfile = () => {
           {(props: FormikProps<any>) => (
             <Form className=" Form card px-4 ">
               <Card>
-                <Card
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <ApTextInput
-                    className="relative w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
-                    label="First Name"
-                    name="firstName"
-                    type="text"
-                    placeHolder="First Name"
-                  />
-                  <ApTextInput
-                    className="relative  w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                    label="Last Name"
-                    name="lastName"
-                    type="text"
-                    placeHolder="Last Name"
-                  />
-                </Card>
-                <ApTextInput
-                  className="relative block w-full rounded-md border-0 py-1.5 px-2 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 outline-blue-500 sm:text-sm sm:leading-6"
-                  label="Email"
-                  name="email"
-                  type="email"
-                  placeHolder="Username"
-                />
-
-                <ApTextInput
-                  className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
-                  label="Password"
-                  name="password"
-                  type="password"
-                  placeHolder="*******"
-                />
+                <div className="border-b my-2">
+                  <p className="font-bold">Personal Info</p>
+                  <p>Update your Personal Information here</p>
+                </div>
+                <div className="w-full flex items-start my-8 border-b gap-48">
+                  <p>Name</p>
+                  <div className="w-full flex gap-8 items-start">
+                    <div className="w-[40%]">
+                      <ApTextInput
+                        className="relative w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
+                        label=""
+                        name="firstName"
+                        type="text"
+                        placeHolder="First Name"
+                      />
+                    </div>
+                    <div className="w-[40%]">
+                      <ApTextInput
+                        className="relative  w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                        label=""
+                        name="lastName"
+                        type="text"
+                        placeHolder="Last Name"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className=" flex items-start my-8 border-b gap-48">
+                  <p>Email</p>
+                  <div className="w-[40%]">
+                    <ApTextInput
+                      className="relative block w-full rounded-md border-0 py-1.5 px-2 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 outline-blue-500 sm:text-sm sm:leading-6"
+                      label=""
+                      name="email"
+                      type="email"
+                      placeHolder="email"
+                    />
+                  </div>
+                </div>
+                <div className="w-full flex items-start my-8 border-b gap-48">
+                  <p>Pasword</p>
+                  <div className="w-[40%]">
+                    <ApTextInput
+                      className="relative block w-full rounded-md border-0 py-1.5 px-2 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 outline-blue-500 sm:text-sm sm:leading-6"
+                      label=""
+                      name="password"
+                      type="password"
+                      placeHolder="*******"
+                    />
+                  </div>
+                </div>
 
                 <Button
                   type="primary"
