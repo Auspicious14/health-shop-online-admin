@@ -16,6 +16,7 @@ export enum IOrderStatus {
   confirmed = "confirmed",
   delivered = "delivered",
   cancelled = "cancelled",
+  new = "new",
 }
 
 export interface IAddress {

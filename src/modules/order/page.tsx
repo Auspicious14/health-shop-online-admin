@@ -23,9 +23,11 @@ const statusColor = {
   confirmed: "text-blue-600",
   delivered: "text-green-600",
   cancelled: "text-red-600",
+  new: "text-black",
 };
 
 export const OrderPage = () => {
+  const [order, setOrder] = useState<IOrder>();
   const { orders, getAllOrders, updateOrderItem } = useOrderState();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [loading, setLoading] = useState(false);
@@ -33,13 +35,19 @@ export const OrderPage = () => {
     console.log("selectedRowKeys changed: ", newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
-
-  const pendingOrders = orders?.map((ord) => ord.status === "pending").length;
-  console.log(pendingOrders);
   useEffect(() => {
     getAllOrders();
   }, []);
 
+  const counts: any = orders
+    .map((o) => o.status)
+    .reduce(
+      (acc: any, value) => ({
+        ...acc,
+        [value]: (acc[value] || 0) + 1,
+      }),
+      {}
+    );
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
@@ -101,33 +109,24 @@ export const OrderPage = () => {
     },
     {
       title: "Status",
-      // dataIndex: "status",
       key: "status",
       render: (_, { _id, status, ...others }) => {
         const items = [
-          { key: "1", label: "delivered" },
-          { key: "2", label: "pending" },
-          { key: "2", label: "confirmed" },
-          { key: "2", label: "cancelled" },
+          { key: "5", label: "New" },
+          { key: "1", label: "Delivered" },
+          { key: "2", label: "Pending" },
+          { key: "3", label: "Confirmed" },
+          { key: "4", label: "Cancelled" },
         ];
         const handleMenuClick: MenuProps["onClick"] = async (e: any) => {
-          // message.info('Click on menu item.');
-          console.log("click", e.domEvent.target.innerText);
           const id = getCookie("user_id");
           const res = await updateOrderItem(
             { others, id, status: e.domEvent.target.innerText },
             _id
           );
-          console.log(res, "responseee");
-        };
-        const handleClick = async () => {
-          console.log(status);
         };
         return (
-          <Dropdown.Button
-            menu={{ items, onClick: handleMenuClick }}
-            onClick={handleClick}
-          >
+          <Dropdown.Button menu={{ items, onClick: handleMenuClick }}>
             <Text className={`block uppercase ${statusColor[status]}`}>
               {status}
             </Text>
@@ -154,15 +153,19 @@ export const OrderPage = () => {
           {/* <Divider orientation="left">Responsive</Divider> */}
           <Card.Grid className="text-center w-[25%] shadow-md py-5 inset-3">
             <h1 className="text-sm">New Orders</h1>
-            <h1 className="font-bold text-2xl">{200}</h1>
+            <h1 className="font-bold text-2xl">{counts.new || 0}</h1>
           </Card.Grid>
           <Card.Grid className="text-center w-[25%] shadow-md py-5 inset-3">
             <h1 className="text-sm">Pending Orders</h1>
-            <h1 className="font-bold text-2xl">{pendingOrders}</h1>
+            <h1 className="font-bold text-2xl">{counts.pending || 0}</h1>
           </Card.Grid>
           <Card.Grid className="text-center w-[25%] shadow-md py-5 inset-3">
             <h1 className="text-sm">Delivered Orders</h1>
-            <h1 className="font-bold text-2xl">$200</h1>
+            <h1 className="font-bold text-2xl">{counts.delivered || 0}</h1>
+          </Card.Grid>
+          <Card.Grid className="text-center w-[25%] shadow-md py-5 inset-3">
+            <h1 className="text-sm">Confirmed Orders</h1>
+            <h1 className="font-bold text-2xl">{counts.confirmed || 0}</h1>
           </Card.Grid>
         </div>
         <div className="shadow-sm p-4 flex items-center justify-between">

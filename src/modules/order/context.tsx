@@ -110,8 +110,8 @@ export const OrderContextProvider: React.FC<IProps> = ({ children }) => {
       });
 
       setLoading(false);
-      const data = await res.res?.data;
-      if (data.data) {
+      const data = await res.res?.data.data;
+      if (data) {
         setOrders(orders?.map((ord) => (ord?._id == data?._id ? data : ord)));
         console.log(data);
         toast.success("Order Updated");
