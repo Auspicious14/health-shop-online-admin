@@ -37,24 +37,18 @@ export const CreateBlog: React.FC<IProps> = ({ blog, onUpdate }) => {
           uri: i.uri,
           name: i.name,
           type: i.type,
+          preview: i.uri,
         }))
       );
     }
   }, [blog]);
 
-  const handleBlogImage = (res: any) => {
-    // console.log(newFileList);
-    console.log(res);
-    setFiles([
-      ...files,
-      {
-        uri: res[0].uri,
-        name: res[0].file.name,
-        type: res[0].file.type,
-      },
-    ]);
+  const handleBlogImage: UploadProps["onChange"] = ({
+    fileList: newFileList,
+  }: any) => {
+    console.log(newFileList, "newFIleListt");
+    setFiles(newFileList);
   };
-
   // console.log(files.map((f: any, i: any) => console.log(f.thumbUrl)));
   // console.log(files[0]?.name);
   // files?.map((f: any) => ({
@@ -127,18 +121,19 @@ export const CreateBlog: React.FC<IProps> = ({ blog, onUpdate }) => {
                 </div>
                 <div className="m-3 w-full">
                   <Card className="m-3 w-full">
-                    <ApFileInput
+                    {/* <ApFileInput
                       accept={"image/*"}
                       onSelected={(res: any) => {
                         if (res) {
                           handleBlogImage(res);
                         }
                       }}
-                    />
-                    {/* <Files
+                    /> */}
+                    <h1>Pictures</h1>
+                    <Files
                       fileList={files}
                       handleChange={(res: any) => handleBlogImage(res)}
-                    /> */}
+                    />
                   </Card>
 
                   <Button
@@ -146,7 +141,7 @@ export const CreateBlog: React.FC<IProps> = ({ blog, onUpdate }) => {
                     type="primary"
                     className="m-3 bg-blue-600 text-white"
                   >
-                    create
+                    {blog?._id ? "Save Changes" : "Add Blog"}
                   </Button>
                 </div>
               </div>
