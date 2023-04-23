@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { FaBlog } from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
 import { BsCartCheck } from "react-icons/bs";
 import { Divider, Input, Menu, MenuProps, Layout, Tooltip, Avatar } from "antd";
 import Link from "next/link";
@@ -9,11 +10,13 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { useProfileState } from "../../modules/profile/context";
-import { getCookie } from "../../helper";
+import { deleteCookie, getCookie } from "../../helper";
+import { useRouter } from "next/router";
 const { Sider, Footer } = Layout;
 export const SideNav = () => {
   const { profile, loading, getProfile } = useProfileState();
   type MenuItem = Required<MenuProps>["items"][number];
+  const router = useRouter();
 
   useEffect(() => {
     getProfile(getCookie("user_id"));
@@ -77,6 +80,14 @@ export const SideNav = () => {
       </Link>
     ),
   ];
+  const handleSignOut = () => {
+    const userId = getCookie("user_id");
+    console.log(userId);
+    if (getCookie("user_id")) {
+      deleteCookie("user_id", -1);
+      router.push("/auth/login");
+    }
+  };
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <>
@@ -90,7 +101,13 @@ export const SideNav = () => {
           className="h-[100vh] fixed"
         />
         <Footer
-          style={{ background: "none", padding: "1rem" }}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            background: "none",
+            padding: "1rem",
+          }}
           className="w-[19%] fixed z-50 bottom-0 border border-t"
         >
           <Link href={"/profile"}>
@@ -117,6 +134,13 @@ export const SideNav = () => {
               </div>
             </div>
           </Link>
+          <Tooltip title="Logout" placement="top">
+            <FiLogOut
+              onClick={handleSignOut}
+              className="cursor-pointer"
+              size={20}
+            />
+          </Tooltip>
         </Footer>
       </>
     </Layout>
