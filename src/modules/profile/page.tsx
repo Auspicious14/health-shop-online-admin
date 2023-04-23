@@ -1,16 +1,25 @@
 import { Card, Input } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SideNav } from "../../components";
 import { UpdateProfile } from "./detail";
+import { useProfileState } from "./context";
+import { getCookie } from "../../helper";
+import { UpdatePassword } from "./password";
 
 export const ProfilePage = () => {
+  const { profile, loading, updateProfile, getProfile } = useProfileState();
   const [show, setShow] = useState<{
     show: boolean;
     data?: any;
     type?: "update" | "password";
   }>({
-    show: false,
+    show: true,
+    type: "update",
   });
+
+  useEffect(() => {
+    getProfile(getCookie("user_id"));
+  }, []);
 
   return (
     <div className="flex w-full gap-4">
@@ -18,23 +27,42 @@ export const ProfilePage = () => {
         <SideNav />
       </div>
       <div className="w-[80%] mx-4">
-        <div className="shadow-sm p-4 ">
+        <div className=" p-4 ">
           <div>
             <h1 className="text-3xl font-bold">Profile</h1>
           </div>
-          <div className="flex gap-4">
-            <p onClick={() => setShow({ show: true, type: "update" })}>
+          <div className="flex gap-4 mt-8 mb-2">
+            <p
+              className={
+                show.show === true && show.type === "update"
+                  ? " border-b-black"
+                  : ""
+              }
+              onClick={() => setShow({ show: true, type: "update" })}
+            >
               Personal Info
             </p>
-            <p>Password</p>
+            <p
+              className={
+                show.show === true && show.type === "update"
+                  ? " border-b-black"
+                  : ""
+              }
+              onClick={() => setShow({ show: true, type: "password" })}
+            >
+              Password
+            </p>
           </div>
-          <Card>
+          {/* <div className="border-b">
             <p>Personal Info</p>
             <p>Update your Personal Information here</p>
-          </Card>
+          </div> */}
         </div>
 
-        {show.show && show.type === "update" && <UpdateProfile />}
+        {show.show && show.type === "update" && (
+          <UpdateProfile profile={profile} />
+        )}
+        {show.show && show.type === "password" && <UpdatePassword />}
       </div>
     </div>
   );
