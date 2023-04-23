@@ -1,5 +1,4 @@
 import {
-  Button,
   Card,
   Space,
   Table,
@@ -15,6 +14,7 @@ import { SideNav } from "../../components";
 import { IOrder } from "./model";
 import { useOrderState } from "./context";
 import { getCookie } from "../../helper";
+import { SearchOutlined } from "@ant-design/icons";
 const Search = Input;
 const { Text } = Typography;
 
@@ -30,7 +30,7 @@ export const OrderPage = () => {
   const [order, setOrder] = useState<IOrder>();
   const { orders, getAllOrders, updateOrderItem } = useOrderState();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState<string>("");
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     console.log("selectedRowKeys changed: ", newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
@@ -63,7 +63,9 @@ export const OrderPage = () => {
     {
       title: "Name",
       key: "name",
-      render: (_, { address }) => <Text>{address?.name}</Text>,
+      render: (_, { address }) => (
+        <Text className="capitalize">{address?.name}</Text>
+      ),
     },
     {
       title: "Product Name",
@@ -136,6 +138,9 @@ export const OrderPage = () => {
     },
   ];
 
+  const filtered = orders?.filter((p) =>
+    p.address?.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+  );
   return (
     <div className="flex w-full gap-4">
       <div className="w-[20%] h-screen border ">
@@ -150,7 +155,6 @@ export const OrderPage = () => {
           <span>{`${orders?.length} orders`}</span>
         </div>
         <div className="flex gap-8 my-4 items-center justify-around">
-          {/* <Divider orientation="left">Responsive</Divider> */}
           <Card.Grid className="text-center w-[25%] shadow-md py-5 inset-3">
             <h1 className="text-sm">New Orders</h1>
             <h1 className="font-bold text-2xl">{counts.new || 0}</h1>
@@ -170,29 +174,21 @@ export const OrderPage = () => {
         </div>
         <div className="shadow-sm p-4 flex items-center justify-between">
           <h1 className=" font-bold">All Orders</h1>
-          <Search className="w-60" />
+          <Search
+            className="w-60"
+            placeholder="Search order"
+            prefix={<SearchOutlined className="text-gray-300" />}
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </div>
         <div>
-          {/* <div style={{ marginBottom: 16 }}>
-            <Button
-              type="primary"
-            //   onClick={start}
-              disabled={!hasSelected}
-              loading={loading}
-            >
-              Reload
-            </Button>
-            <span style={{ marginLeft: 8 }}>
-              {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
-            </span>
-          </div> */}
           <Table
             rowSelection={rowSelection}
             columns={columns}
-            dataSource={orders}
+            dataSource={filtered}
             rowKey={(ord) => ord._id}
             pagination={{ pageSize: 50 }}
-            scroll={{ y: 500 }}
+            scroll={{ y: 300 }}
           />
         </div>
       </div>
