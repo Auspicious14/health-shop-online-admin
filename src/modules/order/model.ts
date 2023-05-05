@@ -14,7 +14,7 @@ export interface IOrder {
 export enum IOrderStatus {
   pending = "pending",
   confirmed = "confirmed",
-  delivered = "delivered",
+  Delivered = "Delivered",
   cancelled = "cancelled",
   new = "new",
 }

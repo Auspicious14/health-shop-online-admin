@@ -21,7 +21,7 @@ const { Text } = Typography;
 const statusColor = {
   pending: "text-orange-400",
   confirmed: "text-blue-600",
-  delivered: "text-green-600",
+  Delivered: "text-green-600",
   cancelled: "text-red-600",
   new: "text-black",
 };
@@ -48,6 +48,7 @@ export const OrderPage = () => {
       }),
       {}
     );
+  console.log(counts);
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
@@ -154,18 +155,18 @@ export const OrderPage = () => {
           <h1 className="text-3xl font-bold">Orders</h1>
           <span>{`${orders?.length} orders`}</span>
         </div>
-        <div className="flex gap-8 my-4 items-center justify-around">
+        <div className="flex gap-8 my-4 items-center justify-between">
           <Card.Grid className="text-center w-[25%] shadow-md py-5 inset-3">
             <h1 className="text-sm">New Orders</h1>
             <h1 className="font-bold text-2xl">{counts.new || 0}</h1>
           </Card.Grid>
-          <Card.Grid className="text-center w-[25%] shadow-md py-5 inset-3">
+          {/* <Card.Grid className="text-center w-[25%] shadow-md py-5 inset-3">
             <h1 className="text-sm">Pending Orders</h1>
             <h1 className="font-bold text-2xl">{counts.pending || 0}</h1>
-          </Card.Grid>
+          </Card.Grid> */}
           <Card.Grid className="text-center w-[25%] shadow-md py-5 inset-3">
             <h1 className="text-sm">Delivered Orders</h1>
-            <h1 className="font-bold text-2xl">{counts.delivered || 0}</h1>
+            <h1 className="font-bold text-2xl">{counts.Delivered || 0}</h1>
           </Card.Grid>
           <Card.Grid className="text-center w-[25%] shadow-md py-5 inset-3">
             <h1 className="text-sm">Confirmed Orders</h1>
@@ -188,7 +189,7 @@ export const OrderPage = () => {
             dataSource={filtered}
             rowKey={(ord) => ord._id}
             pagination={{ pageSize: 50 }}
-            scroll={{ y: 300 }}
+            scroll={{ y: 250 }}
           />
         </div>
       </div>
