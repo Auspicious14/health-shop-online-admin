@@ -11,6 +11,7 @@ import { ApModal, SideNav } from "../../components";
 import { useProductState } from "./context";
 import CreateProductPage from "./detail";
 import { IProduct } from "./model";
+import { helper } from "../../helper";
 const Search = Input;
 const { Text } = Typography;
 
@@ -75,8 +76,11 @@ export const ProductPage = () => {
     },
     {
       title: "Price",
-      dataIndex: "price",
+      // dataIndex: "price",
       key: "price",
+      render: (_, { price }) => (
+        <Text>{helper.toCurrency(parseFloat(price))}</Text>
+      ),
     },
     {
       title: "Status",
