@@ -73,6 +73,13 @@ export const SideNav = () => {
       </Link>
     ),
     getItem(
+      "Category",
+      "sub103",
+      <Link href={"/category"}>
+        <MailOutlined />
+      </Link>
+    ),
+    getItem(
       "Blog",
       "sub4",
       <Link href={"/blog"}>

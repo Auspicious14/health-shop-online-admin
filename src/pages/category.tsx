@@ -1,17 +1,17 @@
 import React from "react";
-import { getCookie } from "../helper";
-import { ProductContextProvider } from "../modules/product/context";
-import { ProductPage } from "../modules/product/page";
+import { CategoryPage } from "../modules/category/page";
+import { CategoryContextProvider } from "../modules/category/context";
 
-const Product = () => {
+const Category = () => {
   return (
-    <ProductContextProvider>
-      <ProductPage />
-    </ProductContextProvider>
+    <CategoryContextProvider>
+      <CategoryPage />
+    </CategoryContextProvider>
   );
 };
 
-export default Product;
+export default Category;
+
 export const getServerSideProps = async ({
   req,
   query,

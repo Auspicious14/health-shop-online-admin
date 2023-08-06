@@ -12,7 +12,6 @@ const FormSchema = Yup.object().shape({
 });
 interface IProps {
   category: ICategory;
-  onDissmiss?: () => void;
   onUpdate?: () => void;
 }
 
@@ -42,7 +41,7 @@ export const CategoryDetail: React.FC<IProps> = ({ category, onUpdate }) => {
     console.log(newFileList, "newFIleListt");
     setFiles(newFileList);
   };
-  const handleProduct = async (values: any) => {
+  const handleSubmit = async (values: any) => {
     console.log(values);
     const id = getCookie("user_id");
     if (category?._id) {
@@ -70,6 +69,7 @@ export const CategoryDetail: React.FC<IProps> = ({ category, onUpdate }) => {
         })),
         id,
       }).then((res: any) => {
+        console.log(res);
         if (res && onUpdate) onUpdate();
       });
     }
@@ -84,11 +84,11 @@ export const CategoryDetail: React.FC<IProps> = ({ category, onUpdate }) => {
           initialValues={{
             name: category?.name || "",
           }}
-          onSubmit={handleProduct}
+          onSubmit={handleSubmit}
         >
           {({ values, setFieldValue }) => (
             <Form>
-              <div className="w-full flex justify-between">
+              <div className="w-full ">
                 <div className="w-full">
                   <Card className="m-3 ">
                     <ApTextInput
@@ -115,7 +115,7 @@ export const CategoryDetail: React.FC<IProps> = ({ category, onUpdate }) => {
                     className="m-3 bg-blue-600 text-white"
                     loading={loading}
                   >
-                    {category?._id ? "Save Changes" : "Add Product"}
+                    {category?._id ? "Save Changes" : "Add Category"}
                   </Button>
                 </div>
               </div>

@@ -7,8 +7,8 @@ interface ICategoryState {
   loading: boolean;
   categories: ICategory[];
   getCategories: (query?: any) => Promise<void>;
-  createCategory: (payload: ICategory) => Promise<void>;
-  updateCategory: (payload: ICategory, id: string) => Promise<void>;
+  createCategory: (payload: ICategory) => Promise<any>;
+  updateCategory: (payload: ICategory, id: string) => Promise<any>;
   deleteCategory: (categoriesId: string) => Promise<void>;
 }
 
