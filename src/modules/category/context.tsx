@@ -53,17 +53,17 @@ export const CategoryContextProvider: React.FC<IProps> = ({ children }) => {
         method: "GET",
       });
       setLoading(false);
-      const data = await res.res?.data;
-      setCategories(data.data);
-      console.log(data.data);
-    } catch (error) {
+      const data = await res.res?.data.data;
+      setCategories(data);
+      return data;
+    } catch (error: any) {
       console.log(error);
+      toast.error(error);
     }
   };
 
   const createCategory = async (payload: ICategory) => {
     setLoading(true);
-    console.log(JSON.stringify(payload));
     try {
       const res = await apiReqHandler({
         endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/category`,
@@ -76,20 +76,18 @@ export const CategoryContextProvider: React.FC<IProps> = ({ children }) => {
       }
       const data = await res.res?.data.data;
       toast.success("category created successfully");
-      setCategories([...data, categories]);
+      setCategories([...categories, data]);
       return data;
     } catch (error: any) {
-      console.log(error);
       toast.error(error);
     }
   };
 
   const updateCategory = async (payload: ICategory, id: string) => {
     setLoading(true);
-    console.log(JSON.stringify(payload));
     try {
       const res = await apiReqHandler({
-        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/categories/${id}`,
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/category/${id}`,
         method: "PUT",
         payload: JSON.stringify(payload),
       });
@@ -100,14 +98,11 @@ export const CategoryContextProvider: React.FC<IProps> = ({ children }) => {
         toast.error("Error");
       }
       setCategories(
-        categories.map((p: ICategory, i: number) =>
-          p._id == data._id ? data : p
-        )
+        categories.map((p: ICategory) => (p._id == data._id ? data : p))
       );
 
       return data;
     } catch (error: any) {
-      console.log(error);
       toast.error(error);
     }
   };
@@ -124,11 +119,10 @@ export const CategoryContextProvider: React.FC<IProps> = ({ children }) => {
 
       if (data) {
         toast.success(data.message);
-        setCategories(data.data);
+        setCategories(categories?.filter((c) => c?._id !== id));
       }
       return data;
     } catch (error: any) {
-      console.log(error);
       toast.error(error);
     }
   };

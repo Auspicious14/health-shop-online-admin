@@ -1,7 +1,7 @@
-import { Button, Input, Popconfirm, Space, Table, Typography } from "antd";
 import React, { useEffect, useState } from "react";
-import { ICategory } from "./model";
+import { Button, Input, Popconfirm, Space, Table, Typography } from "antd";
 import { ColumnsType } from "antd/es/table";
+import { ICategory } from "./model";
 import {
   DeleteOutlined,
   EditFilled,
@@ -14,6 +14,7 @@ import { CategoryDetail } from "./detail";
 import { filter } from "@chakra-ui/react";
 const { Text } = Typography;
 const Search = Input;
+
 export const CategoryPage = () => {
   const [modal, setModal] = useState<{
     show: boolean;
@@ -25,9 +26,11 @@ export const CategoryPage = () => {
   const [search, setSearch] = useState<string>("");
   const { getCategories, categories, loading, deleteCategory } =
     useCategorystate();
+
   useEffect(() => {
     getCategories();
   }, []);
+
   const columns: ColumnsType<ICategory> = [
     {
       title: "Image",
@@ -77,10 +80,10 @@ export const CategoryPage = () => {
       ),
     },
   ];
-  // const filteredCategories = categories?.filter((p) =>
-  //   p.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-  // );
-  // console.log(filteredCategories);
+  const filteredCategories = categories?.filter((p) =>
+    p?.name?.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+  );
+  console.log(filteredCategories);
   return (
     <div className="flex w-full gap-4">
       <div className="w-[20%] h-screen border ">
@@ -115,7 +118,7 @@ export const CategoryPage = () => {
         <Table
           // rowSelection={rowSelection}
           columns={columns}
-          dataSource={categories}
+          dataSource={filteredCategories}
           rowKey={(p) => p._id}
           pagination={{ pageSize: 50 }}
           scroll={{ y: 350 }}
