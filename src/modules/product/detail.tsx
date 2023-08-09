@@ -6,6 +6,8 @@ import { useProductState } from "./context";
 import { IProduct } from "./model";
 import * as Yup from "yup";
 import { getCookie } from "../../helper";
+import { useCategorystate } from "../category/context";
+import { ICategory } from "../category/model";
 
 const FormSchema = Yup.object().shape({
   name: Yup.string().required("Product name is required"),
@@ -26,10 +28,12 @@ interface IProps {
 
 const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
   const { createProduct, loading, updateProduct } = useProductState();
+  const { categories, getCategories } = useCategorystate();
   const formRef = useRef<FormikProps<any>>();
   const [files, setFiles] = useState(null) as any;
 
   useEffect(() => {
+    getCategories();
     if (product?.images && !!product.images.length) {
       setFiles(
         product.images.map((i: any, index: number) => ({
@@ -41,17 +45,15 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
         }))
       );
     }
-    console.log(product?.images);
   }, [product]);
 
   const handleProductImage: UploadProps["onChange"] = ({
     fileList: newFileList,
   }: any) => {
-    console.log(newFileList, "newFIleListt");
     setFiles(newFileList);
   };
   const handleProduct = async (values: any) => {
-    console.log(values);
+    console.log(values.categories);
     const id = getCookie("user_id");
     if (product?._id) {
       updateProduct(
@@ -88,7 +90,7 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
       });
     }
   };
-  console.log(files, "filessss");
+  console.log(product?.categories);
   return (
     <div>
       <div className="w-full mx-4">
@@ -98,8 +100,11 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
           initialValues={{
             name: product?.name || "",
             categories: product?.categories
-              ? product?.categories.map((c) => ({ value: c, label: c }))
-              : [{ value: "men", label: "men" }],
+              ? product?.categories?.map((c) => ({
+                  value: c?.name,
+                  label: c?.name,
+                }))
+              : [{ value: "", label: "" }],
             quantity: product?.quantity || "",
             description: product?.description || "",
             price: product?.price || "",
@@ -138,11 +143,10 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
                     <ApSelectInput
                       isMulti
                       name={"categories"}
-                      options={[
-                        { value: "men", label: "men" },
-                        { value: "women", label: "women" },
-                        { value: "kids", label: "kids" },
-                      ]}
+                      options={categories?.map((c) => ({
+                        label: c.name,
+                        value: c.name,
+                      }))}
                       addOnChange={(val: any) => {
                         console.log(val);
                       }}

@@ -60,27 +60,29 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
         method: "GET",
       });
       setLoading(false);
-      const data = await res.res?.data;
-      setProducts(data.data);
-      console.log(data.data);
-    } catch (error) {
-      console.log(error);
+      const data = await res.res?.data?.data;
+      setProducts(data);
+    } catch (error: any) {
+      toast.error(error);
     }
   };
 
-  const getOneProduct = async (productId: string) => {
+  const getOneProduct = async (id: string) => {
     setLoading(true);
-    console.log(JSON.stringify(productId));
     try {
-      const res = await fetch(`http://localhost:2000/product/:${productId}`, {
+      const res = await apiReqHandler({
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/product/${id}`,
         method: "GET",
       });
       setLoading(false);
-      const data = await res.json();
-      setProduct(data);
-      console.log(data);
-    } catch (error) {
-      console.log(error);
+      if (res.res?.status !== 200) {
+        toast.error("Error");
+      }
+      const data = await res.res?.data?.data;
+      setProducts(data);
+      return data;
+    } catch (error: any) {
+      toast.error(error);
     }
   };
 
@@ -91,25 +93,23 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
       const res = await apiReqHandler({
         endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/product`,
         method: "POST",
-        payload: JSON.stringify(payload),
+        payload,
       });
       setLoading(false);
       if (res.res?.status !== 200) {
         toast.error("Error");
       }
-      const data = await res.res?.data.data;
+      const data = await res.res?.data?.data;
       toast.success("Product created successfully");
-      setProducts([...data, products]);
+      setProducts([...products, data]);
       return data;
     } catch (error: any) {
-      console.log(error);
       toast.error(error);
     }
   };
 
   const updateProduct = async (payload: IProduct, productId: string) => {
     setLoading(true);
-    console.log(JSON.stringify(payload));
     try {
       const res = await apiReqHandler({
         endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/product/${productId}`,
@@ -128,7 +128,6 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
 
       return data;
     } catch (error: any) {
-      console.log(error);
       toast.error(error);
     }
   };
@@ -145,11 +144,10 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
 
       if (data) {
         toast.success(data.message);
-        setProducts(data.data);
+        setProducts(products.filter((p: any) => p?._id !== productId));
       }
       return data;
     } catch (error: any) {
-      console.log(error);
       toast.error(error);
     }
   };

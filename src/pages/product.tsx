@@ -2,11 +2,14 @@ import React from "react";
 import { getCookie } from "../helper";
 import { ProductContextProvider } from "../modules/product/context";
 import { ProductPage } from "../modules/product/page";
+import { CategoryContextProvider } from "../modules/category/context";
 
 const Product = () => {
   return (
     <ProductContextProvider>
-      <ProductPage />
+      <CategoryContextProvider>
+        <ProductPage />
+      </CategoryContextProvider>
     </ProductContextProvider>
   );
 };

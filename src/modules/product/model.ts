@@ -1,3 +1,5 @@
+import { ICategory } from "../category/model";
+
 export interface IProduct {
   _id: string;
   name: string;
@@ -5,7 +7,7 @@ export interface IProduct {
   images: IProductImage[];
   price: string;
   size: { label: string; value: string };
-  categories: [string];
+  categories: ICategory[];
   color: string;
   quantity: string;
   brand: string;

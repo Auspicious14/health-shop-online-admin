@@ -22,7 +22,7 @@ const productStatus = {
 };
 
 export const ProductPage = () => {
-  const { products, getProducts, deleteProduct } = useProductState();
+  const { products, getProducts, deleteProduct, loading } = useProductState();
   const [modal, setModal] = useState<{
     show: boolean;
     data?: any;
@@ -121,7 +121,7 @@ export const ProductPage = () => {
   ];
 
   const filtered = products?.filter((p) =>
-    p.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+    p?.name?.toLocaleLowerCase().includes(search.toLocaleLowerCase())
   );
   return (
     <div className="flex w-full gap-4">
@@ -162,6 +162,7 @@ export const ProductPage = () => {
             rowKey={(p) => p._id}
             pagination={{ pageSize: 50 }}
             scroll={{ y: 350 }}
+            loading={loading}
           />
         </div>
       </div>
