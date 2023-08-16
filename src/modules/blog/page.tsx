@@ -93,7 +93,6 @@ export const BlogPage = () => {
   const filtered = blogs?.filter((p) =>
     p.title.toLocaleLowerCase().includes(search.toLocaleLowerCase())
   );
-  console.log(modal.data);
   return (
     <div className="flex w-full gap-4">
       <div className="w-[20%] h-screen border bg-red-400">
