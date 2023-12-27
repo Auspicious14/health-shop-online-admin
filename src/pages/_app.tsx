@@ -8,6 +8,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 
 import { extendTheme } from "@chakra-ui/react";
 import { ProfileContextProvider } from "../modules/profile/context";
+import { SignUpContextProvider } from "../modules/auth/signup/context";
 
 // 2. Extend the theme to include custom colors, fonts, etc
 const colors = {
@@ -26,21 +27,23 @@ export default function App({
   return (
     <SessionProvider session={session}>
       <ChakraProvider theme={theme}>
-        <ProfileContextProvider>
-          <Component {...pageProps} />
-          <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-          />
-        </ProfileContextProvider>
+        <SignUpContextProvider>
+          <ProfileContextProvider>
+            <Component {...pageProps} />
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+            />
+          </ProfileContextProvider>
+        </SignUpContextProvider>
       </ChakraProvider>
     </SessionProvider>
   );

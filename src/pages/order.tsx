@@ -12,6 +12,7 @@ const Order = () => {
   );
 };
 
+export default Order;
 export const getServerSideProps = async ({
   req,
   query,
@@ -19,7 +20,8 @@ export const getServerSideProps = async ({
   req: any;
   query: any;
 }) => {
-  if (!req?.cookies.user_id) {
+  const parse = JSON.parse(req?.cookies.user_id);
+  if (!parse.isAdmin) {
     return {
       redirect: {
         destination: "/auth/login",
@@ -32,4 +34,3 @@ export const getServerSideProps = async ({
     props: {},
   };
 };
-export default Order;

@@ -61,7 +61,11 @@ export const ApModal: React.FC<IProps> = ({
         //   </div>
         // </Card>
         <Transition.Root show={show} as={Fragment}>
-          <Dialog as="div" className="relative z-50" onClose={setOpen}>
+          <Dialog
+            as="div"
+            className={`relative z-50 ${containerClassName}`}
+            onClose={setOpen}
+          >
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -74,7 +78,7 @@ export const ApModal: React.FC<IProps> = ({
               <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
             </Transition.Child>
 
-            <div className="fixed w-screen inset-0 z-10 overflow-y-auto">
+            <div className="fixed inset-0 z-10 overflow-y-auto">
               <div className="mx-24 my-12 p-4 text-center sm:items-center sm:p-0">
                 <Transition.Child
                   as={Fragment}

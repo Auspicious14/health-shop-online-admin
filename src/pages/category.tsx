@@ -19,7 +19,8 @@ export const getServerSideProps = async ({
   req: any;
   query: any;
 }) => {
-  if (!req?.cookies.user_id) {
+  const parse = JSON.parse(req?.cookies.user_id);
+  if (!parse.isAdmin) {
     return {
       redirect: {
         destination: "/auth/login",

@@ -6,11 +6,15 @@ import { toast } from "react-toastify";
 interface ISignUpState {
   loading: boolean;
   handleSignUp: (user: any) => Promise<void>;
+  generateInviteLink: () => Promise<void>;
 }
 
 const SignUpContext = React.createContext<ISignUpState>({
   loading: false,
   handleSignUp(user) {
+    return null as any;
+  },
+  generateInviteLink() {
     return null as any;
   },
 });
@@ -53,8 +57,25 @@ export const SignUpContextProvider: React.FC<IProps> = ({ children }) => {
       toast.error(error);
     }
   };
+
+  const generateInviteLink = async () => {
+    try {
+      const res = await apiReqHandler({
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/auth/invite`,
+        method: "GET",
+      });
+
+      const data = res?.res?.data;
+      console.log(data);
+      if (data) return data;
+    } catch (error: any) {
+      toast.error(error);
+    }
+  };
   return (
-    <SignUpContext.Provider value={{ handleSignUp, loading }}>
+    <SignUpContext.Provider
+      value={{ handleSignUp, loading, generateInviteLink }}
+    >
       {children}
     </SignUpContext.Provider>
   );
