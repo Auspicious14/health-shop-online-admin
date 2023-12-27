@@ -194,7 +194,7 @@ const InviteLink = () => {
   };
   useEffect(() => {
     generateInviteLink().then((res: any) => {
-      setLink(res.data);
+      setLink(res?.data?.inviteCode);
     });
   }, []);
   return (
