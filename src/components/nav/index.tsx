@@ -34,7 +34,7 @@ export const SideNav = () => {
   const router = useRouter();
   const id = JSON.parse(getCookie("user_id"));
   useEffect(() => {
-    getProfile(id.id);
+    if (id) getProfile(id?.id);
   }, []);
   function getItem(
     label?: React.ReactNode,
