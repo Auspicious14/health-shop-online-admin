@@ -186,7 +186,7 @@ const InviteLink = () => {
   const { generateInviteLink } = useSignUpState();
   const [link, setLink] = useState<string>("");
   const [show, setShow] = useState<boolean>(false);
-  const inviteLink = `http://localhost:3000/auth/signup/${link}`;
+  const inviteLink = `${process.env.NEXT_PUBLIC_BASE_URL}/store/register/${link}`;
   const handleCopy = () => {
     navigator.clipboard
       .writeText(inviteLink)

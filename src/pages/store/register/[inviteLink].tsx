@@ -1,6 +1,6 @@
 import React from "react";
-import { SignUpContextProvider } from "../../../modules/auth/signup/context";
-import { SignUpPage } from "../../../modules/auth/signup/page";
+import { StoreContextProvider } from "../../../modules/store/context";
+import { CreateStorePage } from "../../../modules/store/components/create";
 import { apiReqHandler } from "../../../components";
 
 interface IProps {
@@ -10,9 +10,9 @@ const GenerateInviteLink: React.FC<IProps> = ({ valid }) => {
   return (
     <>
       {valid && (
-        <SignUpContextProvider>
-          <SignUpPage />
-        </SignUpContextProvider>
+        <StoreContextProvider>
+          <CreateStorePage />
+        </StoreContextProvider>
       )}
     </>
   );

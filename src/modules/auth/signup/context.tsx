@@ -39,7 +39,7 @@ export const SignUpContextProvider: React.FC<IProps> = ({ children }) => {
     console.log(JSON.stringify(user));
     try {
       const res = await apiReqHandler({
-        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/auth/login`,
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/auth/signup`,
         method: "POST",
         payload: JSON.stringify(user),
       });
