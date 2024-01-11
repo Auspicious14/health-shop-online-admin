@@ -21,9 +21,9 @@ export const CreateStorePage = () => {
   const { createStore, loading } = useStoreState();
   const router = useRouter();
   const handleSubmit = async (values: any) => {
-    const res = createStore(values);
+    const res = createStore({ accountType: "storeOwner", ...values });
     res.then((rs: any) => {
-      //   if (rs.user) router.push("/auth/login");
+      if (rs) router.push("/auth/login");
     });
   };
   return (
