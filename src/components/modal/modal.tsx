@@ -14,12 +14,13 @@ interface IProps {
   closeBtnClassName?: string;
   containerClassName?: string;
   notOverflow?: boolean;
+  otherProps?: React.ReactNode;
 }
 
 export const ApModal: React.FC<IProps> = ({
   title,
   show,
-  closeBtnClassName,
+  otherProps,
   containerClassName,
   children,
   possition = "right",
@@ -113,6 +114,7 @@ export const ApModal: React.FC<IProps> = ({
                       >
                         Cancel
                       </button>
+                      {otherProps && otherProps}
                     </div>
                   </Dialog.Panel>
                 </Transition.Child>

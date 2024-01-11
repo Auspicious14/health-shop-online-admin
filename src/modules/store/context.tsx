@@ -8,10 +8,16 @@ interface IStoreState {
   product: IStore;
   stores: IStore[];
   getStores: (query?: any) => Promise<void>;
-  getOneStore: (storeId: string) => Promise<void>;
-  createStore: (payload: IStore) => Promise<void>;
-  updateStore: (payload: IStore, storeId: string) => Promise<void>;
-  deleteStore: (storeId: string) => Promise<void>;
+  getOneStore: (storeId: string) => Promise<any>;
+  createStore: (payload: IStore) => Promise<any>;
+  updateStore: (payload: IStore, storeId: string) => Promise<any>;
+  deleteStore: (storeId: string) => Promise<any>;
+  rejectStore: (
+    storeId: string,
+    email: string,
+    remark: string
+  ) => Promise<void>;
+  acceptStore: (storeId: string) => Promise<void>;
 }
 
 const StoreContext = React.createContext<IStoreState>({
@@ -32,6 +38,12 @@ const StoreContext = React.createContext<IStoreState>({
   },
   deleteStore(storeId) {
     return null as any;
+  },
+  async acceptStore(storeId) {
+    return;
+  },
+  async rejectStore(storeId, email, remark) {
+    return;
   },
 });
 
@@ -62,6 +74,7 @@ export const StoreContextProvider: React.FC<IProps> = ({ children }) => {
       setLoading(false);
       const data = await res.res?.data?.data;
       setStores(data);
+      return data;
     } catch (error: any) {
       toast.error(error);
     }
@@ -100,7 +113,7 @@ export const StoreContextProvider: React.FC<IProps> = ({ children }) => {
         toast.error("Error");
       }
       const data = await res.res?.data?.data;
-      toast.success("Product created successfully");
+      toast.success("Store created successfully");
       setStores([...stores, data]);
       return data;
     } catch (error: any) {
@@ -152,6 +165,45 @@ export const StoreContextProvider: React.FC<IProps> = ({ children }) => {
     }
   };
 
+  const acceptStore = async (storeId: string) => {
+    setLoading(true);
+    try {
+      const res = await apiReqHandler({
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/store/accept`,
+        method: "POST",
+        payload: JSON.stringify(storeId),
+      });
+      setLoading(false);
+      const data = await res?.res?.data;
+      if (data) {
+        toast.success(data.message);
+      }
+    } catch (error: any) {
+      toast.error(error);
+    }
+  };
+
+  const rejectStore = async (
+    storeId: string,
+    email: string,
+    remark: string
+  ) => {
+    const payload = { storeId, email, remark };
+    try {
+      const res = await apiReqHandler({
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/store/reject`,
+        method: "POST",
+        payload: JSON.stringify(payload),
+      });
+      setLoading(false);
+      const data = await res?.res?.data;
+      if (data) {
+        toast.success(data.message);
+      }
+    } catch (error: any) {
+      toast.error(error);
+    }
+  };
   return (
     <StoreContext.Provider
       value={{
@@ -163,6 +215,8 @@ export const StoreContextProvider: React.FC<IProps> = ({ children }) => {
         createStore,
         updateStore,
         deleteStore,
+        acceptStore,
+        rejectStore,
       }}
     >
       {children}
