@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { FaBlog } from "react-icons/fa";
+import { FaBlog, FaStoreAlt } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { BsCartCheck } from "react-icons/bs";
 import {
@@ -26,7 +26,10 @@ import { ApModal } from "../modal";
 import { useSignUpState } from "../../modules/auth/signup/context";
 import { toast } from "react-toastify";
 const { Sider, Footer } = Layout;
-export const SideNav = () => {
+interface IProps {
+  store?: boolean;
+}
+export const SideNav: React.FC<IProps> = ({ store }) => {
   const { profile, loading, getProfile } = useProfileState();
   const [modal, setModal] = useState<{ show: boolean }>({ show: false });
 
@@ -49,7 +52,7 @@ export const SideNav = () => {
       type,
     } as MenuItem;
   }
-  const items: MenuProps["items"] = [
+  const AdminMenuItem: MenuProps["items"] = [
     getItem(
       "Logo",
       "sub0",
@@ -89,7 +92,60 @@ export const SideNav = () => {
     ),
     getItem(
       "Category",
-      "sub103",
+      "category",
+      <Link href={"/category"}>
+        <MailOutlined />
+      </Link>
+    ),
+    getItem(
+      "Store",
+      "store",
+      <Link href={"/stores"}>
+        <FaStoreAlt />
+      </Link>
+    ),
+  ];
+  const StoreMenuItem: MenuProps["items"] = [
+    getItem(
+      "Logo",
+      "sub0",
+      <>
+        <Link className="relative" href={"/"}>
+          {/* <RxDashboard /> */}
+        </Link>
+      </>
+    ),
+    getItem(
+      "",
+      "sub02",
+      <>
+        <Divider />
+      </>
+    ),
+    getItem(
+      "Dashboard",
+      "sub1",
+      <Link href={"/"}>
+        <MenuFoldOutlined />
+      </Link>
+    ),
+    getItem(
+      "Order",
+      "sub2",
+      <Link href={"/order"}>
+        <BsCartCheck />
+      </Link>
+    ),
+    getItem(
+      "Product",
+      "sub3",
+      <Link href={"/product"}>
+        <MailOutlined />
+      </Link>
+    ),
+    getItem(
+      "Category",
+      "category",
       <Link href={"/category"}>
         <MailOutlined />
       </Link>
@@ -113,7 +169,7 @@ export const SideNav = () => {
           defaultSelectedKeys={["1"]}
           defaultOpenKeys={["sub1"]}
           mode="inline"
-          items={items}
+          items={store ? StoreMenuItem : AdminMenuItem}
           className="h-[100vh] fixed"
         />
 
@@ -128,13 +184,15 @@ export const SideNav = () => {
           className="w-[19%] fixed z-50 bottom-0 border border-t"
         >
           <div className="">
-            <Button
-              onClick={() => setModal({ show: true })}
-              className="bg-blue-700 text-white text-center mb-6 w-[80%]"
-              color="white"
-            >
-              Invite link
-            </Button>
+            {!store && (
+              <Button
+                onClick={() => setModal({ show: true })}
+                className="bg-blue-700 text-white text-center mb-6 w-[80%]"
+                color="white"
+              >
+                Invite link
+              </Button>
+            )}
             <Link href={"/profile"}>
               <div className="flex gap-4 items-center">
                 <Tooltip title={profile?.firstName} placement="top">

@@ -3,7 +3,11 @@ import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import React, { useEffect } from "react";
 import * as Yup from "yup";
-import { ApBackgroundImage, ApTextInput } from "../../../components";
+import {
+  ApBackgroundImage,
+  ApSelectInput,
+  ApTextInput,
+} from "../../../components";
 import { useSignInState } from "./context";
 import { ISignIn } from "./model";
 import { Button } from "antd";
@@ -13,15 +17,26 @@ import { toast } from "react-toastify";
 const FormSchema = Yup.object().shape({
   email: Yup.string().required("email is required").email(),
   password: Yup.string().required("password is required").min(6),
+  accountType: Yup.object().shape({
+    value: Yup.string().required("Account Type is required"),
+  }),
 });
 
 export const SignInPage = () => {
   const router = useRouter();
   const { handleSignIn, loading } = useSignInState();
-  const handleSubmit = async (values: ISignIn) => {
-    const res = handleSignIn(values);
+  const handleSubmit = async (values: any) => {
+    const res = handleSignIn({
+      accountType: values.accountType.value,
+      email: values.email,
+      password: values.password,
+    });
     res.then((rs: any) => {
-      if (rs.user) router.push("/");
+      console.log(rs.user);
+      if (rs?.user?.isAdmin === false) {
+        router.push("/store");
+      }
+      router.push("/");
     });
   };
 
@@ -40,6 +55,9 @@ export const SignInPage = () => {
           initialValues={{
             email: "",
             password: "",
+            accountType: [{ label: "Admin", value: "admin" }] || [
+              { label: "Admin", value: "admin" },
+            ],
           }}
           validationSchema={FormSchema}
           onSubmit={handleSubmit}
@@ -60,6 +78,14 @@ export const SignInPage = () => {
                 name="password"
                 type="password"
                 placeHolder="*******"
+              />
+              <ApSelectInput
+                name="accountType"
+                options={[
+                  { label: "Admin", value: "admin" },
+                  { label: "Store", value: "storeOwner" },
+                  { label: "User", value: "user" },
+                ]}
               />
               <div className="flex justify-end text-sm">
                 <Button type="link" href={"/auth/forgetpassword"}>

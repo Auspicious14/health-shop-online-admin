@@ -7,4 +7,6 @@ export interface IStore {
   whatsAppNumber: string;
   storePhoneNumber: string;
   description: string;
+  storeName: string;
+  accepted: boolean;
 }

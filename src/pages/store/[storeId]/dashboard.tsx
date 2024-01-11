@@ -1,5 +1,5 @@
 import React from "react";
-import { StoreDashboardPage } from "../../modules/store/components/dashboard";
+import { StoreDashboardPage } from "../../../modules/store/components/dashboard";
 
 const Store = () => {
   return <StoreDashboardPage />;
