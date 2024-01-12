@@ -17,7 +17,7 @@ interface IStoreState {
     email: string,
     remark: string
   ) => Promise<void>;
-  acceptStore: (storeId: string) => Promise<void>;
+  acceptStore: (storeId: string) => Promise<any>;
 }
 
 const StoreContext = React.createContext<IStoreState>({
@@ -40,7 +40,7 @@ const StoreContext = React.createContext<IStoreState>({
     return null as any;
   },
   async acceptStore(storeId) {
-    return;
+    return null;
   },
   async rejectStore(storeId, email, remark) {
     return;
@@ -149,7 +149,7 @@ export const StoreContextProvider: React.FC<IProps> = ({ children }) => {
     setLoading(true);
     try {
       const res = await apiReqHandler({
-        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/store/${storeId}`,
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/store/delete/${storeId}`,
         method: "DELETE",
       });
       setLoading(false);
@@ -165,30 +165,33 @@ export const StoreContextProvider: React.FC<IProps> = ({ children }) => {
     }
   };
 
-  const acceptStore = async (storeId: string) => {
+  const acceptStore = async (id: string) => {
     setLoading(true);
     try {
       const res = await apiReqHandler({
         endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/store/accept`,
         method: "POST",
-        payload: JSON.stringify(storeId),
+        payload: JSON.stringify({ id: id }),
       });
       setLoading(false);
       const data = await res?.res?.data;
+
       if (data) {
         toast.success(data.message);
       }
+      setStores(
+        stores.map((p: IStore, i: number) =>
+          p._id == data.data._id ? data.data : p
+        )
+      );
+      return data;
     } catch (error: any) {
       toast.error(error);
     }
   };
 
-  const rejectStore = async (
-    storeId: string,
-    email: string,
-    remark: string
-  ) => {
-    const payload = { storeId, email, remark };
+  const rejectStore = async (id: string, email: string, remark: string) => {
+    const payload = { id, email, remark };
     try {
       const res = await apiReqHandler({
         endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/store/reject`,

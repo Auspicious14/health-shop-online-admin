@@ -2,19 +2,24 @@ import React, { useEffect, useState } from "react";
 import { useStoreState } from "./context";
 import { IStore } from "./model";
 import { DeleteOutlined, EditFilled, SearchOutlined } from "@ant-design/icons";
-import { Space, Popconfirm, Typography, Input, Table } from "antd";
+import { Space, Popconfirm, Typography, Input, Table, Button } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { ApModal, SideNav } from "../../components";
 import { StoreDetail } from "./detail";
-import { AcceptStore } from "./components/accept";
+import { RejectStore } from "./components/reject";
 
 const { Text } = Typography;
 const Search = Input;
 
 export const StorePage = () => {
-  const { getStores, loading, deleteStore, stores } = useStoreState();
+  const { getStores, loading, deleteStore, stores, acceptStore } =
+    useStoreState();
   const [search, setSearch] = useState<string>("");
-  const [modal, setModal] = useState<{ show: boolean; data?: any }>({
+  const [modal, setModal] = useState<{
+    show: boolean;
+    data?: any;
+    type?: "reject" | "detail";
+  }>({
     show: false,
   });
 
@@ -45,7 +50,7 @@ export const StorePage = () => {
     },
 
     {
-      title: "Accepted",
+      title: "Status",
       dataIndex: "accepted",
       key: "status",
       render: (_, { accepted }) => {
@@ -53,7 +58,7 @@ export const StorePage = () => {
           <Text
             className={
               accepted
-                ? "bg-green-500 opacity-75"
+                ? "bg-green-500 opacity-75 p-2 border rounded-md text-white"
                 : "bg-red-500 opacity-75 p-2 border rounded-md text-white"
             }
           >
@@ -77,7 +82,30 @@ export const StorePage = () => {
             <DeleteOutlined />
           </Popconfirm>
           <Space>
-            <EditFilled onClick={() => setModal({ show: true, data: store })} />
+            <EditFilled
+              onClick={() =>
+                setModal({ show: true, data: store, type: "detail" })
+              }
+            />
+          </Space>
+          <Space>
+            {store?.accepted === true ? (
+              <button
+                onClick={() => handleAcceptOrReject(store)}
+                className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+              >
+                {store?.accepted ? "Reject" : "Accept"}
+              </button>
+            ) : (
+              <Popconfirm
+                title="Proceed to Accept Store"
+                onConfirm={() => acceptStore(store?._id)}
+              >
+                <button className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
+                  {"Accept"}
+                </button>
+              </Popconfirm>
+            )}
           </Space>
         </Space>
       ),
@@ -87,6 +115,12 @@ export const StorePage = () => {
   const filtered = stores?.filter((p) =>
     p?.storeName?.toLocaleLowerCase().includes(search.toLocaleLowerCase())
   );
+
+  const handleAcceptOrReject = (store: IStore) => {
+    if (store?.accepted === true) {
+      setModal({ show: true, type: "reject", data: store });
+    }
+  };
 
   return (
     <div className="flex w-full gap-4">
@@ -123,16 +157,12 @@ export const StorePage = () => {
       </div>
 
       <ApModal
-        title={"Store Detail"}
+        title={modal.type === "detail" ? "Store Detail" : "Reject Store"}
         show={modal.show}
         onDimiss={() => setModal({ show: false })}
-        otherProps={
-          <div className="flex gap-20 mx-12">
-            <AcceptStore store={modal.data} />
-          </div>
-        }
       >
-        <StoreDetail store={modal.data} />
+        {modal.type === "detail" && <StoreDetail store={modal.data} />}
+        {modal.type === "reject" && <RejectStore store={modal.data} />}
       </ApModal>
     </div>
   );
