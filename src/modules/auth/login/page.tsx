@@ -31,12 +31,16 @@ export const SignInPage = () => {
       email: values.email,
       password: values.password,
     });
+
+    // If user is not admin and user is not accepted, do not login
     res.then((rs: any) => {
       console.log(rs.user);
-      if (rs?.user?.isAdmin === false) {
-        router.push("/store");
+      if (rs.user !== undefined) {
+        if (rs?.user?.isAdmin === false) {
+          router.push("/store");
+        }
+        router.push("/");
       }
-      router.push("/");
     });
   };
 

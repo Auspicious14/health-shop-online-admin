@@ -47,6 +47,9 @@ export const SignInContextProvider: React.FC<IProps> = ({ children }) => {
         if (data.error) {
           toast.error(data.error);
         }
+        if (data.message) {
+          toast.error(data.message);
+        }
         setCookie(
           "user_id",
           JSON.stringify({ id: data?.user?._id, isAdmin: data?.user?.isAdmin }),
