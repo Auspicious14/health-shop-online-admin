@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useStoreState } from "./context";
 import { IStore } from "./model";
-import { DeleteOutlined, EditFilled, SearchOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditFilled,
+  EyeOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { Space, Popconfirm, Typography, Input, Table, Button } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { ApModal, SideNav } from "../../components";
-import { StoreDetail } from "./detail";
+import { StoreDetailPage } from "./detail";
 import { RejectStore } from "./components/reject";
+import { EyeDropperIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/router";
 
 const { Text } = Typography;
 const Search = Input;
 
 export const StorePage = () => {
+  const router = useRouter();
   const { getStores, loading, deleteStore, stores, acceptStore } =
     useStoreState();
   const [search, setSearch] = useState<string>("");
@@ -82,11 +90,7 @@ export const StorePage = () => {
             <DeleteOutlined />
           </Popconfirm>
           <Space>
-            <EditFilled
-              onClick={() =>
-                setModal({ show: true, data: store, type: "detail" })
-              }
-            />
+            <EyeOutlined onClick={() => router.push(`/store/${store?._id}`)} />
           </Space>
           <Space>
             {store?.accepted === true ? (
@@ -161,7 +165,7 @@ export const StorePage = () => {
         show={modal.show}
         onDimiss={() => setModal({ show: false })}
       >
-        {modal.type === "detail" && <StoreDetail store={modal.data} />}
+        {modal.type === "detail" && <StoreDetailPage store={modal.data} />}
         {modal.type === "reject" && <RejectStore store={modal.data} />}
       </ApModal>
     </div>

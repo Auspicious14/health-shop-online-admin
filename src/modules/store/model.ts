@@ -9,4 +9,15 @@ export interface IStore {
   description: string;
   storeName: string;
   accepted: boolean;
+  images: {
+    uri: string;
+    name: string;
+    type: string;
+  }[];
+}
+
+export interface IStoreFile {
+  base64Str: string;
+  filename: string;
+  filetype: string;
 }
