@@ -4,18 +4,23 @@ import { BsFillArrowRightCircleFill } from "react-icons/bs";
 import { StoreFormRoute } from "./route";
 import { SocialMediaPlatformSchema } from "./validation";
 import { ApTextInput } from "../../../../components";
-import { PlusCircleFilled } from "@ant-design/icons";
+import { MinusCircleFilled, PlusCircleFilled } from "@ant-design/icons";
+import { Space } from "antd";
 
 interface IProps {
   index: number;
   onPrevious?: () => void;
   onNext?: () => void;
+  onRemove: (index: number) => void;
+  add: React.ReactNode;
 }
 
 export const SocialMediaDetail: React.FC<IProps> = ({
   onNext,
   onPrevious,
   index,
+  onRemove,
+  add,
 }) => {
   const { values, submitForm, setErrors, setFieldValue } = useFormikContext();
 
@@ -43,24 +48,75 @@ export const SocialMediaDetail: React.FC<IProps> = ({
   };
 
   return (
-    <div className="-ml-8 w-full">
-      <PlusCircleFilled />
+    <div className="-ml-8 px-12 w-full">
+      <Space className="justify-between w-full mb-4">
+        {add && add}
+        <MinusCircleFilled
+          onClick={() => onRemove(index)}
+          className={"text-blue-400 text-2xl cursor-pointer "}
+        />
+      </Space>
       <div className="flex flex-col gap-3 w-72 md:w-full">
         <ApTextInput
-          label="Profile URL"
-          name={`socialMedia[${index}].link`}
+          label="Platform"
+          name={`socialMedia[${index}].platform`}
           type="text"
           placeHolder="Enter Profile link"
+          className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+        />
+        <ApTextInput
+          label="Profile URL"
+          name={`socialMedia[${index}].profileLink`}
+          type="text"
+          placeHolder="Enter Profile link"
+          className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
         />
         <ApTextInput
           label="Profile Name"
-          name={`socialMedia[${index}].name`}
+          name={`socialMedia[${index}].profileName`}
           type="text"
           placeHolder="Enter Profile name"
+          className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
         />
       </div>
 
       <StoreFormRoute onNext={handleNext} onPrevious={onPrevious} />
     </div>
+  );
+};
+
+interface ISocialMediaProps {
+  socialMediaForm: any[];
+  onAdd: () => void;
+  onRemove: (index: number) => void;
+  onPrevious: () => void;
+  onNext: () => void;
+}
+
+export const SocialMedia: React.FC<ISocialMediaProps> = ({
+  socialMediaForm,
+  onAdd,
+  onRemove,
+  onNext,
+  onPrevious,
+}) => {
+  return (
+    <>
+      {socialMediaForm?.map((s, index) => (
+        <SocialMediaDetail
+          key={index}
+          index={index}
+          onNext={onNext}
+          onPrevious={onPrevious}
+          onRemove={() => onRemove(index)}
+          add={
+            <PlusCircleFilled
+              onClick={onAdd}
+              className={"text-blue-400 text-2xl cursor-pointer"}
+            />
+          }
+        />
+      ))}
+    </>
   );
 };

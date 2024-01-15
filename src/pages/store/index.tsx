@@ -25,6 +25,16 @@ export const getServerSideProps = async ({
       },
     };
   }
+  console.log(parse);
+  // if (parse === null) {
+  //   return {
+  //     redirect: {
+  //       destination: "/auth/login",
+  //       permenant: false,
+  //     },
+  //   };
+  // }
+
   return {
     props: {},
   };

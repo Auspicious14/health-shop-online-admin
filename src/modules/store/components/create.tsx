@@ -1,6 +1,6 @@
 import { Form, Formik, FormikProps } from "formik";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { ApBackgroundImage, ApTextInput } from "../../../components";
 import { useStoreState } from "../context";
@@ -11,14 +11,14 @@ import { StoreIdentity } from "./create/identity";
 import { IStoreFile } from "../model";
 import { FormSchema } from "./create/validation";
 import { StoreBusinessInfo } from "./create/business-info";
-import { SocialMediaDetail } from "./create/social-media";
+import { SocialMedia, SocialMediaDetail } from "./create/social-media";
 import { StorePayment } from "./create/payment";
 
 export const CreateStorePage = () => {
   const { createStore, loading } = useStoreState();
   const router = useRouter();
   const [files, setFiles] = useState<IStoreFile[]>([]);
-  const [logos, setLogos] = useState<IStoreFile[]>([]);
+  const [logos, setLogos] = useState<any>(null);
   const [show, setShow] = useState<{
     show: boolean;
     type?:
@@ -36,17 +36,37 @@ export const CreateStorePage = () => {
   const handleSelectIdImage: UploadProps["onChange"] = ({
     fileList: newFileList,
   }: any) => {
+    console.log(newFileList);
     setFiles(newFileList);
   };
 
   const handleSelectStoreLogo: UploadProps["onChange"] = ({
     fileList: newFileList,
   }: any) => {
+    console.log(newFileList, "newFIleListt");
     setLogos(newFileList);
   };
 
   const handleSubmit = async (values: any) => {
-    const res = createStore({ accountType: "storeOwner", ...values });
+    const { confirmPassword, ...vals } = values;
+    const payload = {
+      ...vals,
+      // socialMedia: vals.socialMedia,
+      images: logos.map((l: any) => ({
+        uri: l?.thumbUrl,
+        name: l?.name,
+        type: l?.type,
+      })),
+      identificationImage: files.map((l: any) => ({
+        uri: l?.thumbUrl,
+        name: l?.name,
+        type: l?.type,
+      })),
+      accountType: "storeOwner",
+    };
+
+    console.log(payload, "payload");
+    const res = createStore(payload);
     res.then((rs: any) => {
       if (rs) router.push("/auth/login");
     });
@@ -77,7 +97,7 @@ export const CreateStorePage = () => {
             bankAccountNumber: "",
             bankAccountName: "",
             businessNumber: "",
-            socialMedia: [{ name: "", link: "" }],
+            socialMedia: [{ profileName: "", profileLink: "", platform: "" }],
           }}
           validationSchema={FormSchema}
           onSubmit={handleSubmit}
@@ -107,10 +127,29 @@ export const CreateStorePage = () => {
                 />
               )}
               {show.show && show.type === "social-media" && (
-                <SocialMediaDetail
+                <SocialMedia
                   onPrevious={() => handleRoute("identity")}
                   onNext={() => handleRoute("payment")}
-                  index={2}
+                  // index={2}
+                  onAdd={() =>
+                    props.setFieldValue("socialMedia", [
+                      ...props.values.socialMedia,
+                      {
+                        platform: "",
+                        profileName: "",
+                        profileLink: "",
+                      },
+                    ])
+                  }
+                  onRemove={(index: number) =>
+                    props.setFieldValue(
+                      "socialMedia",
+                      props?.values?.socialMedia?.filter(
+                        (s: any, i: number) => i != index
+                      )
+                    )
+                  }
+                  socialMediaForm={props.values.socialMedia}
                 />
               )}
 

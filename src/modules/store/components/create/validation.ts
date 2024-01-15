@@ -43,9 +43,9 @@ export const StorePaymentSchema = Yup.object().shape({
 export const SocialMediaPlatformSchema = Yup.object().shape({
   socialMedia: Yup.array().of(
     Yup.object().shape({
-      // name: Yup.string().required("Social Media Platform is required"),
-      name: Yup.string().required("Profile Name is required"),
-      link: Yup.string().required("Profile Link is required"),
+      platform: Yup.string().required("Social Media Platform is required"),
+      profileName: Yup.string().required("Profile Name is required"),
+      profileLink: Yup.string().required("Profile Link is required"),
     })
   ),
 });

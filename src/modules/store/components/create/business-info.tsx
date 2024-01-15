@@ -2,12 +2,27 @@ import { Button, Space } from "antd";
 import React from "react";
 import { ApTextInput } from "../../../../components";
 import { StoreFormRoute } from "./route";
+import { StoreBusinessSchema } from "./validation";
+import { useFormikContext } from "formik";
 
 interface IProps {
   onPrevious: () => void;
   onNext: () => void;
 }
 export const StoreBusinessInfo: React.FC<IProps> = ({ onNext, onPrevious }) => {
+  const { values, submitForm, setErrors, setFieldValue } = useFormikContext();
+
+  const handleNext = async () => {
+    StoreBusinessSchema.validate(values, { abortEarly: true })
+      .then(() => {
+        if (onNext) onNext();
+        setErrors({});
+      })
+      .catch(() => {
+        submitForm();
+      });
+  };
+
   return (
     <div>
       <Space>
@@ -65,7 +80,7 @@ export const StoreBusinessInfo: React.FC<IProps> = ({ onNext, onPrevious }) => {
         type="textarea"
         placeHolder=""
       />
-      <StoreFormRoute onNext={onNext} onPrevious={onPrevious} />
+      <StoreFormRoute onNext={handleNext} onPrevious={onPrevious} />
     </div>
   );
 };

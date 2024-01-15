@@ -42,7 +42,7 @@ export const Files: React.FC<IProps> = ({ fileList, handleChange }) => {
   return (
     <>
       <Upload
-        listType="picture"
+        listType="picture-card"
         fileList={fileList}
         onPreview={handlePreview}
         onChange={handleChange}

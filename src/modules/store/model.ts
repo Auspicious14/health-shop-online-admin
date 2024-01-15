@@ -17,7 +17,7 @@ export interface IStore {
 }
 
 export interface IStoreFile {
-  base64Str: string;
-  filename: string;
-  filetype: string;
+  uri: string;
+  name: string;
+  type: string;
 }
