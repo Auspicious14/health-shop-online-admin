@@ -9,15 +9,26 @@ export interface IStore {
   description: string;
   storeName: string;
   accepted: boolean;
-  images: {
-    uri: string;
-    name: string;
-    type: string;
-  }[];
+  policy: string;
+  bankName: string;
+  bankAccountName: string;
+  bankAccountNumber: string;
+  storeType: string;
+  businessNumber: string;
+  storeAddress: string;
+  socialMedia: IStoreSocialMedia[];
+  images: IStoreFile[];
+  identificationImage: IStoreFile[];
 }
 
 export interface IStoreFile {
   uri: string;
   name: string;
   type: string;
+}
+
+export interface IStoreSocialMedia {
+  platform: string;
+  profileName: string;
+  profileLink: string;
 }

@@ -115,25 +115,27 @@ export const StoreContextProvider: React.FC<IProps> = ({ children }) => {
       const data = await res.res?.data?.data;
       toast.success("Store created successfully");
       setStores([...stores, data]);
+      // resetLink()
       return data;
     } catch (error: any) {
       toast.error(error);
     }
   };
 
-  const updateStore = async (payload: IStore, storeId: string) => {
+  const updateStore = async (payload: IStore, id: string) => {
     setLoading(true);
     try {
       const res = await apiReqHandler({
-        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/store/${storeId}`,
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/store/${id}`,
         method: "PUT",
         payload: JSON.stringify(payload),
       });
       setLoading(false);
       const data = await res.res?.data.data;
-      toast.success("Product updated successfully");
       if (res.res?.status !== 200) {
         toast.error("Error");
+      } else {
+        toast.success("Product updated successfully");
       }
       setStores(
         stores.map((p: IStore, i: number) => (p._id == data._id ? data : p))
@@ -197,6 +199,22 @@ export const StoreContextProvider: React.FC<IProps> = ({ children }) => {
         endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/store/reject`,
         method: "POST",
         payload: JSON.stringify(payload),
+      });
+      setLoading(false);
+      const data = await res?.res?.data;
+      if (data) {
+        toast.success(data.message);
+      }
+    } catch (error: any) {
+      toast.error(error);
+    }
+  };
+
+  const resetLink = async (code: string) => {
+    try {
+      const res = await apiReqHandler({
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/delete/invite/${code}`,
+        method: "DELETE",
       });
       setLoading(false);
       const data = await res?.res?.data;
