@@ -11,6 +11,7 @@ import { ProfileContextProvider } from "../modules/profile/context";
 import { SignUpContextProvider } from "../modules/auth/signup/context";
 import { StoreContextProvider } from "../modules/store/context";
 import { ProductContextProvider } from "../modules/product/context";
+import { CategoryContextProvider } from "../modules/category/context";
 
 // 2. Extend the theme to include custom colors, fonts, etc
 const colors = {
@@ -32,21 +33,23 @@ export default function App({
         <SignUpContextProvider>
           <StoreContextProvider>
             <ProductContextProvider>
-              <ProfileContextProvider>
-                <Component {...pageProps} />
-                <ToastContainer
-                  position="top-right"
-                  autoClose={5000}
-                  hideProgressBar={false}
-                  newestOnTop={false}
-                  closeOnClick
-                  rtl={false}
-                  pauseOnFocusLoss
-                  draggable
-                  pauseOnHover
-                  theme="light"
-                />
-              </ProfileContextProvider>
+              <CategoryContextProvider>
+                <ProfileContextProvider>
+                  <Component {...pageProps} />
+                  <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                  />
+                </ProfileContextProvider>
+              </CategoryContextProvider>
             </ProductContextProvider>
           </StoreContextProvider>
         </SignUpContextProvider>

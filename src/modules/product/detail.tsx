@@ -42,7 +42,7 @@ const CreateProductPage: React.FC<IProps> = ({
     if (product?.images && !!product.images.length) {
       setFiles(
         product.images.map((i: any, index: number) => ({
-          uri: i.uri,
+          thumbUrl: i.uri,
           name: i.name,
           type: i.type,
           uid: i._id,
@@ -52,14 +52,16 @@ const CreateProductPage: React.FC<IProps> = ({
     }
   }, [product]);
 
+  console.log(categories, "categoriess");
+
   const handleProductImage: UploadProps["onChange"] = ({
     fileList: newFileList,
   }: any) => {
     setFiles(newFileList);
   };
   const handleProduct = async (values: any) => {
-    console.log(values.categories);
-    const id = getCookie("user_id");
+    const user = JSON.parse(getCookie("user_id"));
+    const { id } = user;
     if (product?._id) {
       updateProduct(
         {
@@ -100,7 +102,12 @@ const CreateProductPage: React.FC<IProps> = ({
       });
     }
   };
-  console.log(product?.categories);
+  console.log(
+    product?.categories?.map((c) => ({
+      value: c,
+      label: c,
+    }))
+  );
   return (
     <div>
       <div className="w-full mx-4">
@@ -111,8 +118,8 @@ const CreateProductPage: React.FC<IProps> = ({
             name: product?.name || "",
             categories: product?.categories
               ? product?.categories?.map((c) => ({
-                  value: c?.name,
-                  label: c?.name,
+                  value: c,
+                  label: c,
                 }))
               : [{ value: "", label: "" }],
             quantity: product?.quantity || "",

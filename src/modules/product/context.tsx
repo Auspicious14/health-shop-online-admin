@@ -60,7 +60,7 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
     setLoading(true);
     try {
       const res = await apiReqHandler({
-        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/products?${storeId}`,
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/products?storeId=${storeId}`,
         method: "GET",
       });
       setLoading(false);
@@ -104,11 +104,15 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
         toast.error("Error");
       }
       const data = await res.res?.data?.data;
-      toast.success("Product created successfully");
-      setProducts([...products, data]);
+      if (data) {
+        toast.success("Product created successfully");
+        setProducts([...products, data]);
+        console.log(data, "dataaa");
+      }
       return data;
     } catch (error: any) {
       toast.error(error);
+      console.log(error, "eerrr");
     }
   };
 
