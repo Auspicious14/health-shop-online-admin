@@ -2,13 +2,16 @@ import React from "react";
 import { ProfileContextProvider } from "../modules/profile/context";
 import { ProfilePage } from "../modules/profile/page";
 import { ResetPasswordContextProvider } from "../modules/auth/resetPassword/context";
+import { MainLayout } from "../modules/layout";
 
 const Profile = () => {
   return (
     <div>
       <ProfileContextProvider>
         <ResetPasswordContextProvider>
-          <ProfilePage />
+          <MainLayout>
+            <ProfilePage />
+          </MainLayout>
         </ResetPasswordContextProvider>
       </ProfileContextProvider>
     </div>
