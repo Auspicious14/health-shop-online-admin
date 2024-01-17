@@ -30,7 +30,7 @@ export const getServerSideProps = async ({
   const res = await apiReqHandler({
     endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/auth/validate`,
     method: "POST",
-    payload: JSON.stringify({ inviteCode: query.inviteLink }),
+    payload: JSON.stringify({ inviteCode: query?.inviteLink }),
   });
 
   const valid = res?.res?.data?.valid;

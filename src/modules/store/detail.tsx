@@ -1,65 +1,277 @@
-import React from "react";
-import { IStore } from "./model";
-import { Card, Space } from "antd";
-import { ApImage, SideNav } from "../../components";
+import React, { useEffect, useState } from "react";
+import { IStore, IStoreFile } from "./model";
+import { Button, Card, Space, UploadProps } from "antd";
+import { ApImage, ApTextInput, Files } from "../../components";
+import { Form, Formik, FormikProps } from "formik";
+import { useStoreState } from "./context";
 
 interface IProps {
   store: IStore;
 }
 export const StoreDetailPage: React.FC<IProps> = ({ store }) => {
+  const { loading, updateStore } = useStoreState();
+  const [storeIdImages, setStoreIdImages] = useState<any>(null);
+  const [storeLogos, setStoreLogos] = useState<any>(null);
+
+  useEffect(() => {
+    if (store?.images && !!store?.images?.length) {
+      setStoreLogos(
+        store?.images?.map((s) => ({
+          uri: s?.uri,
+          name: s?.name,
+          type: s?.type,
+        }))
+      );
+    }
+
+    if (store?.identificationImage && !!store?.identificationImage?.length) {
+      setStoreIdImages(
+        store?.identificationImage?.map((s) => ({
+          thumbUrl: s?.uri,
+          name: s?.name,
+          type: s?.type,
+        }))
+      );
+    }
+  }, [store]);
+
+  const handleSelectIdImage: UploadProps["onChange"] = ({
+    fileList: newFileList,
+  }: any) => {
+    setStoreIdImages(newFileList);
+  };
+
+  const handleSelectStoreLogo: UploadProps["onChange"] = ({
+    fileList: newFileList,
+  }: any) => {
+    setStoreLogos(newFileList);
+  };
+
+  const handleSubmit = (values: any) => {
+    const payload = {
+      ...values,
+      images: storeLogos
+        ? storeLogos.map((l: any) => ({
+            uri: l?.thumbUrl,
+            name: l?.name,
+            type: l?.type,
+          }))
+        : [],
+      identificationImage: storeIdImages
+        ? storeIdImages.map((l: any) => ({
+            uri: l?.thumbUrl,
+            name: l?.name,
+            type: l?.type,
+          }))
+        : [],
+      accountType: "storeOwner",
+    };
+    updateStore(payload, store?._id);
+  };
+
   return (
-    <div className="flex w-full gap-4">
-      <div className="w-[20%] h-screen border ">
-        <SideNav store />
-      </div>
-      <div className="w-[80%]">
-        <div className="w-full bg-green-500">
-          <ApImage
-            alt="store image"
-            width={500}
-            src={
-              store?.images?.length > 0
-                ? store?.images[0]?.uri
-                : "https://images.pexels.com/photos/1727684/pexels-photo-1727684.jpeg?auto=compress&cs=tinysrgb&w=300"
-            }
-            className="object-cover w-full"
-          />
-        </div>
-        <div className="p-4">
-          <div className="w-full gap-12 flex justify-between">
-            <div className="w-1/2 ">
-              <p>First Name</p>
-              <div className="p-2 border rounded-md">{store?.firstName}</div>
+    <div>
+      <Formik
+        initialValues={{
+          firstName: store?.firstName || "",
+          lastName: store?.lastName || "",
+          email: store?.email || "",
+          storePhoneNumber: store?.storePhoneNumber || "",
+          whatsAppNumber: store?.whatsAppNumber || "",
+          storeName: store?.storeName || "",
+          description: store?.description || "",
+          storeAddress: store?.storeAddress || "",
+          policy: store?.policy || "",
+          storeType: store?.storeType || "",
+          bankName: store?.bankName || "",
+          bankAccountNumber: store?.bankAccountNumber || "",
+          bankAccountName: store?.bankAccountName || "",
+          businessNumber: store?.businessNumber || "",
+          socialMedia: store?.socialMedia || [
+            { profileName: "", profileLink: "", platform: "" },
+          ],
+        }}
+        onSubmit={handleSubmit}
+      >
+        {(props: FormikProps<any>) => (
+          <Form>
+            <div className="">
+              <ApImage
+                alt="store image"
+                width={500}
+                src={
+                  store?.images?.length > 0
+                    ? store?.images[0]?.uri
+                    : "https://images.pexels.com/photos/1727684/pexels-photo-1727684.jpeg?auto=compress&cs=tinysrgb&w=300"
+                }
+                className="object-cover"
+              />
             </div>
-            <div className="w-1/2 ">
-              <p>Last Name</p>
-              <div className="p-2 border rounded-md">{store?.lastName}</div>
-            </div>
-          </div>
-          <div className="w-full gap-12 flex justify-between my-6">
-            <div className="w-1/2 ">
-              <p>Store Name</p>
-              <div className="p-2 border rounded-md">{store?.storeName}</div>
-            </div>
-            <div className="w-1/2 ">
-              <p>Store Email</p>
-              <div className="p-2 border rounded-md">{store?.email}</div>
-            </div>
-          </div>
-          <div className="w-full gap-12 flex justify-between my-6">
-            <div className="w-1/2 ">
-              <p>Store Phone Number</p>
-              <div className="p-2 border rounded-md">{store?.phoneNumber}</div>
-            </div>
-            <div className="w-1/2 ">
-              <p>Store WhatsApp Number</p>
-              <div className="p-2 border rounded-md">
-                {store?.whatsAppNumber}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+            <Files
+              fileList={storeIdImages}
+              handleChange={(res) => handleSelectIdImage(res)}
+            />
+            <Space className="w-full grid grid-cols-2 my-4">
+              <ApTextInput
+                className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+                label="First Name"
+                name="firstName"
+                type="text"
+                placeHolder="First Name"
+              />
+              <ApTextInput
+                className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+                label="Last Name"
+                name="lastName"
+                type="text"
+                placeHolder="Last Name"
+              />
+            </Space>
+            <Space>
+              <ApTextInput
+                className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+                label="Email"
+                name="email"
+                type="email"
+                placeHolder="Username"
+              />
+            </Space>
+            <h1 className="font-bold text-3xl border-b my-4 py-2">
+              Store Information
+            </h1>
+            <Space className="w-full grid grid-cols-2 ">
+              <ApTextInput
+                className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+                label="Store Name"
+                name="storeName"
+                type="text"
+                placeHolder="Store Name"
+              />
+              <ApTextInput
+                className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+                label="Business Reg No"
+                name="businessNumber"
+                type="text"
+                placeHolder="089192929"
+              />
+            </Space>
+            <Space className="w-full grid grid-cols-2 my-4">
+              <ApTextInput
+                className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+                label="Store Phone Number"
+                name="storePhoneNumber"
+                type="number"
+                placeHolder="+2347*********"
+              />
+              <ApTextInput
+                className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+                label="WhatsApp Number"
+                name="whatsAppNumber"
+                type="number"
+                placeHolder="+2347*********"
+              />
+            </Space>
+            <Space className="w-full grid grid-cols-2 my-4">
+              <ApTextInput
+                className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+                label="Store Address"
+                name="storeAddress"
+                type="text"
+                placeHolder="No 4. John Doe street"
+              />
+              <ApTextInput
+                className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+                label="Store Type"
+                name="storeType"
+                type="text"
+                placeHolder="No 4. John Doe street"
+              />
+            </Space>
+            <Space className="grid grid-cols-2 my-4">
+              <ApTextInput
+                className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+                label="Store Description"
+                name="description"
+                type="textarea"
+                placeHolder=""
+              />
+              <ApTextInput
+                className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+                label="Business Policy / Terms and Condition"
+                name="policy"
+                type="textarea"
+                placeHolder=""
+              />
+            </Space>
+            <h1 className="font-bold text-3xl border-b my-4 py-2">
+              Social Media Information
+            </h1>
+            {props.values?.socialMedia?.map((s: any, index: number) => (
+              <>
+                <div className="grid grid-cols-3 gap-12">
+                  <ApTextInput
+                    label="Platform"
+                    name={`socialMedia[${index}].platform`}
+                    type="text"
+                    placeHolder="Enter Profile link"
+                    className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+                  />
+                  <ApTextInput
+                    label="Profile URL"
+                    name={`socialMedia[${index}].profileLink`}
+                    type="text"
+                    placeHolder="Enter Profile link"
+                    className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+                  />
+                  <ApTextInput
+                    label="Profile Name"
+                    name={`socialMedia[${index}].profileName`}
+                    type="text"
+                    placeHolder="Enter Profile name"
+                    className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </>
+            ))}
+            <h1 className="font-bold text-3xl border-b my-4 py-2">
+              Payment Information
+            </h1>
+            <Space className="w-full grid grid-cols-3 ">
+              <ApTextInput
+                className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+                label="Bank Name"
+                name="bankName"
+                type="text"
+                placeHolder="Kuda MFB"
+              />
+              <ApTextInput
+                className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+                label="Account Name"
+                name="bankAccountName"
+                type="text"
+                placeHolder="Your Account Name"
+              />
+              <ApTextInput
+                className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+                label="Account Number"
+                name="bankAccountNumber"
+                type="text"
+                placeHolder="098********"
+              />
+            </Space>
+
+            <Button
+              type="primary"
+              size="large"
+              htmlType="submit"
+              loading={loading}
+              className="group relative flex w-full justify-center rounded-md bg-[#2158E8] px-3 py-2 my-4 text-sm font-semibold text-white hover:bg-blue-500"
+            >
+              Submit
+            </Button>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 };

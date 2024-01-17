@@ -25,7 +25,7 @@ export const StoreBusinessInfo: React.FC<IProps> = ({ onNext, onPrevious }) => {
 
   return (
     <div>
-      <Space>
+      <Space className="w-full grid grid-cols-2 my-4">
         <ApTextInput
           className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
           label="Store Name"
@@ -41,7 +41,7 @@ export const StoreBusinessInfo: React.FC<IProps> = ({ onNext, onPrevious }) => {
           placeHolder="089192929"
         />
       </Space>
-      <Space>
+      <Space className="w-full grid grid-cols-2 my-4">
         <ApTextInput
           className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
           label="Store Phone Number"
@@ -57,7 +57,7 @@ export const StoreBusinessInfo: React.FC<IProps> = ({ onNext, onPrevious }) => {
           placeHolder="+2347*********"
         />
       </Space>
-      <Space>
+      <Space className="w-full grid grid-cols-2 my-4">
         <ApTextInput
           className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
           label="Store Address"
@@ -73,13 +73,22 @@ export const StoreBusinessInfo: React.FC<IProps> = ({ onNext, onPrevious }) => {
           placeHolder="No 4. John Doe street"
         />
       </Space>
-      <ApTextInput
-        className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
-        label="Business Policy / Terms and Condition"
-        name="policy"
-        type="textarea"
-        placeHolder=""
-      />
+      <Space className="w-full grid grid-cols-2 my-4">
+        <ApTextInput
+          className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+          label="Store Description"
+          name="description"
+          type="textarea"
+          placeHolder=""
+        />
+        <ApTextInput
+          className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+          label="Business Policy / Terms and Condition"
+          name="policy"
+          type="textarea"
+          placeHolder=""
+        />
+      </Space>
       <StoreFormRoute onNext={handleNext} onPrevious={onPrevious} />
     </div>
   );

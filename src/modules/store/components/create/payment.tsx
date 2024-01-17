@@ -10,7 +10,7 @@ interface IProps {
 export const StorePayment: React.FC<IProps> = ({ onNext, onPrevious }) => {
   return (
     <div>
-      <Space className="w-full ">
+      <Space className="w-full grid grid-cols-3 ">
         <ApTextInput
           className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
           label="Bank Name"
@@ -25,8 +25,6 @@ export const StorePayment: React.FC<IProps> = ({ onNext, onPrevious }) => {
           type="text"
           placeHolder="Your Account Name"
         />
-      </Space>
-      <Space>
         <ApTextInput
           className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
           label="Account Number"

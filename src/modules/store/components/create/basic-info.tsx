@@ -25,7 +25,7 @@ export const StoreBasicInfo: React.FC<IProps> = ({ onNext, onPrevious }) => {
 
   return (
     <div>
-      <Space className="w-full justify-between">
+      <Space className="w-full grid grid-cols-2 my-4">
         <ApTextInput
           className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
           label="First Name"
@@ -49,7 +49,7 @@ export const StoreBasicInfo: React.FC<IProps> = ({ onNext, onPrevious }) => {
         type="email"
         placeHolder="Username"
       />
-      <Space className="w-full justify-between">
+      <Space className="w-full grid grid-cols-2 my-4">
         <ApTextInput
           className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
           label="Password"
