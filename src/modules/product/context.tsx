@@ -9,8 +9,12 @@ interface IProductState {
   products: IProduct[];
   getProducts: (query?: any) => Promise<void>;
   getOneProduct: (productId: string) => Promise<void>;
-  createProduct: (payload: IProduct) => Promise<void>;
-  updateProduct: (payload: IProduct, productId: string) => Promise<void>;
+  createProduct: (payload: IProduct, storeId: string) => Promise<void>;
+  updateProduct: (
+    payload: IProduct,
+    productId: string,
+    storeId: string
+  ) => Promise<void>;
   deleteProduct: (productId: string) => Promise<void>;
 }
 
@@ -52,11 +56,11 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const getProducts = async (query?: any) => {
+  const getProducts = async (storeId: string, query?: any) => {
     setLoading(true);
     try {
       const res = await apiReqHandler({
-        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/products`,
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/products?${storeId}`,
         method: "GET",
       });
       setLoading(false);
@@ -86,14 +90,14 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
     }
   };
 
-  const createProduct = async (payload: IProduct) => {
+  const createProduct = async (payload: IProduct, storeId: string) => {
     setLoading(true);
     console.log(JSON.stringify(payload));
     try {
       const res = await apiReqHandler({
         endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/product`,
         method: "POST",
-        payload,
+        payload: { ...payload, storeId },
       });
       setLoading(false);
       if (res.res?.status !== 200) {
@@ -108,13 +112,17 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
     }
   };
 
-  const updateProduct = async (payload: IProduct, productId: string) => {
+  const updateProduct = async (
+    payload: IProduct,
+    productId: string,
+    storeId: string
+  ) => {
     setLoading(true);
     try {
       const res = await apiReqHandler({
         endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/product/${productId}`,
         method: "PUT",
-        payload: JSON.stringify(payload),
+        payload: JSON.stringify({ ...payload, storeId }),
       });
       setLoading(false);
       const data = await res.res?.data.data;
