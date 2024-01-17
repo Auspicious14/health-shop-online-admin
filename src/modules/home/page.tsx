@@ -16,7 +16,7 @@ export const HomePage = () => {
     hour = "Morning";
   } else if (time > 11 && time < 16) {
     hour = "Afternoon";
-  } else if (time > 16 && time <= 23) {
+  } else if (time >= 16 && time <= 23) {
     hour = "Evening";
   }
 
@@ -47,7 +47,7 @@ export const HomePage = () => {
   return (
     <>
       <>
-        <div>
+        <>
           <div className="shadow-sm p-4 flex items-center justify-between">
             <h1 className="text-3xl font-bold">{`Good ${hour}, Admin`}</h1>
             <Search className="w-60" />
@@ -118,7 +118,7 @@ export const HomePage = () => {
               />
             </div>
           </div>
-        </div>
+        </>
       </>
     </>
   );

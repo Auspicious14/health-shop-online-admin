@@ -42,6 +42,7 @@ export const SignInPage = () => {
         router.push("/");
       }
     });
+    console.log(values);
   };
 
   return (
@@ -86,7 +87,7 @@ export const SignInPage = () => {
               <ApSelectInput
                 name="accountType"
                 options={[
-                  { label: "Admin", value: "admin" },
+                  { label: "Admin", value: "Admin" },
                   { label: "Store", value: "storeOwner" },
                   { label: "User", value: "user" },
                 ]}

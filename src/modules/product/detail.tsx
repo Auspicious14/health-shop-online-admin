@@ -24,9 +24,14 @@ interface IProps {
   product: IProduct;
   onDissmiss?: () => void;
   onUpdate?: () => void;
+  storeId: string;
 }
 
-const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
+const CreateProductPage: React.FC<IProps> = ({
+  product,
+  onUpdate,
+  storeId,
+}) => {
   const { createProduct, loading, updateProduct } = useProductState();
   const { categories, getCategories } = useCategorystate();
   const formRef = useRef<FormikProps<any>>();
@@ -70,22 +75,27 @@ const CreateProductPage: React.FC<IProps> = ({ product, onUpdate }) => {
           size: values?.size.value,
           // instock: product?.instock || instock,
         },
-        product._id
+        product._id,
+        storeId
       ).then((res: any) => {
         if (res && onUpdate) onUpdate();
       });
     } else {
-      createProduct({
-        ...values,
-        images: files?.map((f: any) => ({
-          uri: f?.thumbUrl,
-          type: f?.type,
-          name: f?.name,
-        })),
-        id,
-        categories: values.categories.map((c: any) => c.value),
-        size: values.size.value,
-      }).then((res: any) => {
+      createProduct(
+        {
+          ...values,
+
+          images: files?.map((f: any) => ({
+            uri: f?.thumbUrl,
+            type: f?.type,
+            name: f?.name,
+          })),
+          id,
+          categories: values.categories.map((c: any) => c.value),
+          size: values.size.value,
+        },
+        storeId
+      ).then((res: any) => {
         if (res && onUpdate) onUpdate();
       });
     }

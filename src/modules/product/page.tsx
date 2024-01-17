@@ -21,7 +21,10 @@ const productStatus = {
   soon: "bg-orange-100 px-3 py-0.5 rounded-lg text-orange-600",
 };
 
-export const ProductPage = () => {
+interface IProps {
+  storeId: string;
+}
+export const ProductPage: React.FC<IProps> = ({ storeId }) => {
   const { products, getProducts, deleteProduct, loading } = useProductState();
   const [modal, setModal] = useState<{
     show: boolean;
@@ -38,8 +41,8 @@ export const ProductPage = () => {
   };
 
   useEffect(() => {
-    getProducts();
-  }, []);
+    getProducts(storeId);
+  }, [storeId]);
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
@@ -174,6 +177,7 @@ export const ProductPage = () => {
         <CreateProductPage
           product={modal.data}
           onUpdate={() => setModal({ show: false })}
+          storeId={storeId}
         />
       </ApModal>
     </>

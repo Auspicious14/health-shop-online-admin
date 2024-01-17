@@ -169,13 +169,6 @@ export const NavItems = () => {
         <MailOutlined />
       </Link>
     ),
-    getItem(
-      "Category",
-      "category",
-      <Link href={`/store/${router?.query?.storeId}/category`}>
-        <MailOutlined />
-      </Link>
-    ),
   ];
 
   return {

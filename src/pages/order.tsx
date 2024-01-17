@@ -1,14 +1,15 @@
 import React from "react";
 import { OrderContextProvider } from "../modules/order/context";
 import { OrderPage } from "../modules/order/page";
+import { MainLayout } from "../modules/layout";
 
 const Order = () => {
   return (
-    <div>
+    <MainLayout>
       <OrderContextProvider>
         <OrderPage />
       </OrderContextProvider>
-    </div>
+    </MainLayout>
   );
 };
 

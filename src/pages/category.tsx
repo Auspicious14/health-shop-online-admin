@@ -1,12 +1,15 @@
 import React from "react";
 import { CategoryPage } from "../modules/category/page";
 import { CategoryContextProvider } from "../modules/category/context";
+import { MainLayout } from "../modules/layout";
 
 const Category = () => {
   return (
-    <CategoryContextProvider>
-      <CategoryPage />
-    </CategoryContextProvider>
+    <MainLayout>
+      <CategoryContextProvider>
+        <CategoryPage />
+      </CategoryContextProvider>
+    </MainLayout>
   );
 };
 

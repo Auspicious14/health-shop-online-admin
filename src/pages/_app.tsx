@@ -10,6 +10,7 @@ import { extendTheme } from "@chakra-ui/react";
 import { ProfileContextProvider } from "../modules/profile/context";
 import { SignUpContextProvider } from "../modules/auth/signup/context";
 import { StoreContextProvider } from "../modules/store/context";
+import { ProductContextProvider } from "../modules/product/context";
 
 // 2. Extend the theme to include custom colors, fonts, etc
 const colors = {
@@ -30,21 +31,23 @@ export default function App({
       <ChakraProvider theme={theme}>
         <SignUpContextProvider>
           <StoreContextProvider>
-            <ProfileContextProvider>
-              <Component {...pageProps} />
-              <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-              />
-            </ProfileContextProvider>
+            <ProductContextProvider>
+              <ProfileContextProvider>
+                <Component {...pageProps} />
+                <ToastContainer
+                  position="top-right"
+                  autoClose={5000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                  theme="light"
+                />
+              </ProfileContextProvider>
+            </ProductContextProvider>
           </StoreContextProvider>
         </SignUpContextProvider>
       </ChakraProvider>
