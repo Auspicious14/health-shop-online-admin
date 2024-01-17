@@ -7,7 +7,7 @@ import {
 } from "@ant-design/icons";
 import { Button, Space, Table, Input, Typography, Popconfirm } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { ApModal, SideNav } from "../../components";
+import { ApModal } from "../../components";
 import { useProductState } from "./context";
 import CreateProductPage from "./detail";
 import { IProduct } from "./model";
@@ -44,6 +44,8 @@ export const ProductPage = () => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
+
+  console.log(products, "producttts");
   const columns: ColumnsType<IProduct> = [
     {
       title: "Image",
@@ -124,11 +126,8 @@ export const ProductPage = () => {
     p?.name?.toLocaleLowerCase().includes(search.toLocaleLowerCase())
   );
   return (
-    <div className="flex w-full gap-4">
-      <div className="w-[20%] h-screen border ">
-        <SideNav />
-      </div>
-      <div className="w-[80%] mx-4">
+    <>
+      <div>
         <div className="flex justify-between items-center shadow-sm p-4 ">
           <div>
             <h1 className="text-3xl font-bold">Products</h1>
@@ -177,6 +176,6 @@ export const ProductPage = () => {
           onUpdate={() => setModal({ show: false })}
         />
       </ApModal>
-    </div>
+    </>
   );
 };

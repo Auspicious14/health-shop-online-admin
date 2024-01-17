@@ -1,7 +1,7 @@
 import { Button, Card, UploadProps } from "antd";
 import { Field, Form, Formik, FormikProps } from "formik";
 import React, { useEffect, useRef, useState } from "react";
-import { ApSelectInput, ApTextInput, Files, SideNav } from "../../components";
+import { ApSelectInput, ApTextInput, Files } from "../../components";
 import { useProductState } from "./context";
 import { IProduct } from "./model";
 import * as Yup from "yup";

@@ -1,6 +1,5 @@
 import { Card, Input } from "antd";
 import React, { useEffect, useState } from "react";
-import { SideNav } from "../../components";
 import { UpdateProfile } from "./detail";
 import { useProfileState } from "./context";
 import { getCookie } from "../../helper";
@@ -22,11 +21,8 @@ export const ProfilePage = () => {
   }, []);
 
   return (
-    <div className="flex w-full gap-4">
-      <div className="w-[20%] h-screen border ">
-        <SideNav />
-      </div>
-      <div className="w-[80%] mx-4">
+    <>
+      <div>
         <div className=" p-4 ">
           <div>
             <h1 className="text-3xl font-bold">Profile</h1>
@@ -64,6 +60,6 @@ export const ProfilePage = () => {
         )}
         {show.show && show.type === "password" && <UpdatePassword />}
       </div>
-    </div>
+    </>
   );
 };

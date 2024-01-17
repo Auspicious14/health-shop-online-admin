@@ -9,7 +9,7 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import { useCategorystate } from "./context";
-import { ApModal, SideNav } from "../../components";
+import { ApModal } from "../../components";
 import { CategoryDetail } from "./detail";
 import { filter } from "@chakra-ui/react";
 const { Text } = Typography;
@@ -85,11 +85,8 @@ export const CategoryPage = () => {
   );
   console.log(filteredCategories);
   return (
-    <div className="flex w-full gap-4">
-      <div className="w-[20%] h-screen border ">
-        <SideNav />
-      </div>
-      <div className="w-[80%] mx-4">
+    <>
+      <div>
         <div className="flex justify-between items-center shadow-sm p-4 ">
           <div>
             <h1 className="text-3xl font-bold">Categories</h1>
@@ -136,6 +133,6 @@ export const CategoryPage = () => {
           onUpdate={() => setModal({ show: false })}
         />
       </ApModal>
-    </div>
+    </>
   );
 };

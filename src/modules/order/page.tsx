@@ -10,7 +10,6 @@ import {
 import { ColumnsType } from "antd/es/table";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { SideNav } from "../../components";
 import { IOrder } from "./model";
 import { useOrderState } from "./context";
 import { getCookie } from "../../helper";
@@ -143,13 +142,7 @@ export const OrderPage = () => {
     p.address?.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
   );
   return (
-    <div className="flex w-full gap-4">
-      <div className="w-[20%] h-screen border ">
-        <div className="pb-8">
-          <Link href={"/"}>Logo</Link>
-        </div>
-        <SideNav />
-      </div>
+    <div>
       <div className="w-[80%] mx-4">
         <div className="shadow-sm p-4 ">
           <h1 className="text-3xl font-bold">Orders</h1>

@@ -9,7 +9,7 @@ import {
 } from "@ant-design/icons";
 import { Space, Popconfirm, Typography, Input, Table, Button } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { ApModal, SideNav } from "../../components";
+import { ApModal } from "../../components";
 import { StoreDetailPage } from "./detail";
 import { RejectStore } from "./components/reject";
 import { EyeDropperIcon } from "@heroicons/react/24/outline";
@@ -127,37 +127,32 @@ export const StorePage = () => {
   };
 
   return (
-    <div className="flex w-full gap-4">
-      <div className="w-[20%] h-screen border ">
-        <SideNav />
-      </div>
-      <div className="w-[80%] mx-4">
-        <div className="flex justify-between items-center shadow-sm p-4 ">
-          <div>
-            <h1 className="text-3xl font-bold">Stores</h1>
-            <span>keep track of vendor</span>
-          </div>
-        </div>
-        <div className="shadow-sm p-4 flex items-center justify-between">
-          <h1 className=" font-bold">All Stores</h1>
-          <Search
-            className="w-60"
-            placeholder="Search store"
-            prefix={<SearchOutlined className="text-gray-300" />}
-            onChange={(e) => setSearch(e.target.value.toLocaleLowerCase())}
-          />
-        </div>
+    <>
+      <div className="flex justify-between items-center shadow-sm p-4 ">
         <div>
-          <Table
-            //   rowSelection={rowSelection}
-            columns={columns}
-            dataSource={filtered}
-            rowKey={(p) => p._id}
-            pagination={{ pageSize: 50 }}
-            scroll={{ y: 350 }}
-            loading={loading}
-          />
+          <h1 className="text-3xl font-bold">Stores</h1>
+          <span>keep track of vendor</span>
         </div>
+      </div>
+      <div className="shadow-sm p-4 flex items-center justify-between">
+        <h1 className=" font-bold">All Stores</h1>
+        <Search
+          className="w-60"
+          placeholder="Search store"
+          prefix={<SearchOutlined className="text-gray-300" />}
+          onChange={(e) => setSearch(e.target.value.toLocaleLowerCase())}
+        />
+      </div>
+      <div>
+        <Table
+          //   rowSelection={rowSelection}
+          columns={columns}
+          dataSource={filtered}
+          rowKey={(p) => p._id}
+          pagination={{ pageSize: 50 }}
+          scroll={{ y: 350 }}
+          loading={loading}
+        />
       </div>
 
       <ApModal
@@ -168,6 +163,6 @@ export const StorePage = () => {
         {modal.type === "detail" && <StoreDetailPage store={modal.data} />}
         {modal.type === "reject" && <RejectStore store={modal.data} />}
       </ApModal>
-    </div>
+    </>
   );
 };

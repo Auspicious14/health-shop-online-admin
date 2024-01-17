@@ -18,7 +18,7 @@ import {
 import { ColumnsType } from "antd/es/table";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { ApModal, SideNav } from "../../components";
+import { ApModal } from "../../components";
 import { useBlogState } from "./context";
 import { IBlog } from "./model";
 import { CreateBlog } from "./detail";
@@ -94,16 +94,8 @@ export const BlogPage = () => {
     p.title.toLocaleLowerCase().includes(search.toLocaleLowerCase())
   );
   return (
-    <div className="flex w-full gap-4">
-      <div className="w-[20%] h-screen border bg-red-400">
-        {/* <div className="pb-8">
-          <Link href={"/"}>Logo</Link>
-        </div> */}
-        <div>
-          <SideNav />
-        </div>
-      </div>
-      <div className="w-[80%] mx-4">
+    <>
+      <>
         <div className="flex justify-between items-center shadow-sm p-4 ">
           <div>
             <h1 className="text-3xl font-bold">Blogs</h1>
@@ -137,7 +129,7 @@ export const BlogPage = () => {
             rowKey={(p) => p._id}
           />
         </div>
-      </div>
+      </>
 
       <ApModal
         title={modal.type}
@@ -149,6 +141,6 @@ export const BlogPage = () => {
           onUpdate={() => setModal({ show: false })}
         />
       </ApModal>
-    </div>
+    </>
   );
 };

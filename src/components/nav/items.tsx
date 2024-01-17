@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { FaStoreAlt } from "react-icons/fa";
+import { FaStore, FaStoreAlt } from "react-icons/fa";
 import { BsCartCheck } from "react-icons/bs";
 import { Divider, MenuProps } from "antd";
 import Link from "next/link";
@@ -149,6 +149,13 @@ export const NavItems = () => {
       </Link>
     ),
     getItem(
+      "Detail",
+      "su1",
+      <Link href={`/store/${router?.query?.storeId}`}>
+        <FaStore />
+      </Link>
+    ),
+    getItem(
       "Order",
       "sub2",
       <Link href={`/store/${router?.query?.storeId}/order`}>
@@ -158,7 +165,7 @@ export const NavItems = () => {
     getItem(
       "Product",
       "sub3",
-      <Link href={`/store/${router?.query?.storeId}/product`}>
+      <Link href={`/store/${router?.query?.storeId}/products`}>
         <MailOutlined />
       </Link>
     ),

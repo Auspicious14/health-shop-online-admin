@@ -1,7 +1,7 @@
 import { Button, Card, UploadProps } from "antd";
 import { Field, Form, Formik, FormikProps } from "formik";
 import React, { useEffect, useRef, useState } from "react";
-import { ApSelectInput, ApTextInput, Files, SideNav } from "../../components";
+import { ApSelectInput, ApTextInput, Files } from "../../components";
 import { useCategorystate } from "./context";
 import * as Yup from "yup";
 import { getCookie } from "../../helper";

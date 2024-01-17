@@ -6,7 +6,6 @@ import { CategoryScale, registerables } from "chart.js";
 import Link from "next/link";
 import React from "react";
 import { Bar, Doughnut } from "react-chartjs-2";
-import { SideNav } from "../../components";
 const Search = Input;
 export const HomePage = () => {
   Chart.register(CategoryScale, ...registerables);
@@ -47,11 +46,8 @@ export const HomePage = () => {
 
   return (
     <>
-      <div className="flex w-full gap-4">
-        <div className="w-[20%] h-screen border ">
-          <SideNav />
-        </div>
-        <div className="w-[80%] mx-4">
+      <>
+        <div>
           <div className="shadow-sm p-4 flex items-center justify-between">
             <h1 className="text-3xl font-bold">{`Good ${hour}, Admin`}</h1>
             <Search className="w-60" />
@@ -123,7 +119,7 @@ export const HomePage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </>
     </>
   );
 };
