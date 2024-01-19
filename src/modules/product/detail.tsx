@@ -24,7 +24,7 @@ interface IProps {
   product: IProduct;
   onDissmiss?: () => void;
   onUpdate?: () => void;
-  storeId: string;
+  storeId?: string;
 }
 
 const CreateProductPage: React.FC<IProps> = ({

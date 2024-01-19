@@ -9,13 +9,13 @@ interface IProductState {
   products: IProduct[];
   getProducts: (query?: any) => Promise<void>;
   getOneProduct: (productId: string) => Promise<void>;
-  createProduct: (payload: IProduct, storeId: string) => Promise<void>;
+  createProduct: (payload: IProduct, storeId?: string) => Promise<void>;
   updateProduct: (
     payload: IProduct,
     productId: string,
-    storeId: string
+    storeId?: string
   ) => Promise<void>;
-  deleteProduct: (productId: string, storeId: string) => Promise<void>;
+  deleteProduct: (productId: string, storeId?: string) => Promise<void>;
 }
 
 const ProductContext = React.createContext<IProductState>({
@@ -90,7 +90,7 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
     }
   };
 
-  const createProduct = async (payload: IProduct, storeId: string) => {
+  const createProduct = async (payload: IProduct, storeId?: string) => {
     setLoading(true);
     console.log(JSON.stringify(payload));
     try {
@@ -119,7 +119,7 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
   const updateProduct = async (
     payload: IProduct,
     productId: string,
-    storeId: string
+    storeId?: string
   ) => {
     setLoading(true);
     try {
@@ -144,7 +144,7 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
     }
   };
 
-  const deleteProduct = async (productId: string, storeId: string) => {
+  const deleteProduct = async (productId: string, storeId?: string) => {
     setLoading(true);
     try {
       const res = await apiReqHandler({

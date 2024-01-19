@@ -22,7 +22,7 @@ const productStatus = {
 };
 
 interface IProps {
-  storeId: string;
+  storeId?: string;
 }
 export const ProductPage: React.FC<IProps> = ({ storeId }) => {
   const { products, getProducts, deleteProduct, loading } = useProductState();
