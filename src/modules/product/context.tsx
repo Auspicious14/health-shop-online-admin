@@ -58,9 +58,14 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
 
   const getProducts = async (storeId: string, query?: any) => {
     setLoading(true);
+    let endPoint;
+    if (storeId) {
+      endPoint = `${process.env.NEXT_PUBLIC_API_ROUTE}/products?storeId=${storeId}`;
+    }
+    endPoint = `${process.env.NEXT_PUBLIC_API_ROUTE}/products`;
     try {
       const res = await apiReqHandler({
-        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/products?storeId=${storeId}`,
+        endPoint,
         method: "GET",
       });
       setLoading(false);

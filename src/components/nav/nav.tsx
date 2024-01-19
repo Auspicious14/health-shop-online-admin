@@ -76,20 +76,20 @@ export const NavBarComponent: React.FC<IProps> = ({ navItem, center }) => {
   const [modal, setModal] = useState<{ show: boolean }>({ show: false });
   const router = useRouter();
 
-  const id = JSON.parse(getCookie("user_id"));
+  const user = JSON.parse(getCookie("user_id"));
   useEffect(() => {
-    if (id) getProfile(id?.id);
+    if (user) getProfile(user?.id);
   }, []);
 
   const handleSignOut = () => {
-    const userId = getCookie("user_id");
-    console.log(userId);
-    if (getCookie("user_id")) {
+    if (user?.id) {
       deleteCookie("user_id", -1);
       router.push("/auth/login");
     }
   };
-
+  console.log(
+    router.asPath == "/" || "/product" || "/stores" || "/category" || "/order"
+  );
   return (
     <Layout hasSider style={{ minHeight: "100vh" }}>
       <Sider>
@@ -155,6 +155,19 @@ export const NavBarComponent: React.FC<IProps> = ({ navItem, center }) => {
               size={20}
             />
           </Tooltip>
+          {router.asPath !== "/" ||
+          "/product" ||
+          "/stores" ||
+          "/category" ||
+          "/order" ? (
+            <Button
+              onClick={() => router.push("/")}
+              className="bg-blue-700 text-white text-center mt-6 w-[80%]"
+              color="white"
+            >
+              Go Back
+            </Button>
+          ) : null}
         </div>
       </Menu>
 

@@ -60,9 +60,7 @@ export const SignInPage = () => {
           initialValues={{
             email: "",
             password: "",
-            accountType: [{ label: "Admin", value: "admin" }] || [
-              { label: "Admin", value: "admin" },
-            ],
+            accountType: [{ label: "Admin", value: "Admin" }],
           }}
           validationSchema={FormSchema}
           onSubmit={handleSubmit}
