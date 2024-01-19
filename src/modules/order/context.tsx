@@ -10,7 +10,7 @@ interface IOrderState {
   createOrder: (payload: IOrder) => Promise<void>;
   updateOrderItem: (payload: any, orderId: string) => Promise<void>;
   deleteOrderItem: (orderId: string) => Promise<void>;
-  getAllOrders: () => Promise<void>;
+  getAllOrders: (storeId?: string) => Promise<void>;
 }
 
 const OrderContext = React.createContext<IOrderState>({
@@ -48,11 +48,11 @@ export const OrderContextProvider: React.FC<IProps> = ({ children }) => {
   const [orders, setOrders] = useState<IOrder[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const getAllOrders = async () => {
+  const getAllOrders = async (storeId?: string) => {
     setLoading(true);
     try {
       const res = await apiReqHandler({
-        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/orders`,
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/orders?storeId=${storeId}`,
         method: "GET",
       });
       setLoading(false);
@@ -62,7 +62,8 @@ export const OrderContextProvider: React.FC<IProps> = ({ children }) => {
         console.log(data);
       }
       return data;
-    } catch (error) {
+    } catch (error: any) {
+      toast.error(error);
       console.log(error);
     }
   };

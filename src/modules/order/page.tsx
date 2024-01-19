@@ -25,7 +25,11 @@ const statusColor = {
   new: "text-black",
 };
 
-export const OrderPage = () => {
+interface IProps {
+  storeId?: string;
+}
+
+export const OrderPage: React.FC<IProps> = ({ storeId }) => {
   const [order, setOrder] = useState<IOrder>();
   const { orders, getAllOrders, updateOrderItem } = useOrderState();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
@@ -35,11 +39,11 @@ export const OrderPage = () => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
   useEffect(() => {
-    getAllOrders();
+    getAllOrders(storeId);
   }, []);
 
   const counts: any = orders
-    .map((o) => o.status)
+    ?.map((o) => o.status)
     .reduce(
       (acc: any, value) => ({
         ...acc,
@@ -143,7 +147,7 @@ export const OrderPage = () => {
   );
   return (
     <div>
-      <div className="w-[80%] mx-4">
+      <div>
         <div className="shadow-sm p-4 ">
           <h1 className="text-3xl font-bold">Orders</h1>
           <span>{`${orders?.length} orders`}</span>
@@ -151,7 +155,7 @@ export const OrderPage = () => {
         <div className="flex gap-8 my-4 items-center justify-between">
           <Card.Grid className="text-center w-[25%] shadow-md py-5 inset-3">
             <h1 className="text-sm">New Orders</h1>
-            <h1 className="font-bold text-2xl">{counts.new || 0}</h1>
+            <h1 className="font-bold text-2xl">{counts?.new || 0}</h1>
           </Card.Grid>
           {/* <Card.Grid className="text-center w-[25%] shadow-md py-5 inset-3">
             <h1 className="text-sm">Pending Orders</h1>
@@ -159,11 +163,11 @@ export const OrderPage = () => {
           </Card.Grid> */}
           <Card.Grid className="text-center w-[25%] shadow-md py-5 inset-3">
             <h1 className="text-sm">Delivered Orders</h1>
-            <h1 className="font-bold text-2xl">{counts.Delivered || 0}</h1>
+            <h1 className="font-bold text-2xl">{counts?.Delivered || 0}</h1>
           </Card.Grid>
           <Card.Grid className="text-center w-[25%] shadow-md py-5 inset-3">
             <h1 className="text-sm">Confirmed Orders</h1>
-            <h1 className="font-bold text-2xl">{counts.confirmed || 0}</h1>
+            <h1 className="font-bold text-2xl">{counts?.confirmed || 0}</h1>
           </Card.Grid>
         </div>
         <div className="shadow-sm p-4 flex items-center justify-between">
@@ -180,7 +184,7 @@ export const OrderPage = () => {
             rowSelection={rowSelection}
             columns={columns}
             dataSource={filtered}
-            rowKey={(ord) => ord._id}
+            rowKey={(ord) => ord?._id}
             pagination={{ pageSize: 50 }}
             scroll={{ y: 250 }}
           />
