@@ -12,6 +12,7 @@ import { SignUpContextProvider } from "../modules/auth/signup/context";
 import { StoreContextProvider } from "../modules/store/context";
 import { ProductContextProvider } from "../modules/product/context";
 import { CategoryContextProvider } from "../modules/category/context";
+import { OrderContextProvider } from "../modules/order/context";
 
 // 2. Extend the theme to include custom colors, fonts, etc
 const colors = {
@@ -32,25 +33,27 @@ export default function App({
       <ChakraProvider theme={theme}>
         <SignUpContextProvider>
           <StoreContextProvider>
-            <ProductContextProvider>
-              <CategoryContextProvider>
-                <ProfileContextProvider>
-                  <Component {...pageProps} />
-                  <ToastContainer
-                    position="top-right"
-                    autoClose={5000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                    theme="light"
-                  />
-                </ProfileContextProvider>
-              </CategoryContextProvider>
-            </ProductContextProvider>
+            <OrderContextProvider>
+              <ProductContextProvider>
+                <CategoryContextProvider>
+                  <ProfileContextProvider>
+                    <Component {...pageProps} />
+                    <ToastContainer
+                      position="top-right"
+                      autoClose={5000}
+                      hideProgressBar={false}
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      pauseOnFocusLoss
+                      draggable
+                      pauseOnHover
+                      theme="light"
+                    />
+                  </ProfileContextProvider>
+                </CategoryContextProvider>
+              </ProductContextProvider>
+            </OrderContextProvider>
           </StoreContextProvider>
         </SignUpContextProvider>
       </ChakraProvider>

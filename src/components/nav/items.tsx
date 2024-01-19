@@ -158,7 +158,7 @@ export const NavItems = () => {
     getItem(
       "Order",
       "sub2",
-      <Link href={`/store/${router?.query?.storeId}/order`}>
+      <Link href={`/store/${router?.query?.storeId}/orders`}>
         <BsCartCheck />
       </Link>
     ),
