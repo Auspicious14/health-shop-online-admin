@@ -15,7 +15,7 @@ interface IProductState {
     productId: string,
     storeId: string
   ) => Promise<void>;
-  deleteProduct: (productId: string) => Promise<void>;
+  deleteProduct: (productId: string, storeId: string) => Promise<void>;
 }
 
 const ProductContext = React.createContext<IProductState>({
@@ -144,11 +144,11 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
     }
   };
 
-  const deleteProduct = async (productId: string) => {
+  const deleteProduct = async (productId: string, storeId: string) => {
     setLoading(true);
     try {
       const res = await apiReqHandler({
-        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/product/${productId}`,
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/product/${productId}?storeId=${storeId}`,
         method: "DELETE",
       });
       setLoading(false);

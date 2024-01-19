@@ -106,7 +106,7 @@ export const ProductPage: React.FC<IProps> = ({ storeId }) => {
         <Space className="flex gap-8 items-center">
           <Popconfirm
             title="Sure to delete?"
-            onConfirm={() => deleteProduct(product?._id)}
+            onConfirm={() => deleteProduct(product?._id, storeId)}
             okButtonProps={{
               style: { background: "rgb(37 99 235)" },
             }}

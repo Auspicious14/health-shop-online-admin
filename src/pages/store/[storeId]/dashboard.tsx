@@ -1,8 +1,15 @@
 import React from "react";
 import { StoreDashboardPage } from "../../../modules/store/components/dashboard";
+import { AdminStoreLayout } from "../../../modules/store/layout/admin";
 
 const Store = () => {
-  return <StoreDashboardPage />;
+  return (
+    <>
+      <AdminStoreLayout>
+        <StoreDashboardPage />
+      </AdminStoreLayout>
+    </>
+  );
 };
 export default Store;
 export const getServerSideProps = async ({
@@ -17,10 +24,10 @@ export const getServerSideProps = async ({
   if (cookie) {
     parse = JSON?.parse(req?.cookies.user_id);
   }
-  if (parse?.isAdmin) {
+  if (!parse?.isAdmin) {
     return {
       redirect: {
-        destination: "/",
+        destination: "/auth/login",
         permenant: false,
       },
     };
