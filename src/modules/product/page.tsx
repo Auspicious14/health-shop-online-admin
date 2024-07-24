@@ -136,16 +136,18 @@ export const ProductPage: React.FC<IProps> = ({ storeId }) => {
             <h1 className="text-3xl font-bold">Products</h1>
             <span>keep track of vendor</span>
           </div>
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            className="bg-blue-600 items-center flex"
-            onClick={() =>
-              setModal({ show: true, data: null, type: "Add Product" })
-            }
-          >
-            Add product
-          </Button>
+          {storeId && (
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              className="bg-blue-600 items-center flex"
+              onClick={() =>
+                setModal({ show: true, data: null, type: "Add Product" })
+              }
+            >
+              Add product
+            </Button>
+          )}
         </div>
         <div className="shadow-sm p-4 flex items-center justify-between">
           <h1 className=" font-bold">All Products</h1>

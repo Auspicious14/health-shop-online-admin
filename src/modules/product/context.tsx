@@ -61,8 +61,9 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
     let endPoint;
     if (storeId) {
       endPoint = `${process.env.NEXT_PUBLIC_API_ROUTE}/products?storeId=${storeId}`;
+    } else {
+      endPoint = `${process.env.NEXT_PUBLIC_API_ROUTE}/products`;
     }
-    endPoint = `${process.env.NEXT_PUBLIC_API_ROUTE}/products`;
     try {
       const res = await apiReqHandler({
         endPoint,

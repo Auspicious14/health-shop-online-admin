@@ -50,16 +50,21 @@ export const OrderContextProvider: React.FC<IProps> = ({ children }) => {
 
   const getAllOrders = async (storeId?: string) => {
     setLoading(true);
+    let endPoint;
+    if (storeId) {
+      endPoint = `${process.env.NEXT_PUBLIC_API_ROUTE}/orders?storeId=${storeId}`;
+    } else {
+      endPoint = `${process.env.NEXT_PUBLIC_API_ROUTE}/orders`;
+    }
     try {
       const res = await apiReqHandler({
-        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/orders?storeId=${storeId}`,
+        endPoint,
         method: "GET",
       });
       setLoading(false);
       const data = await res.res?.data;
       if (data) {
         setOrders(data.data);
-        console.log(data);
       }
       return data;
     } catch (error: any) {

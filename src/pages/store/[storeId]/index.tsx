@@ -3,6 +3,9 @@ import { StoreDetailPage } from "../../../modules/store/detail";
 import { IStore } from "../../../modules/store/model";
 import { apiReqHandler } from "../../../components";
 import { AdminStoreLayout } from "../../../modules/store/layout/admin";
+import jwt from "jsonwebtoken";
+
+const tokenSecret: any = process.env.JWT_SECRET;
 
 interface IProps {
   store: IStore;
@@ -17,7 +20,32 @@ const StoreDetail: React.FC<IProps> = ({ store }) => {
 
 export default StoreDetail;
 
-export const getServerSideProps = async ({ query }: { query: any }) => {
+export const getServerSideProps = async ({
+  req,
+  query,
+}: {
+  req: any;
+  query: any;
+}) => {
+  const cookie = req?.cookies.token;
+  if (!cookie) {
+    return {
+      redirect: {
+        destination: "/auth/login",
+        permenant: false,
+      },
+    };
+  }
+  const token: any = jwt.verify(cookie, tokenSecret);
+
+  if (!token?.isAdmin) {
+    return {
+      redirect: {
+        destination: "/auth/login",
+        permenant: false,
+      },
+    };
+  }
   const { storeId } = query;
   const data = await apiReqHandler({
     endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/store/${storeId}`,

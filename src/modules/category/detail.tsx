@@ -32,7 +32,6 @@ export const CategoryDetail: React.FC<IProps> = ({ category, onUpdate }) => {
         }))
       );
     }
-    console.log(category?.images);
   }, [category]);
 
   const handleProductImage: UploadProps["onChange"] = ({
@@ -43,12 +42,10 @@ export const CategoryDetail: React.FC<IProps> = ({ category, onUpdate }) => {
   };
   const handleSubmit = async (values: any) => {
     console.log(values);
-    const id = getCookie("user_id");
     if (category?._id) {
       updateCategory(
         {
           ...values,
-          id,
           images: files.map((f: any) => ({
             uri: f?.uri || f?.thumbUrl,
             type: f?.type,
@@ -67,14 +64,13 @@ export const CategoryDetail: React.FC<IProps> = ({ category, onUpdate }) => {
           type: f?.type,
           name: f?.name,
         })),
-        id,
       }).then((res: any) => {
         console.log(res);
         if (res && onUpdate) onUpdate();
       });
     }
   };
-  console.log(files, "filessss");
+
   return (
     <div>
       <div className="w-full mx-4">

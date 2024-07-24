@@ -15,6 +15,7 @@ export const apiReqHandler = async ({
       Accept: "application/json",
       "Content-Type": "application/json;charset=UTF-8",
     },
+    credentials: "include",
   };
 
   if (bearerAuth) {

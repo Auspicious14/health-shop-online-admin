@@ -52,21 +52,16 @@ const CreateProductPage: React.FC<IProps> = ({
     }
   }, [product]);
 
-  console.log(categories, "categoriess");
-
   const handleProductImage: UploadProps["onChange"] = ({
     fileList: newFileList,
   }: any) => {
     setFiles(newFileList);
   };
   const handleProduct = async (values: any) => {
-    const user = JSON.parse(getCookie("user_id"));
-    const { id } = user;
     if (product?._id) {
       updateProduct(
         {
           ...values,
-          id,
           images: files.map((f: any) => ({
             uri: f?.uri || f?.thumbUrl,
             type: f?.type,
@@ -92,7 +87,6 @@ const CreateProductPage: React.FC<IProps> = ({
             type: f?.type,
             name: f?.name,
           })),
-          id,
           categories: values.categories.map((c: any) => c.value),
           size: values.size.value,
         },

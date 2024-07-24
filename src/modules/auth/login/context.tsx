@@ -50,11 +50,7 @@ export const SignInContextProvider: React.FC<IProps> = ({ children }) => {
         if (data.message) {
           toast.error(data.message);
         }
-        setCookie(
-          "user_id",
-          JSON.stringify({ id: data?.user?._id, isAdmin: data?.user?.isAdmin }),
-          3
-        );
+        setCookie("token", data.token, 3);
       }
       return data;
     } catch (error: any) {

@@ -40,7 +40,7 @@ export const OrderPage: React.FC<IProps> = ({ storeId }) => {
   };
   useEffect(() => {
     getAllOrders(storeId);
-  }, []);
+  }, [storeId]);
 
   const counts: any = orders
     ?.map((o) => o.status)

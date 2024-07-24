@@ -57,12 +57,10 @@ export const CreateBlog: React.FC<IProps> = ({ blog, onUpdate }) => {
   //   type: f?.type,
   // }));
   const handleBlog = async (values: any) => {
-    const id = getCookie("user_id");
     if (blog?._id) {
       updateBlog(
         {
           ...values,
-          id,
           images: files.map((f: any) => ({
             uri: f?.thumbUrl,
             type: f?.type,
@@ -78,7 +76,6 @@ export const CreateBlog: React.FC<IProps> = ({ blog, onUpdate }) => {
       createBlog({
         ...values,
         images: files,
-        id,
       }).then((res: any) => {
         console.log(res, "responseeeeeee");
         if (res && onUpdate) onUpdate(res);
