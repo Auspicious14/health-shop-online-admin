@@ -23,16 +23,17 @@ const Content = dynamic(
 );
 
 interface IProps {
+  userId: string;
   children: React.ReactNode;
 }
-export const StoreLayout: React.FC<IProps> = ({ children }) => {
+export const StoreLayout: React.FC<IProps> = ({ userId, children }) => {
   const { StoreMenuItem } = NavItems();
   return (
     <>
       <ConfigProvider>
         <Layout hasSider>
           <Sider className="w-[20%]">
-            <NavBarComponent navItem={StoreMenuItem} />
+            <NavBarComponent navItem={StoreMenuItem} userId={userId} />
           </Sider>
 
           <Layout>

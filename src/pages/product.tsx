@@ -4,10 +4,13 @@ import { MainLayout } from "../modules/layout";
 import jwt from "jsonwebtoken";
 
 const tokenSecret: any = process.env.JWT_SECRET;
+interface IProps {
+  user: { id: string; isAdmin: boolean };
+}
 
-const Product = () => {
+const Product: React.FC<IProps> = ({ user }) => {
   return (
-    <MainLayout>
+    <MainLayout userId={user.id}>
       <ProductPage />
     </MainLayout>
   );
@@ -40,7 +43,10 @@ export const getServerSideProps = async ({
       },
     };
   }
+
   return {
-    props: {},
+    props: {
+      user: token,
+    },
   };
 };

@@ -11,7 +11,7 @@ interface IProps {
 }
 const Category: React.FC<IProps> = ({ store }) => {
   return (
-    <StoreLayout>
+    <StoreLayout userId={store.id}>
       <OrderContextProvider>
         <OrderPage storeId={store.id} />
       </OrderContextProvider>
@@ -49,7 +49,7 @@ export const getServerSideProps = async ({
   }
   return {
     props: {
-      store: token,
+      store: token || null,
     },
   };
 };

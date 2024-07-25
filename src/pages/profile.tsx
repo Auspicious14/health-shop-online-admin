@@ -6,18 +6,19 @@ import { MainLayout } from "../modules/layout";
 import jwt from "jsonwebtoken";
 
 const tokenSecret: any = process.env.JWT_SECRET;
+interface IProps {
+  user: { id: string; isAdmin: boolean };
+}
 
-const Profile = () => {
+const Profile: React.FC<IProps> = ({ user }) => {
   return (
-    <div>
-      <ProfileContextProvider>
-        <ResetPasswordContextProvider>
-          <MainLayout>
-            <ProfilePage />
-          </MainLayout>
-        </ResetPasswordContextProvider>
-      </ProfileContextProvider>
-    </div>
+    <ProfileContextProvider>
+      <ResetPasswordContextProvider>
+        <MainLayout userId={user.id}>
+          <ProfilePage />
+        </MainLayout>
+      </ResetPasswordContextProvider>
+    </ProfileContextProvider>
   );
 };
 export const getServerSideProps = async ({
@@ -48,7 +49,9 @@ export const getServerSideProps = async ({
   }
 
   return {
-    props: {},
+    props: {
+      user: token,
+    },
   };
 };
 export default Profile;

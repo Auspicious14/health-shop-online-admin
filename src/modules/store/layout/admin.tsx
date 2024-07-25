@@ -9,17 +9,18 @@ import { NavItems } from "../../../components";
 const { Sider, Content } = Layout;
 
 interface IProps {
+  userId: string;
   children: React.ReactNode;
 }
 
-export const AdminStoreLayout: React.FC<IProps> = ({ children }) => {
+export const AdminStoreLayout: React.FC<IProps> = ({ userId, children }) => {
   const { AdminStoreMenuItem } = NavItems();
   return (
     <>
       <ConfigProvider>
         <Layout hasSider>
           <Sider className="w-[20%]">
-            <NavBarComponent navItem={AdminStoreMenuItem} />
+            <NavBarComponent navItem={AdminStoreMenuItem} userId={userId} />
           </Sider>
 
           <Layout>

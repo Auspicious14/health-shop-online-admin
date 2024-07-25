@@ -4,11 +4,14 @@ import { AdminStoreLayout } from "../../../modules/store/layout/admin";
 import jwt from "jsonwebtoken";
 
 const tokenSecret: any = process.env.JWT_SECRET;
+interface IProps {
+  user: { id: string; isAdmin: boolean };
+}
 
-const Store = () => {
+const Store: React.FC<IProps> = ({ user }) => {
   return (
     <>
-      <AdminStoreLayout>
+      <AdminStoreLayout userId={user.id}>
         <StoreDashboardPage />
       </AdminStoreLayout>
     </>
@@ -42,6 +45,8 @@ export const getServerSideProps = async ({
     };
   }
   return {
-    props: {},
+    props: {
+      user: token || null,
+    },
   };
 };

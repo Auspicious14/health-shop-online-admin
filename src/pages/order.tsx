@@ -2,10 +2,16 @@ import React from "react";
 import { OrderContextProvider } from "../modules/order/context";
 import { OrderPage } from "../modules/order/page";
 import { MainLayout } from "../modules/layout";
+import jwt from "jsonwebtoken";
 
-const Order = () => {
+const tokenSecret: any = process.env.JWT_SECRET;
+interface IProps {
+  user: { id: string; isAdmin: boolean };
+}
+
+const Order: React.FC<IProps> = ({ user }) => {
   return (
-    <MainLayout>
+    <MainLayout userId={user.id}>
       <OrderContextProvider>
         <OrderPage />
       </OrderContextProvider>
@@ -21,8 +27,8 @@ export const getServerSideProps = async ({
   req: any;
   query: any;
 }) => {
-  const parse = JSON.parse(req?.cookies.user_id);
-  if (!parse.isAdmin) {
+  const cookie = req?.cookies?.token;
+  if (!cookie) {
     return {
       redirect: {
         destination: "/auth/login",
@@ -30,8 +36,20 @@ export const getServerSideProps = async ({
       },
     };
   }
-  // console.log(id);
+  const token: any = jwt.verify(cookie, tokenSecret);
+
+  if (!token?.isAdmin) {
+    return {
+      redirect: {
+        destination: "/auth/login",
+        permenant: false,
+      },
+    };
+  }
+
   return {
-    props: {},
+    props: {
+      user: token,
+    },
   };
 };

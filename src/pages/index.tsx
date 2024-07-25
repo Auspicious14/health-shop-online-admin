@@ -4,9 +4,13 @@ import { MainLayout } from "../modules/layout";
 import jwt from "jsonwebtoken";
 
 const tokenSecret: any = process.env.JWT_SECRET;
-export default function Home() {
+interface IProps {
+  user: { id: string; isAdmin: boolean };
+}
+
+export default function Home({ user }: IProps) {
   return (
-    <MainLayout>
+    <MainLayout userId={user.id}>
       <HomePage />
     </MainLayout>
   );
@@ -39,6 +43,8 @@ export const getServerSideProps = async ({
     };
   }
   return {
-    props: {},
+    props: {
+      user: token,
+    },
   };
 };

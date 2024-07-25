@@ -15,7 +15,7 @@ export const StoreDashboardPage = () => {
     hour = "Morning";
   } else if (time > 11 && time < 16) {
     hour = "Afternoon";
-  } else if (time > 16 && time <= 23) {
+  } else if (time >= 16 && time <= 23) {
     hour = "Evening";
   }
 

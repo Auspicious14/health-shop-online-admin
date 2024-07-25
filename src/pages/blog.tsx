@@ -2,16 +2,21 @@ import React from "react";
 import { BlogContextProvider } from "../modules/blog/context";
 import { BlogPage } from "../modules/blog/page";
 import jwt from "jsonwebtoken";
+import { MainLayout } from "../modules/layout";
 
 const tokenSecret: any = process.env.JWT_SECRET;
 
-const Blog = () => {
+interface IProps {
+  user: { id: string; isAdmin: boolean };
+}
+
+const Blog: React.FC<IProps> = ({ user }) => {
   return (
-    <div>
+    <MainLayout userId={user.id}>
       <BlogContextProvider>
         <BlogPage />
       </BlogContextProvider>
-    </div>
+    </MainLayout>
   );
 };
 
@@ -45,6 +50,8 @@ export const getServerSideProps = async ({
   }
 
   return {
-    props: {},
+    props: {
+      user: token,
+    },
   };
 };

@@ -8,11 +8,12 @@ import jwt from "jsonwebtoken";
 const tokenSecret: any = process.env.JWT_SECRET;
 
 interface IProps {
+  user: { id: string; isAdmin: boolean };
   store: IStore;
 }
-const StoreDetail: React.FC<IProps> = ({ store }) => {
+const StoreDetail: React.FC<IProps> = ({ user, store }) => {
   return (
-    <AdminStoreLayout>
+    <AdminStoreLayout userId={user.id}>
       <StoreDetailPage store={store} />
     </AdminStoreLayout>
   );
@@ -58,6 +59,7 @@ export const getServerSideProps = async ({
   return {
     props: {
       store: store || null,
+      user: token || null,
     },
   };
 };

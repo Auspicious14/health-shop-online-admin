@@ -9,11 +9,12 @@ import { IStore } from "../../modules/store/model";
 const tokenSecret: any = process.env.JWT_SECRET;
 
 interface IProps {
+  user: { id: string; isAdmin: boolean };
   store: IStore;
 }
-const StoreDetail: React.FC<IProps> = ({ store }) => {
+const StoreDetail: React.FC<IProps> = ({ user, store }) => {
   return (
-    <StoreLayout>
+    <StoreLayout userId={user.id}>
       <StoreDetailPage store={store} />
     </StoreLayout>
   );
@@ -58,6 +59,7 @@ export const getServerSideProps = async ({
   return {
     props: {
       store: store || null,
+      user: token || null,
     },
   };
 };

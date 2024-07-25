@@ -7,13 +7,11 @@ import { ApModal } from "../modal";
 import { NavItems } from "./items";
 import { toast } from "react-toastify";
 import { useSignUpState } from "../../modules/auth/signup/context";
-import { deleteCookie, getCookie } from "../../helper";
+import { deleteCookie } from "../../helper";
 import { useRouter } from "next/router";
 import { useProfileState } from "../../modules/profile/context";
-import jwt from "jsonwebtoken";
 import { routePaths } from "./path";
 
-const tokenSecret: any = process.env.NEXT_PUBLIC_JWT_SECRET;
 const { Footer, Sider } = Layout;
 interface IActionProps {
   admin?: boolean;
@@ -69,27 +67,26 @@ const InviteLink = () => {
 };
 
 interface IProps {
+  userId: string;
   navItem: any;
   center?: React.ReactNode;
 }
-export const NavBarComponent: React.FC<IProps> = ({ navItem, center }) => {
+export const NavBarComponent: React.FC<IProps> = ({
+  userId,
+  navItem,
+  center,
+}) => {
   const { profile, getProfile } = useProfileState();
   const { AdminMenuItem } = NavItems();
   const [modal, setModal] = useState<{ show: boolean }>({ show: false });
   const router = useRouter();
 
-  const cookie = getCookie("token");
-  let token: any;
-  if (cookie) {
-    token = jwt.verify(cookie, tokenSecret);
-  }
-  console.log(token);
   useEffect(() => {
-    if (token) getProfile(token?.id);
+    if (userId) getProfile(userId);
   }, []);
 
   const handleSignOut = () => {
-    if (token?.id) {
+    if (userId) {
       deleteCookie("token", -1);
       router.push("/auth/login");
     }

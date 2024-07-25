@@ -4,10 +4,11 @@ import { NavItems } from "../components";
 import { NavBarComponent } from "../components/nav/nav";
 
 interface IProps {
+  userId: string;
   children: React.ReactNode;
 }
 const { Sider, Content } = Layout;
-export const MainLayout: React.FC<IProps> = ({ children }) => {
+export const MainLayout: React.FC<IProps> = ({ userId, children }) => {
   const { AdminMenuItem } = NavItems();
 
   return (
@@ -15,7 +16,7 @@ export const MainLayout: React.FC<IProps> = ({ children }) => {
       <ConfigProvider>
         <Layout hasSider>
           <Sider className="w-[20%]">
-            <NavBarComponent navItem={AdminMenuItem} />
+            <NavBarComponent navItem={AdminMenuItem} userId={userId} />
           </Sider>
           <Layout>
             <Content>
