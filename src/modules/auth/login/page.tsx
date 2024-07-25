@@ -38,8 +38,9 @@ export const SignInPage = () => {
       if (rs.user !== undefined) {
         if (rs?.user?.accountType === "storeOwner") {
           router.push("/store");
+        } else {
+          router.push("/");
         }
-        router.push("/");
       }
     });
     console.log(values);

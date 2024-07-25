@@ -35,7 +35,7 @@ export const getServerSideProps = async ({
   }
   const token: any = jwt.verify(cookie, tokenSecret);
 
-  if (!token?.isAdmin) {
+  if (token?.isAdmin) {
     return {
       redirect: {
         destination: "/auth/login",
