@@ -1,13 +1,16 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+import jwt from "jsonwebtoken";
 import { IRequestSchema } from "./model";
+import { getCookie } from "../../helper";
 
 export const apiReqHandler = async ({
   endPoint,
   payload,
   method,
-  bearerAuth,
 }: IRequestSchema) => {
+  const bearerAuth = getCookie("token");
+
   let reqConfig = {
     url: endPoint,
     method,
