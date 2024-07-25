@@ -1,12 +1,8 @@
 import { EyeInvisibleFilled, UserOutlined } from "@ant-design/icons";
 import { Layout, Menu, Button, Tooltip, Avatar } from "antd";
-// import { Footer } from "antd/es/layout/layout";
-import modal from "antd/es/modal";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FiLogOut } from "react-icons/fi";
-import profile from "../../pages/profile";
-import store from "../../pages/store";
 import { ApModal } from "../modal";
 import { NavItems } from "./items";
 import { toast } from "react-toastify";
@@ -14,7 +10,10 @@ import { useSignUpState } from "../../modules/auth/signup/context";
 import { deleteCookie, getCookie } from "../../helper";
 import { useRouter } from "next/router";
 import { useProfileState } from "../../modules/profile/context";
+import jwt from "jsonwebtoken";
+import { routePaths } from "./path";
 
+const tokenSecret: any = process.env.NEXT_PUBLIC_JWT_SECRET;
 const { Footer, Sider } = Layout;
 interface IActionProps {
   admin?: boolean;
@@ -34,16 +33,19 @@ const InviteLink = () => {
   const [link, setLink] = useState<string>("");
   const [show, setShow] = useState<boolean>(false);
   const inviteLink = `${process.env.NEXT_PUBLIC_BASE_URL}/store/register/${link}`;
+
   const handleCopy = () => {
     navigator.clipboard
       .writeText(inviteLink)
       .then((res) => toast.success("Copied"));
   };
+
   useEffect(() => {
     generateInviteLink().then((res: any) => {
       setLink(res?.data?.inviteCode);
     });
   }, []);
+
   return (
     <>
       <h1 className="text-xl font-bold">Copy the invite link below</h1>
@@ -71,25 +73,28 @@ interface IProps {
   center?: React.ReactNode;
 }
 export const NavBarComponent: React.FC<IProps> = ({ navItem, center }) => {
-  const { profile, loading, getProfile } = useProfileState();
-  const { AdminMenuItem, AdminStoreMenuItem } = NavItems();
+  const { profile, getProfile } = useProfileState();
+  const { AdminMenuItem } = NavItems();
   const [modal, setModal] = useState<{ show: boolean }>({ show: false });
   const router = useRouter();
 
-  const user = JSON.parse(getCookie("user_id"));
+  const cookie = getCookie("token");
+  let token: any;
+  if (cookie) {
+    token = jwt.verify(cookie, tokenSecret);
+  }
+  console.log(token);
   useEffect(() => {
-    if (user) getProfile(user?.id);
+    if (token) getProfile(token?.id);
   }, []);
 
   const handleSignOut = () => {
-    if (user?.id) {
-      deleteCookie("user_id", -1);
+    if (token?.id) {
+      deleteCookie("token", -1);
       router.push("/auth/login");
     }
   };
-  console.log(
-    router.asPath == "/" || "/product" || "/stores" || "/category" || "/order"
-  );
+
   return (
     <Layout hasSider style={{ minHeight: "100vh" }}>
       <Sider>
@@ -107,7 +112,6 @@ export const NavBarComponent: React.FC<IProps> = ({ navItem, center }) => {
       <Menu
         style={{
           display: "flex",
-          // justifyContent: "space-between",
           alignItems: "center",
           background: "none",
           padding: "1rem",
@@ -134,16 +138,15 @@ export const NavBarComponent: React.FC<IProps> = ({ navItem, center }) => {
                     width: "30px",
                     height: "30px",
                     borderRadius: "50%",
-                    // padding: "1rem",
                     display: "inline-block",
                   }}
                   icon={<UserOutlined />}
                 />
               </Tooltip>
               <div>
-                <div>
+                <p>
                   {profile?.firstName} {profile?.lastName}
-                </div>
+                </p>
                 <p className="w-[70%]">{profile?.email}</p>
               </div>
             </div>
@@ -155,11 +158,7 @@ export const NavBarComponent: React.FC<IProps> = ({ navItem, center }) => {
               size={20}
             />
           </Tooltip>
-          {router.asPath !== "/" ||
-          "/product" ||
-          "/stores" ||
-          "/category" ||
-          "/order" ? (
+          {!routePaths.includes(router.asPath) && (
             <Button
               onClick={() => router.push("/")}
               className="bg-blue-700 text-white text-center mt-6 w-[80%]"
@@ -167,7 +166,7 @@ export const NavBarComponent: React.FC<IProps> = ({ navItem, center }) => {
             >
               Go Back
             </Button>
-          ) : null}
+          )}
         </div>
       </Menu>
 

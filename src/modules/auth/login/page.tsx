@@ -36,7 +36,7 @@ export const SignInPage = () => {
     res.then((rs: any) => {
       console.log(rs.user);
       if (rs.user !== undefined) {
-        if (rs?.user?.isAdmin === false) {
+        if (rs?.user?.accountType === "storeOwner") {
           router.push("/store");
         }
         router.push("/");

@@ -1,18 +1,26 @@
 import React from "react";
-import { StoreDashboardPage } from "../../modules/store/components/dashboard";
 import jwt from "jsonwebtoken";
 import { StoreLayout } from "../../modules/store/layout";
+import { OrderPage } from "../../modules/order/page";
+import { OrderContextProvider } from "../../modules/order/context";
 
 const tokenSecret: any = process.env.JWT_SECRET;
 
-const Store = () => {
+interface IProps {
+  store: { id: string; isAdmin: boolean };
+}
+const Category: React.FC<IProps> = ({ store }) => {
   return (
     <StoreLayout>
-      <StoreDashboardPage />
+      <OrderContextProvider>
+        <OrderPage storeId={store.id} />
+      </OrderContextProvider>
     </StoreLayout>
   );
 };
-export default Store;
+
+export default Category;
+
 export const getServerSideProps = async ({
   req,
   query,
@@ -30,7 +38,8 @@ export const getServerSideProps = async ({
     };
   }
   const token: any = jwt.verify(cookie, tokenSecret);
-  if (!token) {
+
+  if (!token?.isAdmin) {
     return {
       redirect: {
         destination: "/auth/login",
@@ -38,8 +47,9 @@ export const getServerSideProps = async ({
       },
     };
   }
-
   return {
-    props: {},
+    props: {
+      store: token,
+    },
   };
 };

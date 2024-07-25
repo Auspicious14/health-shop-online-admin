@@ -13,11 +13,7 @@ interface IProps {
 export const NavItems = () => {
   type MenuItem = Required<MenuProps>["items"][number];
   const router = useRouter();
-  // const id = JSON.parse(getCookie("user_id"));
-  // useEffect(() => {
-  //   if (id) getProfile(id?.id);
-  // }, []);
-  console.log(router?.query?.storeId, "router query");
+
   function getItem(
     label?: React.ReactNode,
     key?: React.Key,
@@ -89,40 +85,49 @@ export const NavItems = () => {
       "Logo",
       "sub0",
       <>
-        <Link className="relative" href={"/"}>
-          {/* <RxDashboard /> */}
+        <Link className="relative" href={"/store"}>
+          {/* <FaStore /> */}
         </Link>
       </>
     ),
-    getItem("", "sub02", <>{/* <Divider /> */}</>),
+    // getItem("", "sub02", <>{/* <Divider /> */}</>),
     getItem(
       "Dashboard",
       "sub1",
-      <Link href={"/store/dashboard"}>
+      <Link href={"/store"}>
         <MenuFoldOutlined />
       </Link>
     ),
     getItem(
+      "Detail",
+      "detail",
+      <>
+        <Link className="relative" href={"/store/detail"}>
+          <FaStore />
+        </Link>
+      </>
+    ),
+    getItem(
       "Order",
       "sub2",
-      <Link href={"/store/order"}>
+      <Link href={"/store/orders"}>
         <BsCartCheck />
       </Link>
     ),
     getItem(
       "Product",
       "sub3",
-      <Link href={"/store/product"}>
+      <Link href={"/store/products"}>
         <MailOutlined />
       </Link>
     ),
-    getItem(
-      "Category",
-      "category",
-      <Link href={"/store/category"}>
-        <MailOutlined />
-      </Link>
-    ),
+    // getItem(
+    //   "Category",
+    //   "category",
+    //   <Link href={"/store/category"}>
+    //     <MailOutlined />
+    //   </Link>
+    // ),
   ];
   const AdminStoreMenuItem: MenuProps["items"] = [
     getItem(

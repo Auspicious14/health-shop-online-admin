@@ -51,7 +51,7 @@ export const OrderPage: React.FC<IProps> = ({ storeId }) => {
       }),
       {}
     );
-  console.log(counts);
+  // console.log(counts);
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,

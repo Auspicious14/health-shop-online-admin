@@ -30,11 +30,21 @@ export const StoreLayout: React.FC<IProps> = ({ children }) => {
   return (
     <>
       <ConfigProvider>
-        <Sider>
-          <NavBarComponent navItem={StoreMenuItem} />
-        </Sider>
-        <Layout>
-          <Content>{children}</Content>
+        <Layout hasSider>
+          <Sider className="w-[20%]">
+            <NavBarComponent navItem={StoreMenuItem} />
+          </Sider>
+
+          <Layout>
+            <Content>
+              <div className="flex min-h-screen">
+                <div className="w-[10%] 3xl:w-[18%] cus-md2:hidden" />
+                <div className="w-[90%] 3xl:w-[82%] bg-white cus-md2:w-full flex flex-col p-[25px]">
+                  {children}
+                </div>
+              </div>
+            </Content>
+          </Layout>
         </Layout>
       </ConfigProvider>
     </>

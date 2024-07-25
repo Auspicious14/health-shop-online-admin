@@ -46,7 +46,7 @@ export const StoreDashboardPage = () => {
   return (
     <>
       <div className="shadow-sm p-4 flex items-center justify-between">
-        <h1 className="text-3xl font-bold">{`Good ${hour}, Store`}</h1>
+        <h1 className="text-3xl font-bold">{`Good ${hour}, Store Owner`}</h1>
         <Search className="w-60" />
       </div>
       <div>
