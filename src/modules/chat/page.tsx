@@ -51,6 +51,10 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
       setMessages(data);
     });
 
+    socket.on("new_message", (message: IChat) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
+    });
+
     socket.on("disconnect", (reason) => {
       if (reason === "io server disconnect") {
         socket.connect();
@@ -137,7 +141,7 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
                   ))}
                 </div>
 
-                <div className="absolute bottom-2 w-full flex gap-4 mt-4">
+                <div className="absolute bottom-2 w-[90%] flex gap-4 mt-4">
                   <input
                     name="new_message"
                     type="text"
