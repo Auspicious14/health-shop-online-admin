@@ -3,7 +3,11 @@ import { FaStore, FaStoreAlt } from "react-icons/fa";
 import { BsCartCheck } from "react-icons/bs";
 import { Divider, MenuProps } from "antd";
 import Link from "next/link";
-import { MailOutlined, MenuFoldOutlined } from "@ant-design/icons";
+import {
+  MailOutlined,
+  MenuFoldOutlined,
+  ProductOutlined,
+} from "@ant-design/icons";
 import { useRouter } from "next/router";
 
 interface IProps {
@@ -118,16 +122,16 @@ export const NavItems = () => {
       "Product",
       "sub3",
       <Link href={"/store/products"}>
+        <ProductOutlined />
+      </Link>
+    ),
+    getItem(
+      "Chat Room",
+      "chat",
+      <Link href={"/store/chats"}>
         <MailOutlined />
       </Link>
     ),
-    // getItem(
-    //   "Category",
-    //   "category",
-    //   <Link href={"/store/category"}>
-    //     <MailOutlined />
-    //   </Link>
-    // ),
   ];
   const AdminStoreMenuItem: MenuProps["items"] = [
     getItem(
@@ -171,6 +175,13 @@ export const NavItems = () => {
       "Product",
       "sub3",
       <Link href={`/store/${router?.query?.storeId}/products`}>
+        <ProductOutlined />
+      </Link>
+    ),
+    getItem(
+      "Chat Room",
+      "sub3",
+      <Link href={`/store/${router?.query?.storeId}/chats`}>
         <MailOutlined />
       </Link>
     ),

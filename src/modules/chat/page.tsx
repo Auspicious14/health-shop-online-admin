@@ -62,8 +62,6 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
     };
   }, [modal]);
 
-  console.log(modal.data, "modal data");
-
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
