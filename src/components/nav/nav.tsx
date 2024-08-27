@@ -116,7 +116,7 @@ export const NavBarComponent: React.FC<IProps> = ({
         className="w-[19%] fixed z-50 bottom-0 border border-t"
       >
         <div className="">
-          {
+          {!routePaths.includes(router.asPath) && (
             <Button
               onClick={() => setModal({ show: true })}
               className="bg-blue-700 text-white text-center mb-6 w-[80%]"
@@ -124,7 +124,7 @@ export const NavBarComponent: React.FC<IProps> = ({
             >
               Invite link
             </Button>
-          }
+          )}
           <Link href={"/profile"}>
             <div className="flex gap-4 items-center">
               <Tooltip title={profile?.firstName} placement="top">

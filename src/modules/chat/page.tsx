@@ -97,94 +97,92 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
     }
   };
 
-  const handleSearch = (value: string) => {
-    setSearchMessage(value);
-    const filterUser = users.filter(
-      (user, i) =>
-        searchMessage.includes(user.user.firstName) ||
-        searchMessage.includes(user.user.lastName)
-    );
-    console.log(filterUser, "filter user");
-  };
+  const filterUsers = users?.filter((user, i) => {
+    return user?.user?.firstName
+      .toLowerCase()
+      .includes(searchMessage.toLowerCase());
+  });
+
+  const lastMessage = messages?.findLast((m) => m)?.message;
 
   return (
     <div className="flex h-screen border rounded-xl">
-      {users?.map((user) => (
-        <>
+      <div className="w-1/4 shadow-sm bg-blue-400 text-gray-200 p-4 overflow-y-auto">
+        <input
+          name="search"
+          type="text"
+          placeholder="Search"
+          className="flex-grow px-4 py-2 outline-none border border-gray-300 rounded-xl my-4 w-full text-gray-600"
+          value={searchMessage}
+          onChange={(e) => setSearchMessage(e.target.value)}
+        />
+        {filterUsers?.map((user) => (
           <div
             key={user._id}
-            className="w-1/4 shadow-sm bg-blue-400 text-gray-200 p-4 overflow-y-auto"
+            className="mb-4"
+            onClick={() => setModal({ show: true, data: user })}
           >
-            <input
-              name="search"
-              type="text"
-              placeholder="Search"
-              className="flex-grow px-4 py-2 outline-none border border-gray-300 rounded-xl my-4 w-full text-gray-600"
-              value={searchMessage}
-              onChange={(e) => handleSearch(e.target.value)}
-            />
             <div
-              className="mb-4"
-              onClick={() => setModal({ show: true, data: user })}
+              className={`flex items-center gap-2 p-2 cursor-pointer ${
+                user?._id === modal.data?._id
+                  ? "bg-gray-200 bg-opacity-40 rounded-lg inset-1"
+                  : ""
+              }`}
             >
-              <div className="flex items-center gap-2 cursor-pointer">
-                <Image
-                  src={chatImg}
-                  width={31}
-                  height={31}
-                  alt="user-image"
-                  className="rounded-full"
-                />
-                <div>
-                  <p className="font-base">{`${user?.user?.firstName} ${user?.user?.lastName}`}</p>
-                  <small className="text-gray-500">
-                    {user?.user?.lastName}
-                  </small>
-                </div>
+              <Image
+                src={chatImg}
+                width={31}
+                height={31}
+                alt="user-image"
+                className="rounded-full"
+              />
+              <div>
+                <p className="text-base text-white">{`${user?.user?.firstName} ${user?.user?.lastName}`}</p>
+                <small className="text-gray-200">{lastMessage}</small>
               </div>
             </div>
           </div>
+        ))}
+      </div>
 
-          {modal.show && (
-            <>
-              <div className="relative flex-1 flex flex-col p-4 ">
-                <div
-                  ref={chatContainerRef}
-                  className="flex-1 overflow-y-auto mb-4 space-y-4"
-                >
-                  {messages.length === 0 && (
-                    <div className="flex justify-center my-auto items-center">
-                      No messages
-                    </div>
-                  )}
-                  {messages.map((message) => (
-                    <MessageComponent message={message} key={message._id} />
-                  ))}
+      {modal.show && (
+        <>
+          <div className="relative flex-1 flex flex-col p-4 ">
+            <div
+              ref={chatContainerRef}
+              className="flex-1 overflow-y-auto mb-4 space-y-4"
+            >
+              {messages.length === 0 && (
+                <div className="flex justify-center my-auto items-center">
+                  No messages
                 </div>
+              )}
+              {messages.map((message) => (
+                <MessageComponent message={message} key={message._id} />
+              ))}
+            </div>
 
-                <div className="absolute bottom-2 w-[90%] flex gap-4 mt-4">
-                  <input
-                    name="new_message"
-                    type="text"
-                    placeholder="Type your message"
-                    className="flex-grow px-4 py-2 outline-none border border-gray-300 rounded-full"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                  />
-                  <button
-                    className="flex justify-center items-center bg-blue-500 text-white p-3 rounded-full"
-                    onClick={() =>
-                      handleSendMessage(message, modal.data?._id as string)
-                    }
-                  >
-                    <SendOutlined className="text-lg" />
-                  </button>
-                </div>
-              </div>
-            </>
-          )}
+            <div className="absolute bottom-2 w-[90%] flex gap-4 mt-4">
+              <input
+                name="new_message"
+                type="text"
+                placeholder="Type your message"
+                className="flex-grow px-4 py-2 outline-none border border-gray-300 rounded-full"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+              />
+              <button
+                className="flex justify-center items-center bg-blue-500 text-white p-3 rounded-full"
+                onClick={() =>
+                  handleSendMessage(message, modal.data?._id as string)
+                }
+              >
+                <SendOutlined className="text-lg" />
+              </button>
+            </div>
+          </div>
         </>
-      ))}
+      )}
     </div>
   );
 };

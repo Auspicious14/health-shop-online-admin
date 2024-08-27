@@ -9,4 +9,5 @@ export const routePaths = [
   "/store/detail",
   "/store/orders",
   "/store/products",
+  "/store/chats",
 ];
