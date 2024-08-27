@@ -6,6 +6,7 @@ import { ApTextInput } from "../../components";
 import {
   CloseCircleFilled,
   LoadingOutlined,
+  MessageOutlined,
   SendOutlined,
 } from "@ant-design/icons";
 import { IChat, IUserMessageStore } from "./model";
@@ -18,8 +19,7 @@ interface IProps {
   user?: { id: string | null; isAdmin: boolean };
 }
 export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
-  const { users, getMessagesBetweenUserAndStore, getUsersWhoMessageStore } =
-    useChatState();
+  const { users, unreadMessages, getUsersWhoMessageStore } = useChatState();
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const [message, setMessage] = useState<string>("");
@@ -46,9 +46,10 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
       socket.connect();
     });
 
-    socket.emit("chats", { storeId, userId: modal.data?._id });
+    socket.emit("chats", { storeId, userId: modal?.data?._id });
 
-    socket.on("all_messages", (data: IChat[]) => {
+    socket.on("user_store_messages", (data: IChat[]) => {
+      console.log(data, "dataa");
       setMessages(data);
     });
 
@@ -105,6 +106,8 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
 
   const lastMessage = messages?.findLast((m) => m)?.message;
 
+  console.log(messages, "messages");
+
   return (
     <div className="flex h-screen border rounded-xl">
       <div className="w-1/4 shadow-sm bg-blue-400 text-gray-200 p-4 overflow-y-auto">
@@ -123,31 +126,53 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
             onClick={() => setModal({ show: true, data: user })}
           >
             <div
-              className={`flex items-center gap-2 p-2 cursor-pointer ${
+              className={`flex items-center justify-between p-2 cursor-pointer ${
                 user?._id === modal.data?._id
                   ? "bg-gray-200 bg-opacity-40 rounded-lg inset-1"
                   : ""
               }`}
             >
-              <Image
-                src={chatImg}
-                width={31}
-                height={31}
-                alt="user-image"
-                className="rounded-full"
-              />
+              <div className="flex items-center gap-2">
+                <Image
+                  src={chatImg}
+                  width={31}
+                  height={31}
+                  alt="user-image"
+                  className="rounded-full"
+                />
+                <div>
+                  <p className="text-base text-white">{`${user?.user?.firstName} ${user?.user?.lastName}`}</p>
+                  <small className="text-gray-200">
+                    {user?.lastMessage?.message}
+                  </small>
+                </div>
+              </div>
               <div>
-                <p className="text-base text-white">{`${user?.user?.firstName} ${user?.user?.lastName}`}</p>
-                <small className="text-gray-200">{lastMessage}</small>
+                {user?._id !== modal.data?._id && (
+                  <p className="flex justify-center items-center m-auto rounded-full w-7 h-7 bg-blue-700 text-white">
+                    {user?.unreadMessagesFromStore}
+                  </p>
+                )}
+                {user?.read && (
+                  <>
+                    <MessageOutlined className="text-blue-700" />
+                  </>
+                )}
               </div>
             </div>
           </div>
         ))}
       </div>
 
+      {messages?.length === 0 && (
+        <div className="flex justify-center items-center m-auto">
+          <p>Start Messaging</p>
+        </div>
+      )}
+
       {modal.show && (
         <>
-          <div className="relative flex-1 flex flex-col p-4 ">
+          <div className="relative flex-1 flex flex-col p-4 py-12">
             <div
               ref={chatContainerRef}
               className="flex-1 overflow-y-auto mb-4 space-y-4"

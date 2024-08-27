@@ -24,9 +24,17 @@ export interface IConversation {
 }
 
 export interface IUserMessageStore {
-  _id: string;
-  messages: IChat[];
-  user: {
+  _id?: string;
+  messages?: IChat[];
+  read?: boolean;
+  unreadMessagesCount: number;
+  lastMessage: {
+    message: string;
+    createdAt: string;
+  };
+  unreadMessagesFromStore: number;
+  unreadMessagesFromUser: number;
+  user?: {
     firstName: string;
     lastName: string;
   };

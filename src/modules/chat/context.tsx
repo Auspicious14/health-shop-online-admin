@@ -5,6 +5,7 @@ import { IChat, IChatPayload, IUserMessageStore } from "./model";
 
 interface IChatState {
   loading: boolean;
+  unreadMessages: number;
   messages: IChat[];
   users: IUserMessageStore[];
   setMessages: (category: IChat[]) => void;
@@ -16,6 +17,7 @@ interface IChatState {
 
 const ChatContext = React.createContext<IChatState>({
   loading: false,
+  unreadMessages: 0,
   messages: [],
   users: [],
   setMessages(category) {},
@@ -49,6 +51,7 @@ export const ChatContextProvider: React.FC<IProps> = ({ children }) => {
   const [messages, setMessages] = useState<IChat[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [users, setUsers] = useState<IUserMessageStore[]>([]);
+  const [unreadMessages, setUnreadMessages] = useState<number>(0);
 
   const getMessages = async (query?: any) => {
     setLoading(true);
@@ -75,7 +78,7 @@ export const ChatContextProvider: React.FC<IProps> = ({ children }) => {
       });
       setLoading(false);
       const data = await res.res?.data;
-      console.log(data, "data");
+
       // setMessages(data.data);
       return data;
     } catch (error: any) {
@@ -84,15 +87,18 @@ export const ChatContextProvider: React.FC<IProps> = ({ children }) => {
   };
 
   const getUsersWhoMessageStore = async (storeId: string) => {
+    const endPoint = `${process.env.NEXT_PUBLIC_API_ROUTE}/store-users-chat?storeId=${storeId}`;
     try {
       const res = await apiReqHandler({
-        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/store-users-chat?storeId=${storeId}`,
+        endPoint,
         method: "GET",
       });
       setLoading(false);
-      const data = await res.res?.data;
-      console.log(data?.data);
-      setUsers(data?.data);
+
+      const data = await res.res?.data?.data;
+      console.log(data, "dataaa");
+      setUsers(data);
+      // setUnreadMessages(data?.unreadMessagesCount);
       return data;
     } catch (error: any) {
       toast.error(error);
@@ -106,7 +112,7 @@ export const ChatContextProvider: React.FC<IProps> = ({ children }) => {
       });
       setLoading(false);
       const data = await res.res?.data;
-      console.log(data);
+      console.log(data.data);
       // setUsers(data.data);
       return data;
     } catch (error: any) {
@@ -114,12 +120,29 @@ export const ChatContextProvider: React.FC<IProps> = ({ children }) => {
     }
   };
 
+  // const getUnreadMessagesCount = async (storeId: string, userId: string) => {
+  //   try {
+  //     const res = await apiReqHandler({
+  //       endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/unread-messages-count`,
+  //       method: "GET",
+  //     });
+  //     setLoading(false);
+  //     const data = await res.res?.data;
+  //     console.log(data);
+  //     // setUsers(data.data);
+  //     return data;
+  //   } catch (error: any) {
+  //     toast.error(error);
+  //   }
+  // }
+
   return (
     <ChatContext.Provider
       value={{
         loading,
         messages,
         users,
+        unreadMessages,
         getMessages,
         setMessages,
         sendMessage,
