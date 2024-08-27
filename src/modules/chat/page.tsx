@@ -10,7 +10,7 @@ import {
 } from "@ant-design/icons";
 import { IChat, IUserMessageStore } from "./model";
 import Image from "next/image";
-import chatImg from "../../../public/images/Stars.png";
+import chatImg from "../../../public/images/user chat image.webp";
 
 interface IProps {
   storeId: string;
@@ -23,6 +23,7 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const [message, setMessage] = useState<string>("");
+  const [searchMessage, setSearchMessage] = useState<string>("");
   const [messages, setMessages] = useState<IChat[]>([]);
   const [modal, setModal] = useState<{
     show: boolean;
@@ -96,17 +97,37 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
     }
   };
 
+  const handleSearch = (value: string) => {
+    setSearchMessage(value);
+    const filterUser = users.filter(
+      (user, i) =>
+        searchMessage.includes(user.user.firstName) ||
+        searchMessage.includes(user.user.lastName)
+    );
+    console.log(filterUser, "filter user");
+  };
+
   return (
-    <div className="flex h-screen ">
+    <div className="flex h-screen border rounded-xl">
       {users?.map((user) => (
         <>
-          <div key={user._id} className="w-1/4 bg-gray-100 p-4 overflow-y-auto">
-            <h2 className="text-lg font-semibold mb-4">Users</h2>
+          <div
+            key={user._id}
+            className="w-1/4 shadow-sm bg-blue-400 text-gray-200 p-4 overflow-y-auto"
+          >
+            <input
+              name="search"
+              type="text"
+              placeholder="Search"
+              className="flex-grow px-4 py-2 outline-none border border-gray-300 rounded-xl my-4 w-full text-gray-600"
+              value={searchMessage}
+              onChange={(e) => handleSearch(e.target.value)}
+            />
             <div
               className="mb-4"
               onClick={() => setModal({ show: true, data: user })}
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 cursor-pointer">
                 <Image
                   src={chatImg}
                   width={31}
@@ -115,7 +136,7 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
                   className="rounded-full"
                 />
                 <div>
-                  <p className="font-medium">{`${user?.user?.firstName} ${user?.user?.lastName}`}</p>
+                  <p className="font-base">{`${user?.user?.firstName} ${user?.user?.lastName}`}</p>
                   <small className="text-gray-500">
                     {user?.user?.lastName}
                   </small>
