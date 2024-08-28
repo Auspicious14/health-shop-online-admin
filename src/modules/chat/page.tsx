@@ -2,16 +2,21 @@ import React, { useEffect, useRef, useState } from "react";
 import { useChatState } from "./context";
 import { io, Socket } from "socket.io-client";
 import { MessageComponent } from "./components/message";
-import { ApTextInput } from "../../components";
+import { ApFileInput, ApTextInput } from "../../components";
 import {
   CloseCircleFilled,
   LoadingOutlined,
   MessageOutlined,
   SendOutlined,
 } from "@ant-design/icons";
-import { IChat, IUserMessageStore } from "./model";
+import { IChat, IFile, IUserMessageStore } from "./model";
 import Image from "next/image";
 import chatImg from "../../../public/images/user chat image.webp";
+import { Upload, UploadFile } from "antd";
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
+import { toast } from "react-toastify";
+import { fileSvc } from "../../services/file";
+import { ImagePreviewComponent } from "./components/preview";
 
 interface IProps {
   storeId: string;
@@ -25,8 +30,10 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
   const [message, setMessage] = useState<string>("");
   const [searchMessage, setSearchMessage] = useState<string>("");
   const [messages, setMessages] = useState<IChat[]>([]);
+  const [files, setFiles] = useState<IFile[]>([]);
   const [modal, setModal] = useState<{
     show: boolean;
+    type?: "preview" | "showMessage";
     data?: IUserMessageStore;
   }>({ show: false });
 
@@ -79,7 +86,11 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
     getUsersWhoMessageStore(storeId);
   }, []);
 
-  const handleSendMessage = (message: string, userId: string) => {
+  const handleSendMessage = async (
+    userId: string,
+    message?: string,
+    fileList?: UploadFile<any>[]
+  ) => {
     const payload = {
       message,
       storeId,
@@ -87,12 +98,29 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
       senderId: storeId,
     };
     if (socketRef.current) {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { ...payload, align: "right" },
-      ]);
-      socketRef.current.emit("send_message", payload);
-      setMessage("");
+      if (message !== "") {
+        setMessages(
+          (prevMessages) =>
+            [...prevMessages, { ...payload, align: "right" }] as IChat[]
+        );
+        socketRef.current.emit("send_message", payload);
+        setMessage("");
+      } else if (fileList) {
+        const fls: IFile[] = [];
+
+        for await (const f of fileList) {
+          fls.push({
+            name: f.name,
+            type: f.type as string,
+            uri: await fileSvc.fileToBase64(f.originFileObj as any),
+          });
+        }
+        setFiles(fls);
+        setModal({ show: true, type: "preview" });
+        // socketRef.current.emit("send_message", files);
+      } else {
+        return toast.error("Invalid text");
+      }
     } else {
       console.log("No socket Instance");
     }
@@ -103,10 +131,6 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
       .toLowerCase()
       .includes(searchMessage.toLowerCase());
   });
-
-  const lastMessage = messages?.findLast((m) => m)?.message;
-
-  console.log(messages, "messages");
 
   return (
     <div className="flex h-screen border rounded-xl">
@@ -123,7 +147,9 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
           <div
             key={user._id}
             className="mb-4"
-            onClick={() => setModal({ show: true, data: user })}
+            onClick={() =>
+              setModal({ show: true, type: "showMessage", data: user })
+            }
           >
             <div
               className={`flex items-center justify-between p-2 cursor-pointer ${
@@ -148,11 +174,12 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
                 </div>
               </div>
               <div>
-                {user?._id !== modal.data?._id && (
-                  <p className="flex justify-center items-center m-auto rounded-full w-7 h-7 bg-blue-700 text-white">
-                    {user?.unreadMessagesFromStore}
-                  </p>
-                )}
+                {user?._id !== modal.data?._id &&
+                  user?.unreadMessagesFromUser !== 0 && (
+                    <p className="flex justify-center items-center m-auto rounded-full w-7 h-7 bg-blue-700 text-white">
+                      {user?.unreadMessagesFromUser}
+                    </p>
+                  )}
                 {user?.read && (
                   <>
                     <MessageOutlined className="text-blue-700" />
@@ -170,7 +197,7 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
         </div>
       )}
 
-      {modal.show && (
+      {modal.show && modal.type == "showMessage" && (
         <>
           <div className="relative flex-1 flex flex-col p-4 py-12">
             <div
@@ -187,19 +214,31 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
               ))}
             </div>
 
-            <div className="absolute bottom-2 w-[90%] flex gap-4 mt-4">
+            <div className="absolute bottom-2 w-[90%] flex items-center gap-4 mt-4">
+              <Upload
+                name="avatar"
+                listType="text"
+                className="avatar-uploader"
+                showUploadList={false}
+                onChange={({ fileList }) =>
+                  handleSendMessage(modal?.data?._id as string, "", fileList)
+                }
+                rootClassName="w-10 h-10 flex justify-center items-center"
+              >
+                <PlusCircleIcon fontSize={10} className="w-7 h-7" />
+              </Upload>
               <input
                 name="new_message"
                 type="text"
                 placeholder="Type your message"
-                className="flex-grow px-4 py-2 outline-none border border-gray-300 rounded-full"
+                className="flex-grow px-4 py-2 w-full outline-none border border-gray-300 rounded-full"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
               />
               <button
                 className="flex justify-center items-center bg-blue-500 text-white p-3 rounded-full"
                 onClick={() =>
-                  handleSendMessage(message, modal.data?._id as string)
+                  handleSendMessage(modal.data?._id as string, message)
                 }
               >
                 <SendOutlined className="text-lg" />
@@ -207,6 +246,10 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
             </div>
           </div>
         </>
+      )}
+
+      {modal.show && modal.type == "preview" && (
+        <ImagePreviewComponent images={files} />
       )}
     </div>
   );

@@ -39,3 +39,9 @@ export interface IUserMessageStore {
     lastName: string;
   };
 }
+
+export interface IFile {
+  uri: string;
+  name: string;
+  type: string;
+}

@@ -48,7 +48,7 @@ export const ApFileInput: React.FC<IProps> = (props: IProps) => {
         name="file"
         multiple={multiple}
         accept={accept}
-        className="hide"
+        className=""
         onChange={handleOnChange}
       />
       {/* <Upload
