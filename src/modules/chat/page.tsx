@@ -133,7 +133,8 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
   });
 
   return (
-    <div className="flex h-screen border rounded-xl">
+    <div className="flex h-screen border rounded-xl relative">
+      {/* Inbox Section */}
       <div className="w-1/4 shadow-sm bg-blue-400 text-gray-200 p-4 overflow-y-auto">
         <input
           name="search"
@@ -191,66 +192,75 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
         ))}
       </div>
 
-      {messages?.length === 0 && (
-        <div className="flex justify-center items-center m-auto">
-          <p>Start Messaging</p>
-        </div>
-      )}
-
-      {modal.show && modal.type == "showMessage" && (
-        <>
-          <div className="relative flex-1 flex flex-col p-4 py-12">
-            <div
-              ref={chatContainerRef}
-              className="flex-1 overflow-y-auto mb-4 space-y-4"
-            >
-              {messages.length === 0 && (
-                <div className="flex justify-center my-auto items-center">
-                  No messages
-                </div>
-              )}
-              {messages.map((message) => (
-                <MessageComponent message={message} key={message._id} />
-              ))}
-            </div>
-
-            <div className="absolute bottom-2 w-[90%] flex items-center gap-4 mt-4">
-              <Upload
-                name="avatar"
-                listType="text"
-                className="avatar-uploader"
-                showUploadList={false}
-                onChange={({ fileList }) =>
-                  handleSendMessage(modal?.data?._id as string, "", fileList)
-                }
-                rootClassName="w-10 h-10 flex justify-center items-center"
-              >
-                <PlusCircleIcon fontSize={10} className="w-7 h-7" />
-              </Upload>
-              <input
-                name="new_message"
-                type="text"
-                placeholder="Type your message"
-                className="flex-grow px-4 py-2 w-full outline-none border border-gray-300 rounded-full"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-              />
-              <button
-                className="flex justify-center items-center bg-blue-500 text-white p-3 rounded-full"
-                onClick={() =>
-                  handleSendMessage(modal.data?._id as string, message)
-                }
-              >
-                <SendOutlined className="text-lg" />
-              </button>
-            </div>
+      {/* Message Section */}
+      <div className="w-3/4 relative bg-white p-4 overflow-y-auto flex flex-col">
+        {messages?.length === 0 && (
+          <div className="flex justify-center items-center m-auto">
+            <p>Start Messaging</p>
           </div>
-        </>
-      )}
+        )}
 
-      {modal.show && modal.type == "preview" && (
-        <ImagePreviewComponent images={files} />
-      )}
+        {modal.show && modal.type == "showMessage" && (
+          <>
+            <div className="relative flex-1 flex flex-col">
+              <div
+                ref={chatContainerRef}
+                className="flex-1 overflow-y-auto mb-4 space-y-4"
+              >
+                {messages.length === 0 && (
+                  <div className="flex justify-center my-auto items-center">
+                    No messages
+                  </div>
+                )}
+                {messages.map((message) => (
+                  <MessageComponent message={message} key={message._id} />
+                ))}
+              </div>
+
+              {/* Fixed Input Area */}
+              <div className="fixed bottom-0 left-0 w-[70%] bg-white flex items-center gap-4 p-4">
+                <Upload
+                  name="avatar"
+                  listType="text"
+                  className="avatar-uploader"
+                  showUploadList={false}
+                  onChange={({ fileList }) =>
+                    handleSendMessage(modal?.data?._id as string, "", fileList)
+                  }
+                  rootClassName="w-10 h-10 flex justify-center items-center"
+                >
+                  <PlusCircleIcon fontSize={10} className="w-7 h-7" />
+                </Upload>
+                <input
+                  name="new_message"
+                  type="text"
+                  placeholder="Type your message"
+                  className="flex-grow px-4 py-2 w-full outline-none border border-gray-300 rounded-full"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                />
+                <button
+                  className="flex justify-center items-center bg-blue-500 text-white p-3 rounded-full"
+                  onClick={() =>
+                    handleSendMessage(modal.data?._id as string, message)
+                  }
+                >
+                  <SendOutlined className="text-lg" />
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Image Preview Modal */}
+        {modal.show && modal.type == "preview" && (
+          <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+            <ImagePreviewComponent images={files} />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
+
+// relative flex-1 flex flex-col p-4 py-12
