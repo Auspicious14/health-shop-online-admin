@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useChatState } from "./context";
 import { io, Socket } from "socket.io-client";
 import { MessageComponent } from "./components/message";
-import { ApFileInput, ApTextInput } from "../../components";
+import { ApFileInput, ApTextInput, Files } from "../../components";
 import {
   CloseCircleFilled,
   LoadingOutlined,
@@ -31,6 +31,7 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
   const [searchMessage, setSearchMessage] = useState<string>("");
   const [messages, setMessages] = useState<IChat[]>([]);
   const [files, setFiles] = useState<IFile[]>([]);
+  const [filePreviews, setFilePreviews] = useState<IFile[]>([]);
   const [modal, setModal] = useState<{
     show: boolean;
     type?: "preview" | "showMessage";
@@ -56,7 +57,6 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
     socket.emit("chats", { storeId, userId: modal?.data?._id });
 
     socket.on("user_store_messages", (data: IChat[]) => {
-      console.log(data, "dataa");
       setMessages(data);
     });
 
@@ -116,7 +116,7 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
           });
         }
         setFiles(fls);
-        setModal({ show: true, type: "preview" });
+        setFilePreviews(fls);
         // socketRef.current.emit("send_message", files);
       } else {
         return toast.error("Invalid text");
@@ -132,10 +132,12 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
       .includes(searchMessage.toLowerCase());
   });
 
+  console.log(files, "FILESS");
+
   return (
     <div className="flex h-screen border rounded-xl relative">
       {/* Inbox Section */}
-      <div className="w-1/4 shadow-sm bg-blue-400 text-gray-200 p-4 overflow-y-auto">
+      <div className="w-1/2 md:w-1/3 lg:w-1/4 shadow-sm bg-blue-400 text-gray-200 p-4 overflow-y-auto">
         <input
           name="search"
           type="text"
@@ -193,7 +195,7 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
       </div>
 
       {/* Message Section */}
-      <div className="w-3/4 relative bg-white p-4 overflow-y-auto flex flex-col">
+      <div className="w-full md:w-2/3 lg:w-3/4 relative bg-white p-4 overflow-y-auto flex flex-col">
         {messages?.length === 0 && (
           <div className="flex justify-center items-center m-auto">
             <p>Start Messaging</p>
@@ -202,7 +204,7 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
 
         {modal.show && modal.type == "showMessage" && (
           <>
-            <div className="relative flex-1 flex flex-col">
+            <div className="relative flex-1 flex flex-col mb-12">
               <div
                 ref={chatContainerRef}
                 className="flex-1 overflow-y-auto mb-4 space-y-4"
@@ -218,16 +220,17 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
               </div>
 
               {/* Fixed Input Area */}
-              <div className="fixed bottom-0 left-0 w-[70%] bg-white flex items-center gap-4 p-4">
+              <div className="fixed bg-transparent bottom-4 left-[36%] sm:left-[35%] md:left-[48%] lg:left-[47%] xl:left-[43%] w-[56%] sm:w-[59%] md:w-[48%] lg:w-[49%] xl:w-[54%] flex items-center gap-4">
                 <Upload
                   name="avatar"
                   listType="text"
                   className="avatar-uploader"
                   showUploadList={false}
+                  multiple
                   onChange={({ fileList }) =>
                     handleSendMessage(modal?.data?._id as string, "", fileList)
                   }
-                  rootClassName="w-10 h-10 flex justify-center items-center"
+                  rootClassName="w-10 h-10 flex justify-center items-center cursor-pointer"
                 >
                   <PlusCircleIcon fontSize={10} className="w-7 h-7" />
                 </Upload>
@@ -235,7 +238,7 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
                   name="new_message"
                   type="text"
                   placeholder="Type your message"
-                  className="flex-grow px-4 py-2 w-full outline-none border border-gray-300 rounded-full"
+                  className="flex-grow px-4 py-2 outline-none border border-gray-300 rounded-full w-full"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                 />
@@ -249,15 +252,26 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
                 </button>
               </div>
             </div>
+
+            {filePreviews?.length > 0 && (
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+                <ImagePreviewComponent
+                  images={filePreviews}
+                  onDissmiss={(img) =>
+                    setFilePreviews(
+                      filePreviews.filter((f, i) => f.uri !== img.uri)
+                    )
+                  }
+                />
+              </div>
+            )}
           </>
         )}
 
         {/* Image Preview Modal */}
-        {modal.show && modal.type == "preview" && (
-          <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-            <ImagePreviewComponent images={files} />
-          </div>
-        )}
+        {/* {modal.show && modal.type == "preview" && (
+         
+        )} */}
       </div>
     </div>
   );

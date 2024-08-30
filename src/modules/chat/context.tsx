@@ -96,7 +96,6 @@ export const ChatContextProvider: React.FC<IProps> = ({ children }) => {
       setLoading(false);
 
       const data = await res.res?.data?.data;
-      console.log(data, "dataaa");
       setUsers(data);
       // setUnreadMessages(data?.unreadMessagesCount);
       return data;
@@ -112,7 +111,6 @@ export const ChatContextProvider: React.FC<IProps> = ({ children }) => {
       });
       setLoading(false);
       const data = await res.res?.data;
-      console.log(data.data);
       // setUsers(data.data);
       return data;
     } catch (error: any) {
