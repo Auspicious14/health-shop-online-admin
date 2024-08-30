@@ -95,7 +95,7 @@ export const NavItems = () => {
         <ApImage src={Logo} alt="logo" />
       </>
     ),
-    // getItem("", "sub02", <>{/* <Divider /> */}</>),
+    getItem("", "sub02", <>{<Divider />}</>),
     getItem(
       "Dashboard",
       "sub1",

@@ -25,9 +25,14 @@ const Content = dynamic(
 interface IProps {
   userId: string;
   children: React.ReactNode;
+  className?: string;
 }
 
-export const StoreLayout: React.FC<IProps> = ({ userId, children }) => {
+export const StoreLayout: React.FC<IProps> = ({
+  userId,
+  children,
+  className,
+}) => {
   const { StoreMenuItem } = NavItems();
   return (
     <>
@@ -45,7 +50,9 @@ export const StoreLayout: React.FC<IProps> = ({ userId, children }) => {
             <Content>
               <div className="flex min-h-screen z-[500]">
                 <div className="hidden lg:block lg:w-[10%] 3xl:w-[18%]" />
-                <div className="w-full lg:w-[90%] 3xl:w-[82%] bg-white flex flex-col p-4">
+                <div
+                  className={`w-full lg:w-[90%] 3xl:w-[82%] bg-white flex flex-col p-4 ${className}`}
+                >
                   {children}
                 </div>
               </div>
