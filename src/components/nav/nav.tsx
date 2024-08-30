@@ -99,9 +99,8 @@ export const NavBarComponent: React.FC<IProps> = ({
           onClick={() => {}}
           style={{ width: 256 }}
           defaultSelectedKeys={["1"]}
-          defaultOpenKeys={["sub1"]}
           mode="inline"
-          items={navItem || AdminMenuItem}
+          items={navItem}
           className="h-[100vh] fixed"
         />
       </Sider>

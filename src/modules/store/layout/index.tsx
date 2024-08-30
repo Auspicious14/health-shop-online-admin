@@ -26,21 +26,26 @@ interface IProps {
   userId: string;
   children: React.ReactNode;
 }
+
 export const StoreLayout: React.FC<IProps> = ({ userId, children }) => {
   const { StoreMenuItem } = NavItems();
   return (
     <>
       <ConfigProvider>
         <Layout hasSider>
-          <Sider className="w-[20%]">
+          <Sider
+            className="w-[20%] lg:w-[15%] md:w-[25%] sm:w-[30%] xs:w-[40%] bg-gray-800 z-0"
+            breakpoint="md"
+            collapsedWidth="0"
+          >
             <NavBarComponent navItem={StoreMenuItem} userId={userId} />
           </Sider>
 
           <Layout>
             <Content>
-              <div className="flex min-h-screen">
-                <div className="w-[10%] 3xl:w-[18%] cus-md2:hidden" />
-                <div className="w-[90%] 3xl:w-[82%] bg-white cus-md2:w-full flex flex-col p-[25px]">
+              <div className="flex min-h-screen z-[500]">
+                <div className="hidden lg:block lg:w-[10%] 3xl:w-[18%]" />
+                <div className="w-full lg:w-[90%] 3xl:w-[82%] bg-white flex flex-col p-4">
                   {children}
                 </div>
               </div>

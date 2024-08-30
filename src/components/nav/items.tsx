@@ -9,6 +9,8 @@ import {
   ProductOutlined,
 } from "@ant-design/icons";
 import { useRouter } from "next/router";
+import { ApImage } from "../image";
+import Logo from "../../../public/images/vendify logo white.jpg";
 
 interface IProps {
   store?: boolean;
@@ -38,6 +40,7 @@ export const NavItems = () => {
       <>
         <Link className="relative" href={"/"}>
           {/* <RxDashboard /> */}
+          <ApImage src={Logo} alt="logo" />
         </Link>
       </>
     ),
@@ -86,12 +89,10 @@ export const NavItems = () => {
   ];
   const StoreMenuItem: MenuProps["items"] = [
     getItem(
-      "Logo",
+      "",
       "sub0",
       <>
-        <Link className="relative" href={"/store"}>
-          {/* <FaStore /> */}
-        </Link>
+        <ApImage src={Logo} alt="logo" />
       </>
     ),
     // getItem("", "sub02", <>{/* <Divider /> */}</>),
@@ -140,6 +141,7 @@ export const NavItems = () => {
       <>
         <Link className="relative" href={"/"}>
           {/* <RxDashboard /> */}
+          <ApImage src={Logo} alt="logo" />
         </Link>
       </>
     ),
