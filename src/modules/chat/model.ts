@@ -4,6 +4,7 @@ export interface IChat {
   storeId: string;
   userId: string;
   senderId: string;
+  images: IFile[];
   align?: "left" | "right";
   createdAt?: string;
   updatedAt?: string;

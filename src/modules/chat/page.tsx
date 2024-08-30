@@ -31,7 +31,6 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
   const [searchMessage, setSearchMessage] = useState<string>("");
   const [messages, setMessages] = useState<IChat[]>([]);
   const [files, setFiles] = useState<IFile[]>([]);
-  const [filePreviews, setFilePreviews] = useState<IFile[]>([]);
   const [modal, setModal] = useState<{
     show: boolean;
     type?: "preview" | "showMessage";
@@ -57,10 +56,12 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
     socket.emit("chats", { storeId, userId: modal?.data?._id });
 
     socket.on("user_store_messages", (data: IChat[]) => {
+      console.log(data);
       setMessages(data);
     });
 
     socket.on("new_message", (message: IChat) => {
+      console.log(message, "new message");
       setMessages((prevMessages) => [...prevMessages, message]);
     });
 
@@ -86,38 +87,26 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
     getUsersWhoMessageStore(storeId);
   }, []);
 
-  const handleSendMessage = async (
-    userId: string,
-    message?: string,
-    fileList?: UploadFile<any>[]
-  ) => {
+  const handleSendMessage = async (userId: string, message?: string) => {
     const payload = {
       message,
       storeId,
       userId,
       senderId: storeId,
+      files,
     };
     if (socketRef.current) {
-      if (message !== "") {
+      if (message !== "" || files.length > 0) {
         setMessages(
           (prevMessages) =>
-            [...prevMessages, { ...payload, align: "right" }] as IChat[]
+            [
+              ...prevMessages,
+              { ...payload, images: files, align: "right" },
+            ] as IChat[]
         );
         socketRef.current.emit("send_message", payload);
         setMessage("");
-      } else if (fileList) {
-        const fls: IFile[] = [];
-
-        for await (const f of fileList) {
-          fls.push({
-            name: f.name,
-            type: f.type as string,
-            uri: await fileSvc.fileToBase64(f.originFileObj as any),
-          });
-        }
-        setFiles(fls);
-        setFilePreviews(fls);
-        // socketRef.current.emit("send_message", files);
+        setFiles([]);
       } else {
         return toast.error("Invalid text");
       }
@@ -132,7 +121,16 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
       .includes(searchMessage.toLowerCase());
   });
 
-  console.log(files, "FILESS");
+  const handleFileUpload = async (fileList: UploadFile<any>[]) => {
+    const fls: IFile[] = await Promise.all(
+      fileList.map(async (f) => ({
+        name: f.name,
+        uri: await fileSvc.fileToBase64(f.originFileObj as any),
+        type: f.type as string,
+      }))
+    );
+    setFiles(fls);
+  };
 
   return (
     <div className="flex h-screen border rounded-xl relative">
@@ -196,11 +194,11 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
 
       {/* Message Section */}
       <div className="w-full md:w-2/3 lg:w-3/4 relative bg-white p-4 overflow-y-auto flex flex-col">
-        {messages?.length === 0 && (
+        {/* {messages?.length === 0 && (
           <div className="flex justify-center items-center m-auto">
             <p>Start Messaging</p>
           </div>
-        )}
+        )} */}
 
         {modal.show && modal.type == "showMessage" && (
           <>
@@ -210,7 +208,7 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
                 className="flex-1 overflow-y-auto mb-4 space-y-4"
               >
                 {messages.length === 0 && (
-                  <div className="flex justify-center my-auto items-center">
+                  <div className="flex justify-center m-auto items-center">
                     No messages
                   </div>
                 )}
@@ -220,16 +218,14 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
               </div>
 
               {/* Fixed Input Area */}
-              <div className="fixed bg-transparent bottom-4 left-[36%] sm:left-[35%] md:left-[48%] lg:left-[47%] xl:left-[43%] w-[56%] sm:w-[59%] md:w-[48%] lg:w-[49%] xl:w-[54%] flex items-center gap-4">
+              <div className="z-[500] fixed bg-transparent bottom-4 left-[36%] sm:left-[35%] md:left-[48%] lg:left-[47%] xl:left-[43%] w-[56%] sm:w-[59%] md:w-[48%] lg:w-[49%] xl:w-[54%] flex items-center gap-4">
                 <Upload
                   name="avatar"
                   listType="text"
                   className="avatar-uploader"
                   showUploadList={false}
                   multiple
-                  onChange={({ fileList }) =>
-                    handleSendMessage(modal?.data?._id as string, "", fileList)
-                  }
+                  onChange={({ fileList }) => handleFileUpload(fileList)}
                   rootClassName="w-10 h-10 flex justify-center items-center cursor-pointer"
                 >
                   <PlusCircleIcon fontSize={10} className="w-7 h-7" />
@@ -253,25 +249,18 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
               </div>
             </div>
 
-            {filePreviews?.length > 0 && (
+            {files?.length > 0 && (
               <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
                 <ImagePreviewComponent
-                  images={filePreviews}
-                  onDissmiss={(img) =>
-                    setFilePreviews(
-                      filePreviews.filter((f, i) => f.uri !== img.uri)
-                    )
+                  images={files}
+                  onDissmiss={(img, index) =>
+                    setFiles(files.filter((f, i) => i !== index))
                   }
                 />
               </div>
             )}
           </>
         )}
-
-        {/* Image Preview Modal */}
-        {/* {modal.show && modal.type == "preview" && (
-         
-        )} */}
       </div>
     </div>
   );
