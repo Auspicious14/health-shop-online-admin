@@ -5,6 +5,7 @@ import { apiReqHandler } from "../../components";
 import { StoreDetailPage } from "../../modules/store/detail";
 import { StoreLayout } from "../../modules/store/layout";
 import { IStore } from "../../modules/store/model";
+import { StoreLayoutV2 } from "../../modules/store/layout/layout";
 
 const tokenSecret: any = process.env.JWT_SECRET;
 
@@ -14,9 +15,9 @@ interface IProps {
 }
 const StoreDetail: React.FC<IProps> = ({ user, store }) => {
   return (
-    <StoreLayout userId={user.id}>
+    <StoreLayoutV2 userId={user.id}>
       <StoreDetailPage store={store} />
-    </StoreLayout>
+    </StoreLayoutV2>
   );
 };
 

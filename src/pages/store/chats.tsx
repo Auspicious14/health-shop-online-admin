@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import { IStore } from "../../modules/store/model";
 import { ChatPage } from "../../modules/chat/page";
 import { ChatContextProvider } from "../../modules/chat/context";
+import { StoreLayoutV2 } from "../../modules/store/layout/layout";
 
 const tokenSecret: any = process.env.JWT_SECRET;
 
@@ -14,11 +15,11 @@ interface IProps {
 
 const Chat: React.FC<IProps> = ({ store }) => {
   return (
-    <StoreLayout userId={store?.id} className="p-0">
+    <StoreLayoutV2 userId={store?.id}>
       <ChatContextProvider>
         <ChatPage userId={store?.id} storeId={store?.id} />
       </ChatContextProvider>
-    </StoreLayout>
+    </StoreLayoutV2>
   );
 };
 

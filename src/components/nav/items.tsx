@@ -90,14 +90,14 @@ export const NavItems = () => {
   const StoreMenuItem: MenuProps["items"] = [
     getItem(
       "Dashboard",
-      "sub1",
+      "/store",
       <Link href={"/store"}>
         <MenuFoldOutlined />
       </Link>
     ),
     getItem(
       "Detail",
-      "detail",
+      "/store/detail",
       <>
         <Link className="relative" href={"/store/detail"}>
           <FaStore />
@@ -106,21 +106,21 @@ export const NavItems = () => {
     ),
     getItem(
       "Order",
-      "sub2",
+      "/store/orders",
       <Link href={"/store/orders"}>
         <BsCartCheck />
       </Link>
     ),
     getItem(
       "Product",
-      "sub3",
+      "/store/products",
       <Link href={"/store/products"}>
         <ProductOutlined />
       </Link>
     ),
     getItem(
       "Chat Room",
-      "chat",
+      "/store/chats",
       <Link href={"/store/chats"}>
         <MailOutlined />
       </Link>

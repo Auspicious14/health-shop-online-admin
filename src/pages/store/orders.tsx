@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { StoreLayout } from "../../modules/store/layout";
 import { OrderPage } from "../../modules/order/page";
 import { OrderContextProvider } from "../../modules/order/context";
+import { StoreLayoutV2 } from "../../modules/store/layout/layout";
 
 const tokenSecret: any = process.env.JWT_SECRET;
 
@@ -11,11 +12,11 @@ interface IProps {
 }
 const Category: React.FC<IProps> = ({ store }) => {
   return (
-    <StoreLayout userId={store.id}>
+    <StoreLayoutV2 userId={store.id}>
       <OrderContextProvider>
         <OrderPage storeId={store.id} />
       </OrderContextProvider>
-    </StoreLayout>
+    </StoreLayoutV2>
   );
 };
 
