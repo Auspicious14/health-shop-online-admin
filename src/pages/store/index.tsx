@@ -2,6 +2,7 @@ import React from "react";
 import { StoreDashboardPage } from "../../modules/store/components/dashboard";
 import jwt from "jsonwebtoken";
 import { StoreLayout } from "../../modules/store/layout";
+import { StoreLayoutV2 } from "../../modules/store/layout/layout";
 
 const tokenSecret: any = process.env.JWT_SECRET;
 interface IProps {
@@ -9,9 +10,9 @@ interface IProps {
 }
 const Store: React.FC<IProps> = ({ store }) => {
   return (
-    <StoreLayout userId={store.id}>
+    <StoreLayoutV2>
       <StoreDashboardPage />
-    </StoreLayout>
+    </StoreLayoutV2>
   );
 };
 export default Store;

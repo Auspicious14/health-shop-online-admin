@@ -70,11 +70,13 @@ interface IProps {
   userId: string;
   navItem: any;
   center?: React.ReactNode;
+  collapsed?: boolean;
 }
 export const NavBarComponent: React.FC<IProps> = ({
   userId,
   navItem,
   center,
+  collapsed,
 }) => {
   const { profile, getProfile } = useProfileState();
   const { AdminMenuItem } = NavItems();
@@ -93,78 +95,81 @@ export const NavBarComponent: React.FC<IProps> = ({
   };
 
   return (
-    <Layout hasSider style={{ minHeight: "100vh" }}>
-      <Sider>
+    <>
+      <>
         <Menu
           onClick={() => {}}
-          style={{ width: 256 }}
           defaultSelectedKeys={["1"]}
           mode="inline"
+          theme="light"
           items={navItem}
-          className="h-[100vh] fixed"
         />
-      </Sider>
+      </>
       {center && <ActionButtons />}
-      <Menu
-        style={{
-          display: "flex",
-          alignItems: "center",
-          background: "none",
-          padding: "1rem",
-        }}
-        className="w-[19%] fixed z-50 bottom-0 border border-t"
-      >
-        <div className="">
-          {!routePaths.includes(router.asPath) && (
-            <Button
-              onClick={() => setModal({ show: true })}
-              className="bg-blue-700 text-white text-center mb-6 w-[80%]"
-              color="white"
-            >
-              Invite link
-            </Button>
-          )}
-          <Link href={"/profile"}>
-            <div className="flex gap-4 items-center">
-              <Tooltip title={profile?.firstName} placement="top">
-                <Avatar
-                  src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                  style={{
-                    backgroundColor: "#87d068",
-                    width: "30px",
-                    height: "30px",
-                    borderRadius: "50%",
-                    display: "inline-block",
-                  }}
-                  icon={<UserOutlined />}
-                />
-              </Tooltip>
-              <div>
-                <p>
-                  {profile?.firstName} {profile?.lastName}
-                </p>
-                <p className="w-[70%]">{profile?.email}</p>
+      <div className="fixed bottom-2 right-0 left-4 flex justify-center items-center">
+        <Menu
+          mode="inline"
+          theme="light"
+          // style={{
+          //   display: "flex",
+          //   alignItems: "center",
+          //   background: "none",
+          //   padding: "1rem",
+          // }}
+          // className="w-[19%] fixed z-50 bottom-0 border border-t"
+        >
+          <div className="">
+            {!routePaths.includes(router.asPath) && (
+              <Button
+                onClick={() => setModal({ show: true })}
+                className="bg-blue-700 text-white text-center mb-6 w-[80%]"
+                color="white"
+              >
+                Invite link
+              </Button>
+            )}
+            <Link href={"/profile"}>
+              <div className="flex gap-4 items-center">
+                <Tooltip title={profile?.firstName} placement="top">
+                  <Avatar
+                    src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                    style={{
+                      backgroundColor: "#87d068",
+                      width: "30px",
+                      height: "30px",
+                      borderRadius: "50%",
+                      display: "inline-block",
+                    }}
+                    icon={<UserOutlined />}
+                  />
+                </Tooltip>
+                <div>
+                  <p>
+                    {profile?.firstName} {profile?.lastName}
+                  </p>
+                  <p className="w-[70%]">{profile?.email}</p>
+                </div>
               </div>
-            </div>
-          </Link>
-          <Tooltip title="Logout" placement="top">
-            <FiLogOut
-              onClick={handleSignOut}
-              className="cursor-pointer"
-              size={20}
-            />
-          </Tooltip>
-          {!routePaths.includes(router.asPath) && (
-            <Button
-              onClick={() => router.push("/")}
-              className="bg-blue-700 text-white text-center mt-6 w-[80%]"
-              color="white"
-            >
-              Go Back
-            </Button>
-          )}
-        </div>
-      </Menu>
+            </Link>
+            <Tooltip title="Logout" placement="top">
+              <FiLogOut
+                onClick={handleSignOut}
+                className="cursor-pointer"
+                size={20}
+              />
+            </Tooltip>
+            {!routePaths.includes(router.asPath) && (
+              <Button
+                onClick={() => router.push("/")}
+                className="bg-blue-700 text-white text-center mt-6 w-[80%]"
+                color="white"
+              >
+                Go Back
+              </Button>
+            )}
+          </div>
+        </Menu>
+      </div>
 
       <ApModal
         show={modal.show}
@@ -174,6 +179,6 @@ export const NavBarComponent: React.FC<IProps> = ({
       >
         <InviteLink />
       </ApModal>
-    </Layout>
+    </>
   );
 };

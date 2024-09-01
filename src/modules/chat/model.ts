@@ -32,6 +32,7 @@ export interface IUserMessageStore {
   lastMessage: {
     message: string;
     createdAt: string;
+    images: IFile[];
   };
   unreadMessagesFromStore: number;
   unreadMessagesFromUser: number;

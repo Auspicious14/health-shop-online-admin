@@ -17,6 +17,7 @@ import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { toast } from "react-toastify";
 import { fileSvc } from "../../services/file";
 import { ImagePreviewComponent } from "./components/preview";
+import { BsImage } from "react-icons/bs";
 
 interface IProps {
   storeId: string;
@@ -169,9 +170,14 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
                 />
                 <div>
                   <p className="text-base text-white">{`${user?.user?.firstName} ${user?.user?.lastName}`}</p>
-                  <small className="text-gray-200">
-                    {user?.lastMessage?.message}
-                  </small>
+                  {user?.lastMessage?.message && (
+                    <small className="text-gray-200">
+                      {user?.lastMessage?.message}
+                    </small>
+                  )}
+                  {user?.lastMessage?.images && (
+                    <BsImage size={15} className="text-gray-200" />
+                  )}
                 </div>
               </div>
               <div>
