@@ -10,7 +10,7 @@ interface IProps {
 }
 const Store: React.FC<IProps> = ({ store }) => {
   return (
-    <StoreLayoutV2>
+    <StoreLayoutV2 userId={store?.id}>
       <StoreDashboardPage />
     </StoreLayoutV2>
   );

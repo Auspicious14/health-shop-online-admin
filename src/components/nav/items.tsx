@@ -89,14 +89,6 @@ export const NavItems = () => {
   ];
   const StoreMenuItem: MenuProps["items"] = [
     getItem(
-      "",
-      "sub0",
-      <>
-        <ApImage src={Logo} alt="logo" />
-      </>
-    ),
-    getItem("", "sub02", <>{<Divider />}</>),
-    getItem(
       "Dashboard",
       "sub1",
       <Link href={"/store"}>

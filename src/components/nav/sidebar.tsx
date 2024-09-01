@@ -1,17 +1,46 @@
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavItems } from "./items";
-import { Button } from "antd";
-import { CloseOutlined } from "@ant-design/icons";
+import { Avatar, Button, Tooltip } from "antd";
+import {
+  CloseOutlined,
+  EyeInvisibleFilled,
+  UserOutlined,
+} from "@ant-design/icons";
 import { ApImage } from "../image";
 import Logo from "../../../public/images/vendify logo white.jpg";
+import router from "next/router";
+import { deleteCookie } from "../../helper";
+import { useProfileState } from "../../modules/profile/context";
+import { toast } from "react-toastify";
+import { useSignUpState } from "../../modules/auth/signup/context";
+import { FiLogOut } from "react-icons/fi";
 
 interface IProps {
   isOpen: boolean;
+  center?: boolean;
   toggleSidebar: () => void;
+  userId: string;
 }
-const Sidebar: React.FC<IProps> = ({ isOpen, toggleSidebar }) => {
+const Sidebar: React.FC<IProps> = ({
+  userId,
+  isOpen,
+  toggleSidebar,
+  center,
+}) => {
   const { StoreMenuItem } = NavItems();
+  const { profile, getProfile } = useProfileState();
+
+  useEffect(() => {
+    if (userId) getProfile(userId);
+  }, []);
+
+  const handleSignOut = () => {
+    if (userId) {
+      deleteCookie("token", -1);
+      router.push("/auth/login");
+    }
+  };
 
   const MenuItem = ({
     item,
@@ -26,23 +55,28 @@ const Sidebar: React.FC<IProps> = ({ isOpen, toggleSidebar }) => {
           {item.label}
         </button>
         <div className="ml-4 space-y-2">
-          {item.children.map((child: any) => (
+          {/* {item.children.map((child: any) => (
             <MenuItem
               key={child.key}
               item={child}
               toggleSidebar={toggleSidebar}
             />
-          ))}
+          ))} */}
         </div>
       </div>
     ) : (
-      <Link
-        href={item.key}
-        className="block px-4 py-2 text-base hover:bg-gray-700 rounded"
-        onClick={toggleSidebar} // Close sidebar on link click
-      >
-        {item.label}
-      </Link>
+      <div>
+        <div className="flex gap-4 items-center px-4 py-4 text-base hover:bg-gray-700 hover:text-white rounded">
+          <>{item.icon}</>
+          <Link
+            href={item.key}
+            className=" "
+            onClick={toggleSidebar} // Close sidebar on link click
+          >
+            {item.label}
+          </Link>
+        </div>
+      </div>
     );
   };
   return (
@@ -64,8 +98,97 @@ const Sidebar: React.FC<IProps> = ({ isOpen, toggleSidebar }) => {
           <MenuItem key={i} item={item} toggleSidebar={toggleSidebar} />
         ))}
       </nav>
+
+      {center && <ActionButtons />}
+
+      <div className="fixed bottom-2 px-4">
+        <Link href={"/profile"}>
+          <div className="flex gap-4 items-center">
+            <Tooltip title={profile?.firstName} placement="top">
+              <Avatar
+                src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                style={{
+                  backgroundColor: "#87d068",
+                  width: "30px",
+                  height: "30px",
+                  borderRadius: "50%",
+                  display: "inline-block",
+                }}
+                icon={<UserOutlined />}
+              />
+            </Tooltip>
+            <div>
+              {/* <p>
+                {profile?.firstName} {profile?.lastName}
+              </p> */}
+              <p className="w-[60%]">{profile?.email}</p>
+            </div>
+          </div>
+        </Link>
+        <Tooltip title="Logout" placement="top">
+          <FiLogOut
+            onClick={handleSignOut}
+            className="cursor-pointer"
+            size={20}
+          />
+        </Tooltip>
+      </div>
     </div>
   );
 };
 
 export default Sidebar;
+
+interface IActionProps {
+  admin?: boolean;
+  storeAdmin?: boolean;
+}
+
+export const ActionButtons: React.FC<IActionProps> = ({
+  admin,
+  storeAdmin,
+}) => {
+  const [modal, setModal] = useState<{ show: boolean }>({ show: false });
+
+  return <>{admin && <InviteLink />}</>;
+};
+
+const InviteLink = () => {
+  const { generateInviteLink } = useSignUpState();
+  const [link, setLink] = useState<string>("");
+  const [show, setShow] = useState<boolean>(false);
+  const inviteLink = `${process.env.NEXT_PUBLIC_BASE_URL}/store/register/${link}`;
+
+  const handleCopy = () => {
+    navigator.clipboard
+      .writeText(inviteLink)
+      .then((res) => toast.success("Copied"));
+  };
+
+  useEffect(() => {
+    generateInviteLink().then((res: any) => {
+      setLink(res?.data?.inviteCode);
+    });
+  }, []);
+
+  return (
+    <>
+      <h1 className="text-xl font-bold">Copy the invite link below</h1>
+      <div className="flex justify-between items-center my-2 mt-6">
+        <div className="w-[70%] p-2 bg-gray-100 border rounded-md flex justify-between items-center">
+          {show == true ? inviteLink : "********************"}
+          <EyeInvisibleFilled
+            className="text-gray-500"
+            onClick={() => setShow(!show)}
+          />
+        </div>
+        <Button
+          className="bg-blue-700 text-white text-center "
+          onClick={handleCopy}
+        >
+          Copy
+        </Button>
+      </div>
+    </>
+  );
+};

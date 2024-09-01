@@ -5,8 +5,9 @@ import { Button } from "antd";
 
 interface IProps {
   children: React.ReactNode;
+  userId: string;
 }
-export const StoreLayoutV2: React.FC<IProps> = ({ children }) => {
+export const StoreLayoutV2: React.FC<IProps> = ({ userId, children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -15,7 +16,11 @@ export const StoreLayoutV2: React.FC<IProps> = ({ children }) => {
 
   return (
     <div className="relative flex h-screen overflow-hidden">
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      <Sidebar
+        isOpen={isSidebarOpen}
+        toggleSidebar={toggleSidebar}
+        userId={userId}
+      />
 
       <div
         className={`fixed inset-0 bg-black opacity-50 transition-opacity ${
