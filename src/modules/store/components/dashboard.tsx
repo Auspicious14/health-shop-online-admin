@@ -45,7 +45,6 @@ export const StoreDashboardPage = () => {
 
   return (
     <>
-      {/* Header Section */}
       <div className="shadow-sm flex flex-col md:flex-row items-center justify-between">
         <h1 className="text-2xl md:text-3xl font-bold text-center md:text-left">{`Good ${hour}, Store Owner`}</h1>
         <div className="w-full md:w-auto mt-4 md:mt-0">
@@ -53,12 +52,10 @@ export const StoreDashboardPage = () => {
         </div>
       </div>
 
-      {/* Dashboard Title */}
       <div className="my-4 px-4">
         <h1 className="font-bold text-lg md:text-xl">Dashboard</h1>
       </div>
 
-      {/* Statistics Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 my-4 px-4">
         <Card.Grid className="text-center shadow-md py-5">
           <h1 className="text-sm">Total Sales</h1>
@@ -78,11 +75,10 @@ export const StoreDashboardPage = () => {
         </Card.Grid>
       </div>
 
-      {/* Sales and Customer Value Section */}
       <div className="flex flex-col lg:flex-row gap-4 justify-between my-4 px-4">
         <div className="lg:w-2/3 p-4 border rounded-md">
+          <h1 className="font-bold">Sales</h1>
           <div className="flex justify-between items-center mb-4">
-            {/* <h1 className="font-bold">Sales</h1> */}
             <div className="flex gap-2 flex-wrap items-center">
               <Card.Grid className="px-4 text-center border">
                 <h1 className="text-sm">Today</h1>
