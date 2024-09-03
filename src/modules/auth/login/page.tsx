@@ -11,7 +11,7 @@ import {
 import { useSignInState } from "./context";
 import { ISignIn } from "./model";
 import { Button } from "antd";
-import Vector from "../../../../public/images/unsplash_MU70DTGr7d0.png";
+import Vector from "../../../../public/images/vendify-login.webp";
 import { toast } from "react-toastify";
 
 const FormSchema = Yup.object().shape({
@@ -36,21 +36,20 @@ export const SignInPage = () => {
     res.then((rs: any) => {
       console.log(rs.user);
       if (rs.user !== undefined) {
-        if (rs?.user?.accountType === "storeOwner") {
+        if (rs?.user?.accountType === "storeOwner" && rs?.user?.accepted) {
           router.push("/store");
         } else {
           router.push("/");
         }
       }
     });
-    console.log(values);
   };
 
   return (
-    <div className="flex justify-between">
-      <div className="ml-32 mt-24 w-1/4">
-        <div className="my-6 mx-4 text-left">
-          <h2 className=" text-3xl font-bold tracking-tight text-gray-900">
+    <div className="flex flex-col justify-center lg:flex-row lg:justify-between min-h-screen">
+      <div className="lg:w-1/2 w-full p-6 lg:ml-32 lg:mt-16 flex flex-col justify-center items-center lg:block">
+        <div className=" mx-4 text-left">
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900">
             Welcome Back
           </h2>
           <p className="text-[#475467] my-2">
@@ -67,9 +66,9 @@ export const SignInPage = () => {
           onSubmit={handleSubmit}
         >
           {(props: FormikProps<any>) => (
-            <Form className=" Form card px-4 ">
+            <Form className="Form card px-4">
               <ApTextInput
-                className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
+                className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 label="Email"
                 name="email"
                 type="email"
@@ -77,7 +76,7 @@ export const SignInPage = () => {
               />
 
               <ApTextInput
-                className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
+                className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 label="Password"
                 name="password"
                 type="password"
@@ -115,13 +114,22 @@ export const SignInPage = () => {
           )}
         </Formik>
       </div>
-      <ApBackgroundImage
-        src={Vector.src}
-        className={"text-white text-5xl text-justify px-8"}
-      >
-        “We’ve been using Untitled to kick start every new project and can’t
-        imagine working without it.”
-      </ApBackgroundImage>
+
+      <div className="relative lg:w-1/2 w-full h-64 lg:h-auto hidden lg:block font-sans">
+        <div
+          className="absolute inset-0 bg-cover bg-center flex items-center justify-center text-center p-8"
+          style={{
+            backgroundImage: "url('/images/vendify-login.webp')",
+          }}
+        >
+          {/* Semi-transparent overlay */}
+          <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+          <p className="text-white text-2xl lg:text-5xl relative z-10">
+            “Our platform has transformed the way we connect with customers and
+            manage multiple stores, making shopping seamless and efficient.”
+          </p>
+        </div>
+      </div>
     </div>
   );
 };
