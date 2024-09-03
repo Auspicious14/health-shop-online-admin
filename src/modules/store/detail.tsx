@@ -4,6 +4,7 @@ import { Button, Card, Space, UploadProps } from "antd";
 import { ApImage, ApTextInput, Files } from "../../components";
 import { Form, Formik, FormikProps } from "formik";
 import { useStoreState } from "./context";
+import { SocialMedia } from "./components/create/social-media";
 
 interface IProps {
   store: IStore;
@@ -71,6 +72,7 @@ export const StoreDetailPage: React.FC<IProps> = ({ store }) => {
 
   return (
     <div>
+      <h1>Store Details</h1>
       <Formik
         initialValues={{
           firstName: store?.firstName || "",
@@ -87,9 +89,9 @@ export const StoreDetailPage: React.FC<IProps> = ({ store }) => {
           bankAccountNumber: store?.bankAccountNumber || "",
           bankAccountName: store?.bankAccountName || "",
           businessNumber: store?.businessNumber || "",
-          socialMedia: store?.socialMedia || [
-            { profileName: "", profileLink: "", platform: "" },
-          ],
+          socialMedia: store?.socialMedia
+            ? store?.socialMedia
+            : [{ profileName: "", profileLink: "", platform: "" }],
         }}
         onSubmit={handleSubmit}
       >
@@ -129,13 +131,13 @@ export const StoreDetailPage: React.FC<IProps> = ({ store }) => {
                 placeHolder="Last Name"
               />
             </Space>
-            <Space>
+            <Space className="block">
               <ApTextInput
                 className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
                 label="Email"
                 name="email"
                 type="email"
-                placeHolder="Username"
+                placeHolder="store@gmail.com"
               />
             </Space>
             <h1 className="font-bold text-3xl border-b my-4 py-2">
@@ -208,37 +210,32 @@ export const StoreDetailPage: React.FC<IProps> = ({ store }) => {
             <h1 className="font-bold text-3xl border-b my-4 py-2">
               Social Media Information
             </h1>
-            {props.values?.socialMedia?.map((s: any, index: number) => (
-              <>
-                <div className="grid grid-cols-3 gap-12">
-                  <ApTextInput
-                    label="Platform"
-                    name={`socialMedia[${index}].platform`}
-                    type="text"
-                    placeHolder="Enter Profile link"
-                    className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
-                  />
-                  <ApTextInput
-                    label="Profile URL"
-                    name={`socialMedia[${index}].profileLink`}
-                    type="text"
-                    placeHolder="Enter Profile link"
-                    className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
-                  />
-                  <ApTextInput
-                    label="Profile Name"
-                    name={`socialMedia[${index}].profileName`}
-                    type="text"
-                    placeHolder="Enter Profile name"
-                    className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </>
-            ))}
+
+            <SocialMedia
+              socialMediaForm={props.values?.socialMedia}
+              onAdd={() =>
+                props.setFieldValue("socialMedia", [
+                  ...props.values.socialMedia,
+                  {
+                    platform: "",
+                    profileName: "",
+                    profileLink: "",
+                  },
+                ])
+              }
+              onRemove={(index: number) =>
+                props.setFieldValue(
+                  "socialMedia",
+                  props?.values?.socialMedia?.filter(
+                    (s: any, i: number) => i != index
+                  )
+                )
+              }
+            />
             <h1 className="font-bold text-3xl border-b my-4 py-2">
               Payment Information
             </h1>
-            <Space className="w-full grid grid-cols-3 ">
+            <Space className="w-full grid lg:grid-cols-3 grid-cols-2 ">
               <ApTextInput
                 className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
                 label="Bank Name"

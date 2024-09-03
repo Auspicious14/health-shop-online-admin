@@ -48,7 +48,7 @@ export const SocialMediaDetail: React.FC<IProps> = ({
   };
 
   return (
-    <div className="-ml-8 px-12 w-full">
+    <div className="lg:-ml-8 lg:px-12 w-full">
       <Space className="justify-between w-full mb-4">
         {add && add}
         <MinusCircleFilled
@@ -56,7 +56,7 @@ export const SocialMediaDetail: React.FC<IProps> = ({
           className={"text-blue-400 text-2xl cursor-pointer "}
         />
       </Space>
-      <div className="flex flex-col gap-3 w-72 md:w-full">
+      <div className="flex flex-col gap-3 md:w-full">
         <ApTextInput
           label="Platform"
           name={`socialMedia[${index}].platform`}
@@ -80,7 +80,7 @@ export const SocialMediaDetail: React.FC<IProps> = ({
         />
       </div>
 
-      <StoreFormRoute onNext={handleNext} onPrevious={onPrevious} />
+      {onNext && <StoreFormRoute onNext={handleNext} onPrevious={onPrevious} />}
     </div>
   );
 };
@@ -89,8 +89,8 @@ interface ISocialMediaProps {
   socialMediaForm: any[];
   onAdd: () => void;
   onRemove: (index: number) => void;
-  onPrevious: () => void;
-  onNext: () => void;
+  onPrevious?: () => void;
+  onNext?: () => void;
 }
 
 export const SocialMedia: React.FC<ISocialMediaProps> = ({

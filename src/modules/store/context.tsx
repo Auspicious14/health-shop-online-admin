@@ -135,7 +135,7 @@ export const StoreContextProvider: React.FC<IProps> = ({ children }) => {
       if (res.res?.status !== 200) {
         toast.error("Error");
       } else {
-        toast.success("Product updated successfully");
+        toast.success("Store updated successfully");
       }
       setStores(
         stores.map((p: IStore, i: number) => (p._id == data._id ? data : p))
