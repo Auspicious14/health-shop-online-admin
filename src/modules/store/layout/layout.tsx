@@ -15,7 +15,7 @@ export const StoreLayoutV2: React.FC<IProps> = ({ userId, children }) => {
   };
 
   return (
-    <div className="relative flex h-screen overflow-hidden">
+    <div className="relative flex h-screen">
       <Sidebar
         isOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}

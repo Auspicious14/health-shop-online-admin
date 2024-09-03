@@ -81,7 +81,7 @@ const Sidebar: React.FC<IProps> = ({
   };
   return (
     <div
-      className={`fixed top-0 left-0 h-full bg-white transition-transform transform ${
+      className={`fixed overflow-hidden top-0 left-0 h-full bg-white transition-transform transform ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       } md:relative md:translate-x-0 md:w-64 z-40`}
       style={{ zIndex: 40 }}
