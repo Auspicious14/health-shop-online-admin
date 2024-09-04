@@ -134,9 +134,13 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
   };
 
   return (
-    <div className="flex h-screen border rounded-xl relative">
+    <div className="flex h-screen border rounded-xl relative bg-red-400">
       {/* Inbox Section */}
-      <div className="w-1/2 md:w-1/3 lg:w-1/4 shadow-sm bg-blue-400 text-gray-200 p-4 overflow-y-auto">
+      <div
+        className={`${
+          modal.type == "showMessage" ? "hidden" : "w-full"
+        } md:w-1/3 lg:w-1/4 md:block shadow-sm bg-blue-400 text-gray-200 p-4 overflow-y-auto`}
+      >
         <input
           name="search"
           type="text"
@@ -199,75 +203,77 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
       </div>
 
       {/* Message Section */}
-      <div className="w-full md:w-2/3 lg:w-3/4 relative bg-white p-4 overflow-y-auto flex flex-col">
-        {/* {messages?.length === 0 && (
+      {modal.show && modal.type == "showMessage" && (
+        <div className="w-full md:w-2/3 lg:w-3/4 relative bg-white p-4 overflow-y-auto flex flex-col">
+          {/* {messages?.length === 0 && (
           <div className="flex justify-center items-center m-auto">
             <p>Start Messaging</p>
           </div>
         )} */}
 
-        {modal.show && modal.type == "showMessage" && (
-          <>
-            <div className="relative flex-1 flex flex-col mb-12">
-              <div
-                ref={chatContainerRef}
-                className="flex-1 overflow-y-auto mb-4 space-y-4"
-              >
-                {messages.length === 0 && (
-                  <div className="flex justify-center m-auto items-center">
-                    No messages
-                  </div>
-                )}
-                {messages.map((message) => (
-                  <MessageComponent message={message} key={message._id} />
-                ))}
+          {modal.show && modal.type == "showMessage" && (
+            <>
+              <div className="relative flex-1 flex flex-col mb-12">
+                <div
+                  ref={chatContainerRef}
+                  className="flex-1 overflow-y-auto mb-4 space-y-4"
+                >
+                  {messages.length === 0 && (
+                    <div className="flex justify-center m-auto items-center">
+                      No messages
+                    </div>
+                  )}
+                  {messages.map((message) => (
+                    <MessageComponent message={message} key={message._id} />
+                  ))}
+                </div>
+
+                {/* Fixed Input Area */}
+                <div className="z-[500] fixed bg-transparent bottom-4 left-[5%] sm:left-[35%] md:left-[48%] lg:left-[47%] xl:left-[43%] w-[90%] sm:w-[59%] md:w-[48%] lg:w-[49%] xl:w-[54%] flex items-center gap-4">
+                  <Upload
+                    name="avatar"
+                    listType="text"
+                    className="avatar-uploader"
+                    showUploadList={false}
+                    multiple
+                    onChange={({ fileList }) => handleFileUpload(fileList)}
+                    rootClassName="w-10 h-10 flex justify-center items-center cursor-pointer"
+                  >
+                    <PlusCircleIcon fontSize={10} className="w-7 h-7" />
+                  </Upload>
+                  <input
+                    name="new_message"
+                    type="text"
+                    placeholder="Type your message"
+                    className="flex-grow px-4 py-2 outline-none border border-gray-300 rounded-full w-full"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                  />
+                  <button
+                    className="flex justify-center items-center bg-blue-500 text-white p-3 rounded-full"
+                    onClick={() =>
+                      handleSendMessage(modal.data?._id as string, message)
+                    }
+                  >
+                    <SendOutlined className="text-lg" />
+                  </button>
+                </div>
               </div>
 
-              {/* Fixed Input Area */}
-              <div className="z-[500] fixed bg-transparent bottom-4 left-[36%] sm:left-[35%] md:left-[48%] lg:left-[47%] xl:left-[43%] w-[56%] sm:w-[59%] md:w-[48%] lg:w-[49%] xl:w-[54%] flex items-center gap-4">
-                <Upload
-                  name="avatar"
-                  listType="text"
-                  className="avatar-uploader"
-                  showUploadList={false}
-                  multiple
-                  onChange={({ fileList }) => handleFileUpload(fileList)}
-                  rootClassName="w-10 h-10 flex justify-center items-center cursor-pointer"
-                >
-                  <PlusCircleIcon fontSize={10} className="w-7 h-7" />
-                </Upload>
-                <input
-                  name="new_message"
-                  type="text"
-                  placeholder="Type your message"
-                  className="flex-grow px-4 py-2 outline-none border border-gray-300 rounded-full w-full"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                />
-                <button
-                  className="flex justify-center items-center bg-blue-500 text-white p-3 rounded-full"
-                  onClick={() =>
-                    handleSendMessage(modal.data?._id as string, message)
-                  }
-                >
-                  <SendOutlined className="text-lg" />
-                </button>
-              </div>
-            </div>
-
-            {files?.length > 0 && (
-              <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-                <ImagePreviewComponent
-                  images={files}
-                  onDissmiss={(img, index) =>
-                    setFiles(files.filter((f, i) => i !== index))
-                  }
-                />
-              </div>
-            )}
-          </>
-        )}
-      </div>
+              {files?.length > 0 && (
+                <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+                  <ImagePreviewComponent
+                    images={files}
+                    onDissmiss={(img, index) =>
+                      setFiles(files.filter((f, i) => i !== index))
+                    }
+                  />
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 };

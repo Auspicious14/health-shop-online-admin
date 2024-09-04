@@ -31,18 +31,25 @@ export const MessageComponent: React.FC<IProps> = ({ message }) => {
             : "bg-blue-300"
         }`}
       >
-        <div className="grid grid-cols-2 gap-4 justify-center">
-          {message?.images?.length > 0 &&
-            message?.images?.map((img, i) => (
-              <div key={i}>
-                <ApImage
-                  src={img?.uri}
-                  alt={img?.name}
-                  className="obect-cover w-full"
-                />
-              </div>
-            ))}
-        </div>
+        {message?.message && (
+          <div>
+            <p>{message?.message}</p>
+          </div>
+        )}
+        {message?.images?.length > 0 && (
+          <div className="grid grid-cols-2 gap-4 justify-center">
+            {message?.images?.length > 0 &&
+              message?.images?.map((img, i) => (
+                <div key={i}>
+                  <ApImage
+                    src={img?.uri}
+                    alt={img?.name}
+                    className="obect-cover w-full"
+                  />
+                </div>
+              ))}
+          </div>
+        )}
         <small className="block text-xs mt-2 text-right">
           {`${hours}:${minutes} ${hours <= 11 ? "am" : "pm"}`}
         </small>

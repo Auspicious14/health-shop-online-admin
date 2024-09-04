@@ -63,10 +63,12 @@ export const OrderPage: React.FC<IProps> = ({ storeId }) => {
       title: "id",
       dataIndex: "_id",
       key: "id",
+      width: 100,
     },
     {
       title: "Name",
       key: "name",
+      width: 100,
       render: (_, { address }) => (
         <Text className="capitalize">{address?.name}</Text>
       ),
@@ -74,6 +76,7 @@ export const OrderPage: React.FC<IProps> = ({ storeId }) => {
     {
       title: "Product Name",
       key: "productName",
+      width: 100,
       render: (_, { cart }) => (
         <Space className="block capitalize">
           {cart?.map((c, i) => (
@@ -85,6 +88,7 @@ export const OrderPage: React.FC<IProps> = ({ storeId }) => {
     {
       title: "Order Date",
       key: "createdAt",
+      width: 100,
       render: (_, { createdAt }) => (
         <Text className="block capitalize">
           {new Date(createdAt).toDateString()}
@@ -94,6 +98,7 @@ export const OrderPage: React.FC<IProps> = ({ storeId }) => {
     {
       title: "Qty",
       key: "quantity",
+      width: 100,
       render: (_, { cart }) => (
         <Space className="block ">
           {cart?.map((c, i) => (
@@ -105,6 +110,7 @@ export const OrderPage: React.FC<IProps> = ({ storeId }) => {
     {
       title: "Price",
       key: "price",
+      width: 100,
       render: (_, { cart }) => (
         <Space className="block capitalize ">
           {cart?.map((c, i) => (
@@ -116,6 +122,7 @@ export const OrderPage: React.FC<IProps> = ({ storeId }) => {
     {
       title: "Status",
       key: "status",
+      width: 100,
       render: (_, { _id, status, ...others }) => {
         const items = [
           { key: "5", label: "New" },
@@ -146,40 +153,41 @@ export const OrderPage: React.FC<IProps> = ({ storeId }) => {
     p.address?.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
   );
   return (
-    <div>
+    <div className="w-full px-4">
       <div>
-        <div className="shadow-sm p-4 ">
-          <h1 className="text-3xl font-bold">Orders</h1>
+        <div className="shadow-sm p-4">
+          <h1 className="text-2xl md:text-3xl font-bold">Orders</h1>
           <span>{`${orders?.length} orders`}</span>
         </div>
-        <div className="flex gap-8 my-4 items-center justify-between">
-          <Card.Grid className="text-center w-[25%] shadow-md py-5 inset-3">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 my-4">
+          <Card.Grid className="text-center shadow-md py-5 inset-3">
             <h1 className="text-sm">New Orders</h1>
             <h1 className="font-bold text-2xl">{counts?.new || 0}</h1>
           </Card.Grid>
-          {/* <Card.Grid className="text-center w-[25%] shadow-md py-5 inset-3">
-            <h1 className="text-sm">Pending Orders</h1>
-            <h1 className="font-bold text-2xl">{counts.pending || 0}</h1>
-          </Card.Grid> */}
-          <Card.Grid className="text-center w-[25%] shadow-md py-5 inset-3">
+
+          <Card.Grid className="text-center shadow-md py-5 inset-3">
             <h1 className="text-sm">Delivered Orders</h1>
             <h1 className="font-bold text-2xl">{counts?.Delivered || 0}</h1>
           </Card.Grid>
-          <Card.Grid className="text-center w-[25%] shadow-md py-5 inset-3">
+
+          <Card.Grid className="text-center shadow-md py-5 inset-3">
             <h1 className="text-sm">Confirmed Orders</h1>
             <h1 className="font-bold text-2xl">{counts?.confirmed || 0}</h1>
           </Card.Grid>
         </div>
-        <div className="shadow-sm p-4 flex items-center justify-between">
-          <h1 className=" font-bold">All Orders</h1>
+
+        <div className="shadow-sm p-4 flex flex-wrap items-center justify-between">
+          <h1 className="font-bold mb-2 md:mb-0">All Orders</h1>
           <Search
-            className="w-60"
+            className="w-full md:w-60"
             placeholder="Search order"
             prefix={<SearchOutlined className="text-gray-300" />}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <div>
+
+        <div className="">
           <Table
             rowSelection={rowSelection}
             columns={columns}
