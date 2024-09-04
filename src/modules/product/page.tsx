@@ -48,11 +48,14 @@ export const ProductPage: React.FC<IProps> = ({ storeId }) => {
     onChange: onSelectChange,
   };
 
-  console.log(products, "producttts");
   const columns: ColumnsType<IProduct> = [
     {
       title: "Image",
       key: "images",
+      // responsive: ["lg"],
+      width: 100,
+      sorter: (a, b) => a.images.length - b.images.length,
+      sortDirections: ["descend", "ascend"],
       render: (_, { images }) => (
         <Space className="w-20 h-20">
           <img
@@ -67,22 +70,35 @@ export const ProductPage: React.FC<IProps> = ({ storeId }) => {
     {
       title: "Product Name",
       key: "name",
+      sorter: (a, b) => a.name.length - b.name.length,
+      sortDirections: ["descend", "ascend"],
+      width: 100,
       render: (_, { name }) => <Text className="capitalize">{name}</Text>,
     },
     {
       title: "Qty",
       dataIndex: "quantity",
       key: "quantity",
+      width: 100,
+      sorter: (a, b) => a.quantity.length - b.quantity.length,
+      sortDirections: ["descend", "ascend"],
     },
     {
       title: "Color",
       dataIndex: "color",
+      responsive: ["xs"],
       key: "color",
+      width: 100,
+      sorter: (a, b) => a.color.length - b.color.length,
+      sortDirections: ["descend", "ascend"],
     },
     {
       title: "Price",
-      // dataIndex: "price",
+      dataIndex: "price",
       key: "price",
+      width: 100,
+      sorter: (a, b) => a.price.length - b.price.length,
+      sortDirections: ["descend", "ascend"],
       render: (_, { price }) => (
         <Text>{helper.toCurrency(parseFloat(price))}</Text>
       ),
@@ -91,6 +107,7 @@ export const ProductPage: React.FC<IProps> = ({ storeId }) => {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      width: 100,
       render: (_, { availability }) => {
         return (
           <Text className={`${productStatus[availability]}`}>
@@ -130,17 +147,17 @@ export const ProductPage: React.FC<IProps> = ({ storeId }) => {
   );
   return (
     <>
-      <div>
-        <div className="flex justify-between items-center shadow-sm p-4 ">
-          <div>
-            <h1 className="text-3xl font-bold">Products</h1>
-            <span>keep track of vendor</span>
+      <div className="p-4">
+        <div className="flex sm:flex-row items-center justify-between shadow-sm mb-4">
+          <div className="mb-4 sm:mb-0">
+            <h1 className="text-2xl sm:text-3xl font-bold">Products</h1>
+            <span className="text-sm sm:text-base">Keep track of vendor</span>
           </div>
           {storeId && (
             <Button
               type="primary"
               icon={<PlusOutlined />}
-              className="bg-blue-600 items-center flex"
+              className="bg-blue-600 flex items-center"
               onClick={() =>
                 setModal({ show: true, data: null, type: "Add Product" })
               }
@@ -149,24 +166,25 @@ export const ProductPage: React.FC<IProps> = ({ storeId }) => {
             </Button>
           )}
         </div>
-        <div className="shadow-sm p-4 flex items-center justify-between">
-          <h1 className=" font-bold">All Products</h1>
+        <div className="shadow-sm mb-4 py-4 flex flex-col lg:justify-between sm:flex-row items-center">
+          <h1 className="text-lg sm:text-xl font-bold">All Products</h1>
           <Search
-            className="w-60"
+            className="lg:w-60 w-full"
             placeholder="Search product"
             prefix={<SearchOutlined className="text-gray-300" />}
-            onChange={(e) => setSearch(e.target.value.toLocaleLowerCase())}
+            onChange={(e) => setSearch(e.target.value.toLowerCase())}
           />
         </div>
-        <div>
+        <div className="w-[20rem] sm:w-[30rem] md:w-[28rem] sm:wuto lg:w-auto">
           <Table
             rowSelection={rowSelection}
             columns={columns}
             dataSource={filtered}
             rowKey={(p) => p._id}
             pagination={{ pageSize: 50 }}
-            scroll={{ y: 350 }}
+            scroll={{ x: 350 }}
             loading={loading}
+            tableLayout="fixed"
           />
         </div>
       </div>
