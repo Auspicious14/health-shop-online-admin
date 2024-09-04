@@ -80,7 +80,7 @@ export const ApModal: React.FC<IProps> = ({
             </Transition.Child>
 
             <div className="fixed inset-0 z-10 overflow-y-auto">
-              <div className="mx-24 my-12 p-4 text-center sm:items-center sm:p-0">
+              <div className="flex items-center justify-center min-h-full p-4 sm:p-6 lg:p-8">
                 <Transition.Child
                   as={Fragment}
                   enter="ease-out duration-300"
@@ -90,17 +90,17 @@ export const ApModal: React.FC<IProps> = ({
                   leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                   leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 >
-                  <Dialog.Panel className="max-w-full relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all ">
+                  <Dialog.Panel className="w-full max-w-lg sm:max-w-2xl relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all">
                     <div className="w-full bg-white px-4 sm:p-6 sm:pb-4">
                       <div className="flex justify-between items-center ">
                         {title && (
-                          <h1 className="text-lg font-bold uppercase  w-full">
+                          <h1 className="text-lg font-bold uppercase w-full">
                             {title}
                           </h1>
                         )}
                         <CloseOutlined
                           onClick={onDimiss}
-                          className={` z-50 text-black `}
+                          className={` z-50 text-black cursor-pointer `}
                         />
                       </div>
                       <Divider />

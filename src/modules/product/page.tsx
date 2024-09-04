@@ -86,7 +86,6 @@ export const ProductPage: React.FC<IProps> = ({ storeId }) => {
     {
       title: "Color",
       dataIndex: "color",
-      responsive: ["xs"],
       key: "color",
       width: 100,
       sorter: (a, b) => a.color.length - b.color.length,
@@ -175,7 +174,7 @@ export const ProductPage: React.FC<IProps> = ({ storeId }) => {
             onChange={(e) => setSearch(e.target.value.toLowerCase())}
           />
         </div>
-        <div className="w-[20rem] sm:w-[30rem] md:w-[28rem] sm:wuto lg:w-auto">
+        <div className="w-[20rem] sm:w-[30rem] md:w-[28rem] sm:wuto lg:w-full">
           <Table
             rowSelection={rowSelection}
             columns={columns}
@@ -185,6 +184,7 @@ export const ProductPage: React.FC<IProps> = ({ storeId }) => {
             scroll={{ x: 350 }}
             loading={loading}
             tableLayout="fixed"
+            rowClassName={"w-full"}
           />
         </div>
       </div>

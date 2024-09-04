@@ -103,168 +103,159 @@ const CreateProductPage: React.FC<IProps> = ({
     }))
   );
   return (
-    <div>
-      <div className="w-full mx-4">
-        <Formik
-          innerRef={formRef as any}
-          validationSchema={FormSchema}
-          initialValues={{
-            name: product?.name || "",
-            categories: product?.categories
-              ? product?.categories?.map((c) => ({
-                  value: c,
-                  label: c,
-                }))
-              : [{ value: "", label: "" }],
-            quantity: product?.quantity || "",
-            description: product?.description || "",
-            price: product?.price || "",
-            color: product?.color || "",
-            size: product?.size.value
-              ? product?.size.value
-              : { label: "lg", value: "lg" },
-            brand: product?.brand || "",
-            // soldout: product?.soldout || "",
-            availability: product?.availability || "",
-          }}
-          onSubmit={handleProduct}
-        >
-          {({ values, setFieldValue }) => (
-            <Form>
-              <div className="w-full flex justify-between">
-                <div className="w-full">
-                  <Card className="m-3 ">
-                    <ApTextInput
-                      name="name"
-                      type="text"
-                      placeHolder="Nike Air MAx"
-                      label="Name"
-                      className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
-                    />
-                    <ApTextInput
-                      name="description"
-                      type="textarea"
-                      placeHolder="Nike Air MAx"
-                      label="Description"
-                      className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
-                    />
-                  </Card>
-                  <Card className="m-3">
-                    <div>Categories</div>
-                    <ApSelectInput
-                      isMulti
-                      name={"categories"}
-                      options={categories?.map((c) => ({
-                        label: c.name,
-                        value: c.name,
-                      }))}
-                      addOnChange={(val: any) => {
-                        console.log(val);
-                      }}
-                      className="my-4 relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
-                    />
-                    <ApTextInput
-                      name="brand"
-                      type="text"
-                      placeHolder="nike"
-                      label="Brand"
-                      className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
-                    />
-                    <ApTextInput
-                      name="color"
-                      type="text"
-                      placeHolder="red"
-                      label="Color"
-                      className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
-                    />
-                    <div>Size</div>
-                    <ApSelectInput
-                      name="size"
-                      options={[
-                        { label: "sm", value: "sm" },
-                        { label: "base", value: "base" },
-                        { label: "lg", value: "lg" },
-                        { label: "xl", value: "xl" },
-                      ]}
-                      addOnChange={(val: any) => {
-                        console.log(val);
-                      }}
-                      className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
-                    />
-                  </Card>
-                  <Card className="mx-3 ">
-                    <ApTextInput
-                      name="quantity"
-                      type="text"
-                      placeHolder="3"
-                      label="Quantity"
-                      className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
-                    />
-                  </Card>
-                </div>
-                <div className=" w-full">
-                  <Card className="m-3 ">
-                    <ApTextInput
-                      name="price"
-                      type="number"
-                      placeHolder="9000"
-                      label="Price"
-                      className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
-                    />
-                  </Card>
-                  <Card className="m-3 w-full">
-                    <h1>Pictures</h1>
-                    <Files
-                      fileList={files}
-                      handleChange={(res: any) => handleProductImage(res)}
-                    />
-                  </Card>
-                  <Card className="m-3 w-full">
-                    <h1>Availability</h1>
-                    <div className="flex my-4 gap-4">
-                      <div className="flex gap-2 items-center">
-                        <Field
-                          type="radio"
-                          value="instock"
-                          name="availability"
-                          className=" text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                        />
-                        Instock
-                      </div>
-                      <div className="flex gap-2 items-center">
-                        <Field
-                          type="radio"
-                          value="soldout"
-                          name="availability"
-                          className=" text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                        />
-                        Soldout
-                      </div>
-                      <div className="flex gap-2 items-center">
-                        <Field
-                          type="radio"
-                          value="soon"
-                          name="availability"
-                          className=" text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                        />
-                        Soon
-                      </div>
-                    </div>
-                  </Card>
-                  <Button
-                    htmlType="submit"
-                    type="primary"
-                    className="m-3 bg-blue-600 text-white"
-                    loading={loading}
-                  >
-                    {product?._id ? "Save Changes" : "Add Product"}
-                  </Button>
-                </div>
+    <div className="w-full px-4">
+      <Formik
+        innerRef={formRef as any}
+        validationSchema={FormSchema}
+        initialValues={{
+          name: product?.name || "",
+          categories: product?.categories
+            ? product?.categories?.map((c) => ({
+                value: c,
+                label: c,
+              }))
+            : [{ value: "", label: "" }],
+          quantity: product?.quantity || "",
+          description: product?.description || "",
+          price: product?.price || "",
+          color: product?.color || "",
+          size: product?.size.value
+            ? product?.size.value
+            : { label: "lg", value: "lg" },
+          brand: product?.brand || "",
+          availability: product?.availability || "",
+        }}
+        onSubmit={handleProduct}
+      >
+        {({ values, setFieldValue }) => (
+          <Form>
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="w-full">
+                <Card className="m-3">
+                  <ApTextInput
+                    name="name"
+                    type="text"
+                    placeHolder="Nike Air Max"
+                    label="Name"
+                    className="block w-full rounded-md py-1.5 px-2 border ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                  />
+                  <ApTextInput
+                    name="description"
+                    type="textarea"
+                    placeHolder="Nike Air Max"
+                    label="Description"
+                    className="block w-full rounded-md py-1.5 px-2 border ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                  />
+                </Card>
+                <Card className="m-3">
+                  <div>Categories</div>
+                  <ApSelectInput
+                    isMulti
+                    name="categories"
+                    options={categories?.map((c) => ({
+                      label: c.name,
+                      value: c.name,
+                    }))}
+                    className="block w-full rounded-md py-1.5 px-2 border ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                  />
+                  <ApTextInput
+                    name="brand"
+                    type="text"
+                    placeHolder="Nike"
+                    label="Brand"
+                    className="block w-full rounded-md py-1.5 px-2 border ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                  />
+                  <ApTextInput
+                    name="color"
+                    type="text"
+                    placeHolder="Red"
+                    label="Color"
+                    className="block w-full rounded-md py-1.5 px-2 border ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                  />
+                  <div>Size</div>
+                  <ApSelectInput
+                    name="size"
+                    options={[
+                      { label: "sm", value: "sm" },
+                      { label: "base", value: "base" },
+                      { label: "lg", value: "lg" },
+                      { label: "xl", value: "xl" },
+                    ]}
+                    className="block w-full rounded-md py-1.5 px-2 border ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                  />
+                </Card>
+                <Card className="m-3">
+                  <ApTextInput
+                    name="quantity"
+                    type="text"
+                    placeHolder="3"
+                    label="Quantity"
+                    className="block w-full rounded-md py-1.5 px-2 border ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                  />
+                </Card>
               </div>
-            </Form>
-          )}
-        </Formik>
-      </div>
+              <div className="w-full">
+                <Card className="m-3">
+                  <ApTextInput
+                    name="price"
+                    type="number"
+                    placeHolder="9000"
+                    label="Price"
+                    className="block w-full rounded-md py-1.5 px-2 border ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                  />
+                </Card>
+                <Card className="m-3">
+                  <h1>Pictures</h1>
+                  <Files
+                    fileList={files}
+                    handleChange={(res: any) => handleProductImage(res)}
+                  />
+                </Card>
+                <Card className="m-3">
+                  <h1>Availability</h1>
+                  <div className="flex my-4 gap-4">
+                    <div className="flex gap-2 items-center">
+                      <Field
+                        type="radio"
+                        value="instock"
+                        name="availability"
+                        className="text-blue-600"
+                      />
+                      Instock
+                    </div>
+                    <div className="flex gap-2 items-center">
+                      <Field
+                        type="radio"
+                        value="soldout"
+                        name="availability"
+                        className="text-blue-600"
+                      />
+                      Soldout
+                    </div>
+                    <div className="flex gap-2 items-center">
+                      <Field
+                        type="radio"
+                        value="soon"
+                        name="availability"
+                        className="text-blue-600"
+                      />
+                      Soon
+                    </div>
+                  </div>
+                </Card>
+                <Button
+                  htmlType="submit"
+                  type="primary"
+                  className="m-3 w-full bg-blue-600 text-white"
+                  loading={loading}
+                >
+                  {product?._id ? "Save Changes" : "Add Product"}
+                </Button>
+              </div>
+            </div>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 };
