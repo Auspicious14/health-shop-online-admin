@@ -30,7 +30,7 @@ export const SignUpPage = () => {
           <h2 className="text-3xl font-bold tracking-tight text-gray-900">
             Sign Up
           </h2>
-          <p className="text-[#475467] my-2">We're pleased to have you!</p>
+          <p className="text-[#475467] my-2">We&apos;re pleased to have you!</p>
         </div>
         <Formik
           initialValues={{
