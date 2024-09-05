@@ -125,8 +125,9 @@ export const SignInPage = () => {
           {/* Semi-transparent overlay */}
           <div className="absolute inset-0 bg-black bg-opacity-50"></div>
           <p className="text-white text-2xl lg:text-5xl relative z-10">
-            “Our platform has transformed the way we connect with customers and
-            manage multiple stores, making shopping seamless and efficient.”
+            &rsquo;&rsquo;Our platform has transformed the way we connect with
+            customers and manage multiple stores, making shopping seamless and
+            efficient.&apos;&apos;
           </p>
         </div>
       </div>
