@@ -15,7 +15,7 @@ export const StoreLayoutV2: React.FC<IProps> = ({ userId, children }) => {
   };
 
   return (
-    <div className="relative flex h-screen">
+    <div className="flex h-screen overflow-hidden">
       <Sidebar
         isOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
@@ -29,16 +29,18 @@ export const StoreLayoutV2: React.FC<IProps> = ({ userId, children }) => {
         onClick={toggleSidebar}
       ></div>
 
-      <div className={`flex-1 p-4 transition-all duration-300 ease-in-out`}>
-        {/* Toggle Button for Mobile */}
+      <div
+        className={`flex-1 p-4 transition-all duration-300 ease-in-out overflow-y-auto md:ml-[250px]`} // Adjust margin based on sidebar width
+      >
         <Button
           type="text"
           icon={<MenuFoldOutlined size={30} />}
           onClick={toggleSidebar}
-          className={`"text-2xl text-gray-800 md:hidden ${
+          className={`text-2xl text-gray-800 md:hidden ${
             isSidebarOpen ? "hidden" : "block"
-          }"`}
+          }`}
         />
+
         <div>{children}</div>
       </div>
     </div>

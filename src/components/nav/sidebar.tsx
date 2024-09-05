@@ -54,36 +54,24 @@ const Sidebar: React.FC<IProps> = ({
         <button className="w-full text-left px-4 py-2 text-base hover:bg-gray-700 rounded">
           {item.label}
         </button>
-        <div className="ml-4 space-y-2">
-          {/* {item.children.map((child: any) => (
-            <MenuItem
-              key={child.key}
-              item={child}
-              toggleSidebar={toggleSidebar}
-            />
-          ))} */}
-        </div>
       </div>
     ) : (
       <div>
         <div className="flex gap-4 items-center px-4 py-4 text-base hover:bg-gray-700 hover:text-white rounded">
           <>{item.icon}</>
-          <Link
-            href={item.key}
-            className=" "
-            onClick={toggleSidebar} // Close sidebar on link click
-          >
+          <Link href={item.key} onClick={toggleSidebar}>
             {item.label}
           </Link>
         </div>
       </div>
     );
   };
+
   return (
     <div
-      className={`fixed overflow-hidden z-[1000] top-0 left-0 h-full bg-white transition-transform  transform ${
+      className={`fixed overflow-hidden z-[1000] top-0 left-0 h-full w-[250px] bg-white transition-transform transform ${
         isOpen ? "translate-x-0 ease-in" : "-translate-x-full ease-out"
-      } md:relative md:translate-x-0 md:w-64`}
+      } md:translate-x-0 md:w-64`}
     >
       <ApImage src={Logo} alt="logo" className="object-cover" />
       <Button
@@ -92,7 +80,8 @@ const Sidebar: React.FC<IProps> = ({
         onClick={toggleSidebar}
         className={`absolute top-2 right-4 text-2xl md:hidden`}
       ></Button>
-      <nav className=" px-4">
+
+      <nav className="px-4">
         {StoreMenuItem.map((item, i) => (
           <MenuItem key={i} item={item} toggleSidebar={toggleSidebar} />
         ))}
@@ -117,9 +106,6 @@ const Sidebar: React.FC<IProps> = ({
               />
             </Tooltip>
             <div>
-              {/* <p>
-                {profile?.firstName} {profile?.lastName}
-              </p> */}
               <p className="w-[60%]">{profile?.email}</p>
             </div>
           </div>
