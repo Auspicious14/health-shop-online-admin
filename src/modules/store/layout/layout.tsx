@@ -6,8 +6,13 @@ import { Button } from "antd";
 interface IProps {
   children: React.ReactNode;
   userId: string;
+  className?: string;
 }
-export const StoreLayoutV2: React.FC<IProps> = ({ userId, children }) => {
+export const StoreLayoutV2: React.FC<IProps> = ({
+  userId,
+  children,
+  className,
+}) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -30,7 +35,7 @@ export const StoreLayoutV2: React.FC<IProps> = ({ userId, children }) => {
       ></div>
 
       <div
-        className={`flex-1 p-4 transition-all duration-300 ease-in-out overflow-y-auto md:ml-[250px]`} // Adjust margin based on sidebar width
+        className={`flex-1 p-4 transition-all duration-300 ease-in-out overflow-y-auto md:ml-[250px] ${className}`}
       >
         <Button
           type="text"

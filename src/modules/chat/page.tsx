@@ -135,7 +135,6 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
 
   return (
     <div className="flex h-screen border rounded-xl relative">
-      {/* Inbox Section */}
       <div
         className={`${
           modal.type == "showMessage" ? "hidden" : "w-full"
@@ -202,7 +201,6 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
         ))}
       </div>
 
-      {/* Message Section */}
       {modal.show && modal.type == "showMessage" && (
         <div className="w-full md:w-2/3 lg:w-3/4 relative bg-white p-4 overflow-y-auto flex flex-col">
           {/* {messages?.length === 0 && (
@@ -228,7 +226,6 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
                   ))}
                 </div>
 
-                {/* Fixed Input Area */}
                 <div className="z-[500] fixed bg-transparent bottom-4 left-[5%] sm:left-[35%] md:left-[48%] lg:left-[47%] xl:left-[43%] w-[90%] sm:w-[59%] md:w-[48%] lg:w-[49%] xl:w-[54%] flex items-center gap-4">
                   <Upload
                     name="avatar"
@@ -277,5 +274,3 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
     </div>
   );
 };
-
-// relative flex-1 flex flex-col p-4 py-12

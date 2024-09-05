@@ -15,7 +15,7 @@ interface IProps {
 
 const Chat: React.FC<IProps> = ({ store }) => {
   return (
-    <StoreLayoutV2 userId={store?.id}>
+    <StoreLayoutV2 userId={store?.id} className="py-0">
       <ChatContextProvider>
         <ChatPage userId={store?.id} storeId={store?.id} />
       </ChatContextProvider>

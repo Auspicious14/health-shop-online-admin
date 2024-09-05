@@ -37,7 +37,7 @@ export const MessageComponent: React.FC<IProps> = ({ message }) => {
           </div>
         )}
         {message?.images?.length > 0 && (
-          <div className="grid grid-cols-2 gap-4 justify-center">
+          <div className="grid grid-cols-2 items-center gap-4 justify-center">
             {message?.images?.length > 0 &&
               message?.images?.map((img, i) => (
                 <div key={i}>
