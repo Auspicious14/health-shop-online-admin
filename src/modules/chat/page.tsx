@@ -134,7 +134,7 @@ export const ChatPage: React.FC<IProps> = ({ storeId, userId }) => {
   };
 
   return (
-    <div className="flex h-screen border rounded-xl relative bg-red-400">
+    <div className="flex h-screen border rounded-xl relative">
       {/* Inbox Section */}
       <div
         className={`${

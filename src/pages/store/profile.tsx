@@ -1,9 +1,9 @@
 import React from "react";
-import { ProfileContextProvider } from "../modules/profile/context";
-import { ProfilePage } from "../modules/profile/page";
-import { ResetPasswordContextProvider } from "../modules/auth/resetPassword/context";
-import { MainLayout } from "../modules/layout";
 import jwt from "jsonwebtoken";
+import { StoreLayoutV2 } from "../../modules/store/layout/layout";
+import { ResetPasswordContextProvider } from "../../modules/auth/resetPassword/context";
+import { ProfileContextProvider } from "../../modules/profile/context";
+import { ProfilePage } from "../../modules/profile/page";
 
 const tokenSecret: any = process.env.JWT_SECRET;
 interface IProps {
@@ -14,9 +14,9 @@ const Profile: React.FC<IProps> = ({ user }) => {
   return (
     <ProfileContextProvider>
       <ResetPasswordContextProvider>
-        <MainLayout userId={user.id}>
+        <StoreLayoutV2 userId={user.id}>
           <ProfilePage />
-        </MainLayout>
+        </StoreLayoutV2>
       </ResetPasswordContextProvider>
     </ProfileContextProvider>
   );
@@ -41,7 +41,7 @@ export const getServerSideProps = async ({
   }
   const token: any = jwt.verify(cookie, tokenSecret);
 
-  if (!token?.isAdmin) {
+  if (token?.isAdmin) {
     return {
       redirect: {
         destination: "/auth/login",

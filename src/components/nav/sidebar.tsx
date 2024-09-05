@@ -81,10 +81,9 @@ const Sidebar: React.FC<IProps> = ({
   };
   return (
     <div
-      className={`fixed overflow-hidden top-0 left-0 h-full bg-white transition-transform transform ${
-        isOpen ? "translate-x-0" : "-translate-x-full"
-      } md:relative md:translate-x-0 md:w-64 z-40`}
-      style={{ zIndex: 40 }}
+      className={`fixed overflow-hidden z-[1000] top-0 left-0 h-full bg-white transition-transform  transform ${
+        isOpen ? "translate-x-0 ease-in" : "-translate-x-full ease-out"
+      } md:relative md:translate-x-0 md:w-64`}
     >
       <ApImage src={Logo} alt="logo" className="object-cover" />
       <Button
@@ -102,7 +101,7 @@ const Sidebar: React.FC<IProps> = ({
       {center && <ActionButtons />}
 
       <div className="fixed bottom-2 px-4">
-        <Link href={"/profile"}>
+        <Link href={"/store/profile"}>
           <div className="flex gap-4 items-center">
             <Tooltip title={profile?.firstName} placement="top">
               <Avatar

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { apiReqHandler } from "../../../components";
-import { setCookie } from "../../../helper";
 import { toast } from "react-toastify";
+import { IResetPassword, IUpdatePassword } from "./model";
 
 interface IResetPasswordState {
   loading: boolean;
-  handleResetPassword: (params: any) => Promise<void>;
-  handleUpdatePassword: (params: any) => Promise<void>;
+  handleResetPassword: (params: IResetPassword) => Promise<void>;
+  handleUpdatePassword: (params: IUpdatePassword) => Promise<void>;
 }
 
 const ResetPasswordContext = React.createContext<IResetPasswordState>({
@@ -36,9 +36,8 @@ export const ResetPasswordContextProvider: React.FC<IProps> = ({
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleResetPassword = async (params: any) => {
+  const handleResetPassword = async (params: IResetPassword) => {
     setLoading(true);
-    console.log(JSON.stringify(params));
     try {
       const response = await apiReqHandler({
         endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/auth/reset`,
@@ -47,15 +46,13 @@ export const ResetPasswordContextProvider: React.FC<IProps> = ({
       });
       setLoading(false);
       const data = await response.res?.data;
-      console.log(data);
-      console.log(data);
+      return data;
     } catch (error) {
       console.log(error);
     }
   };
-  const handleUpdatePassword = async (params: any) => {
+  const handleUpdatePassword = async (params: IUpdatePassword) => {
     setLoading(true);
-    console.log(JSON.stringify(params));
     try {
       const response = await apiReqHandler({
         endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/auth/update/password`,
@@ -66,9 +63,7 @@ export const ResetPasswordContextProvider: React.FC<IProps> = ({
       const data = await response.res?.data;
       if (data) {
         toast.success("Password Updated");
-        console.log(data);
       }
-      console.log(data);
       return data;
     } catch (error: any) {
       toast.error(error);

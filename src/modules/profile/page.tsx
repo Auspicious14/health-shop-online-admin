@@ -23,7 +23,7 @@ export const ProfilePage = () => {
   return (
     <>
       <div>
-        <div className=" p-4 ">
+        <div className="p-4">
           <div>
             <h1 className="text-3xl font-bold">Profile</h1>
           </div>
@@ -31,8 +31,8 @@ export const ProfilePage = () => {
             <p
               className={
                 show.show === true && show.type === "update"
-                  ? " border-b-black"
-                  : ""
+                  ? " border-b-black border-b cursor-pointer"
+                  : "cursor-pointer"
               }
               onClick={() => setShow({ show: true, type: "update" })}
             >
@@ -40,9 +40,9 @@ export const ProfilePage = () => {
             </p>
             <p
               className={
-                show.show === true && show.type === "update"
-                  ? " border-b-black"
-                  : ""
+                show.show === true && show.type === "password"
+                  ? " border-b border-b-black cursor-pointer"
+                  : "cursor-pointer"
               }
               onClick={() => setShow({ show: true, type: "password" })}
             >

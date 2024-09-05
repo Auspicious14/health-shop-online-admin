@@ -50,14 +50,13 @@ export const ProfileContextProvider: React.FC<IProps> = ({ children }) => {
       if (data) setProfile(data);
 
       return data;
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(error);
     }
   };
 
   const updateProfile = async (payload: IProfile, id: string) => {
     setLoading(true);
-    console.log(JSON.stringify(payload));
     try {
       const res = await apiReqHandler({
         endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/auth/update/${id}`,
@@ -73,7 +72,6 @@ export const ProfileContextProvider: React.FC<IProps> = ({ children }) => {
 
       return data;
     } catch (error: any) {
-      console.log(error);
       toast.error(error);
     }
   };

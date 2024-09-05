@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { getCookie } from "../../helper";
 import { toast } from "react-toastify";
 import { useProfileState } from "./context";
-import { IProfile } from "./model";
+import { IChangePassword } from "./model";
 import { useResetPasswordState } from "../auth/resetPassword/context";
 
 const FormSchema = Yup.object().shape({
@@ -20,10 +20,9 @@ const FormSchema = Yup.object().shape({
 
 export const UpdatePassword = () => {
   const { handleUpdatePassword, loading } = useResetPasswordState();
-  const formRef = useRef<FormikProps<any>>();
+  const formRef = useRef<FormikProps<IChangePassword>>(null);
 
   const handleSubmit = (values: any) => {
-    console.log(values);
     const { confirmNewPassword, ...otherValues } = values;
     const id = getCookie("user_id");
     handleUpdatePassword({ ...otherValues, id }).then((res: any) => {});
@@ -33,7 +32,7 @@ export const UpdatePassword = () => {
     <div>
       <div className="w-full mx-4">
         <Formik
-          innerRef={formRef as any}
+          innerRef={formRef}
           initialValues={{
             oldPassword: "",
             newPassword: "",
