@@ -24,7 +24,11 @@ import { IBlog } from "./model";
 import { CreateBlog } from "./detail";
 const Search = Input;
 const { Text } = Typography;
-export const BlogPage = () => {
+
+interface IProps {
+  storeId: string;
+}
+export const BlogPage: React.FC<IProps> = ({ storeId }) => {
   const { getBlogs, loading, deleteBlog, blogs } = useBlogState();
   const [modal, setModal] = useState<{
     show: boolean;
@@ -138,6 +142,7 @@ export const BlogPage = () => {
       >
         <CreateBlog
           blog={modal.data}
+          storeId={storeId}
           onUpdate={() => setModal({ show: false })}
         />
       </ApModal>

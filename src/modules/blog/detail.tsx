@@ -12,21 +12,18 @@ import { getCookie } from "../../helper";
 import { toast } from "react-toastify";
 
 const FormSchema = Yup.object().shape({
-  // name: Yup.string().required("blog name is required"),
-  // description: Yup.string().required("Description is required"),
-  // price: Yup.string().required("blog price is required"),
-  // // price: Yup.string().required("Color is required"),
-  // categories: Yup.string().required("category is required"),
+  title: Yup.string().required("blog name is required"),
+  description: Yup.string().required("Description is required"),
 });
 interface IProps {
+  storeId: string;
   blog: IBlog;
   onDissmiss?: () => void;
   onUpdate?: (blog: IBlog) => void;
 }
 
-export const CreateBlog: React.FC<IProps> = ({ blog, onUpdate }) => {
+export const CreateBlog: React.FC<IProps> = ({ storeId, blog, onUpdate }) => {
   const { createBlog, loading, updateBlog } = useBlogState();
-  const router = useRouter();
   const formRef = useRef<FormikProps<any>>();
   const [files, setFiles] = useState<IBlogImage[]>([]);
 
@@ -46,21 +43,15 @@ export const CreateBlog: React.FC<IProps> = ({ blog, onUpdate }) => {
   const handleBlogImage: UploadProps["onChange"] = ({
     fileList: newFileList,
   }: any) => {
-    console.log(newFileList, "newFIleListt");
     setFiles(newFileList);
   };
-  // console.log(files.map((f: any, i: any) => console.log(f.thumbUrl)));
-  // console.log(files[0]?.name);
-  // files?.map((f: any) => ({
-  //   uri: f?.thumbUrl,
-  //   name: f?.name,
-  //   type: f?.type,
-  // }));
+
   const handleBlog = async (values: any) => {
     if (blog?._id) {
       updateBlog(
         {
           ...values,
+          storeId,
           images: files.map((f: any) => ({
             uri: f?.thumbUrl,
             type: f?.type,
@@ -69,23 +60,25 @@ export const CreateBlog: React.FC<IProps> = ({ blog, onUpdate }) => {
         },
         blog._id
       ).then((res: any) => {
-        console.log(res, "updateeeeeee");
         if (res && onUpdate) onUpdate(res);
       });
     } else {
       createBlog({
         ...values,
-        images: files,
+        images: files.map((f: any) => ({
+          uri: f?.thumbUrl,
+          type: f?.type,
+          name: f?.name,
+        })),
+        storeId,
       }).then((res: any) => {
-        console.log(res, "responseeeeeee");
         if (res && onUpdate) onUpdate(res);
       });
     }
   };
-
   return (
     <div>
-      <div className="w-full mx-4">
+      <div className="w-full md:mx-4">
         <Formik
           innerRef={formRef as any}
           validationSchema={FormSchema}
@@ -97,7 +90,7 @@ export const CreateBlog: React.FC<IProps> = ({ blog, onUpdate }) => {
         >
           {({ values, setFieldValue }) => (
             <Form>
-              <div className="w-full flex justify-between">
+              <div className="w-full md:flex justify-between">
                 <div className="w-full">
                   <Card className="m-3 ">
                     <ApTextInput
@@ -126,7 +119,7 @@ export const CreateBlog: React.FC<IProps> = ({ blog, onUpdate }) => {
                         }
                       }}
                     /> */}
-                    <h1>Pictures</h1>
+                    <h1>Images</h1>
                     <Files
                       fileList={files}
                       handleChange={(res: any) => handleBlogImage(res)}

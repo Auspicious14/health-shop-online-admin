@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { FaStore, FaStoreAlt } from "react-icons/fa";
+import { FaBlog, FaBlogger, FaStore, FaStoreAlt } from "react-icons/fa";
 import { BsCartCheck } from "react-icons/bs";
 import { Divider, MenuProps } from "antd";
 import Link from "next/link";
@@ -123,6 +123,13 @@ export const NavItems = () => {
       "/store/chats",
       <Link href={"/store/chats"}>
         <MailOutlined />
+      </Link>
+    ),
+    getItem(
+      "Blog",
+      "/store/blog",
+      <Link href={"/store/blog"}>
+        <FaBlogger />
       </Link>
     ),
   ];

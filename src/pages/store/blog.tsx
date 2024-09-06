@@ -1,26 +1,26 @@
 import React from "react";
-import { BlogContextProvider } from "../modules/blog/context";
-import { BlogPage } from "../modules/blog/page";
+import { BlogPage } from "../../modules/blog/page";
 import jwt from "jsonwebtoken";
-import { MainLayout } from "../modules/layout";
+import { StoreLayoutV2 } from "../../modules/store/layout/layout";
+import { BlogContextProvider } from "../../modules/blog/context";
 
 const tokenSecret: any = process.env.JWT_SECRET;
 
 interface IProps {
-  user: { id: string; isAdmin: boolean };
+  store: { id: string; isAdmin: boolean };
 }
 
-const Blog: React.FC<IProps> = ({ user }) => {
+const StoreBlog: React.FC<IProps> = ({ store }) => {
   return (
-    <MainLayout userId={user.id}>
+    <StoreLayoutV2 userId={store.id}>
       <BlogContextProvider>
-        <BlogPage storeId={user.id} />
+        <BlogPage storeId={store.id} />
       </BlogContextProvider>
-    </MainLayout>
+    </StoreLayoutV2>
   );
 };
 
-export default Blog;
+export default StoreBlog;
 
 export const getServerSideProps = async ({
   req,
@@ -40,7 +40,7 @@ export const getServerSideProps = async ({
   }
   const token: any = jwt.verify(cookie, tokenSecret);
 
-  if (!token?.isAdmin) {
+  if (token?.isAdmin) {
     return {
       redirect: {
         destination: "/auth/login",
@@ -51,7 +51,7 @@ export const getServerSideProps = async ({
 
   return {
     props: {
-      user: token,
+      store: token,
     },
   };
 };

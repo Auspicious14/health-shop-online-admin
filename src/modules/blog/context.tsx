@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { apiReqHandler } from "../../components";
-import { IBlog } from "./model";
+import { IBlog, IBlogFilter, IBlogPayload } from "./model";
 
 interface IBlogState {
   loading: boolean;
@@ -9,8 +9,8 @@ interface IBlogState {
   blogs: IBlog[];
   getBlogs: (query?: any) => Promise<void>;
   getOneblog: (blogId: string) => Promise<void>;
-  createBlog: (payload: IBlog) => Promise<void>;
-  updateBlog: (payload: IBlog, blogId: string) => Promise<void>;
+  createBlog: (payload: IBlogPayload) => Promise<void>;
+  updateBlog: (payload: IBlogPayload, blogId: string) => Promise<void>;
   deleteBlog: (blogId: string) => Promise<void>;
 }
 
@@ -52,17 +52,18 @@ export const BlogContextProvider: React.FC<IProps> = ({ children }) => {
   const [blogs, setBlogs] = useState<IBlog[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const getBlogs = async (query?: any) => {
+  const getBlogs = async (filter?: IBlogFilter) => {
+    const query = new URLSearchParams(filter as {}).toString();
+
     setLoading(true);
     try {
       const res = await apiReqHandler({
-        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/blogs`,
+        endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/blogs?${query}`,
         method: "GET",
       });
       setLoading(false);
       const data = await res.res?.data;
       setBlogs(data.data);
-      console.log(data.data);
     } catch (error) {
       console.log(error);
     }
@@ -70,7 +71,6 @@ export const BlogContextProvider: React.FC<IProps> = ({ children }) => {
 
   const getOneblog = async (blogId: string) => {
     setLoading(true);
-    console.log(JSON.stringify(blogId));
     try {
       const res = await fetch(`http://localhost:2000/blog/:${blogId}`, {
         method: "GET",
@@ -78,16 +78,14 @@ export const BlogContextProvider: React.FC<IProps> = ({ children }) => {
       setLoading(false);
       const data = await res.json();
       setBlog(data);
-      console.log(data);
     } catch (error: any) {
       console.log(error);
       toast.error(error);
     }
   };
 
-  const createBlog = async (payload: IBlog) => {
+  const createBlog = async (payload: IBlogPayload) => {
     setLoading(true);
-    console.log(JSON.stringify(payload));
     try {
       const res = await apiReqHandler({
         endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/blog`,
@@ -105,12 +103,12 @@ export const BlogContextProvider: React.FC<IProps> = ({ children }) => {
       );
       return data;
     } catch (error: any) {
-      console.log(error);
+      // console.log(error);
       toast.error(error);
     }
   };
 
-  const updateBlog = async (payload: IBlog, blogId: string) => {
+  const updateBlog = async (payload: IBlogPayload, blogId: string) => {
     setLoading(true);
     console.log(JSON.stringify(payload));
     try {

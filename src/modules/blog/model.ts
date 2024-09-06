@@ -11,3 +11,16 @@ export interface IBlogImage {
   type: string;
   name: string;
 }
+
+export interface IBlogFilter {
+  category: string;
+  new: string;
+  storeId: string;
+}
+
+export interface IBlogPayload {
+  storeId: string;
+  title: string;
+  description: string;
+  images?: IBlogImage[];
+}
