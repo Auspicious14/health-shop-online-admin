@@ -12,11 +12,11 @@ import { useRouter } from "next/router";
 import { useProfileState } from "../../modules/profile/context";
 import { routePaths } from "./path";
 
-const { Footer, Sider } = Layout;
 interface IActionProps {
   admin?: boolean;
   storeAdmin?: boolean;
 }
+
 export const ActionButtons: React.FC<IActionProps> = ({
   admin,
   storeAdmin,
@@ -35,7 +35,7 @@ const InviteLink = () => {
   const handleCopy = () => {
     navigator.clipboard
       .writeText(inviteLink)
-      .then((res) => toast.success("Copied"));
+      .then(() => toast.success("Copied"));
   };
 
   useEffect(() => {
@@ -47,16 +47,16 @@ const InviteLink = () => {
   return (
     <>
       <h1 className="text-xl font-bold">Copy the invite link below</h1>
-      <div className="flex justify-between items-center my-2 mt-6">
-        <div className="w-[70%] p-2 bg-gray-100 border rounded-md flex justify-between items-center">
-          {show == true ? inviteLink : "********************"}
+      <div className="flex flex-col sm:flex-row justify-between items-center my-2 mt-6">
+        <div className="w-full sm:w-[70%] p-2 bg-gray-100 border rounded-md flex justify-between items-center">
+          {show ? inviteLink : "********************"}
           <EyeInvisibleFilled
-            className="text-gray-500"
+            className="text-gray-500 cursor-pointer"
             onClick={() => setShow(!show)}
           />
         </div>
         <Button
-          className="bg-blue-700 text-white text-center "
+          className="bg-blue-700 text-white mt-4 sm:mt-0 sm:ml-2"
           onClick={handleCopy}
         >
           Copy
@@ -72,6 +72,7 @@ interface IProps {
   center?: React.ReactNode;
   collapsed?: boolean;
 }
+
 export const NavBarComponent: React.FC<IProps> = ({
   userId,
   navItem,
@@ -85,7 +86,7 @@ export const NavBarComponent: React.FC<IProps> = ({
 
   useEffect(() => {
     if (userId) getProfile(userId);
-  }, []);
+  }, [userId]);
 
   const handleSignOut = () => {
     if (userId) {
@@ -95,37 +96,24 @@ export const NavBarComponent: React.FC<IProps> = ({
   };
 
   return (
-    <>
-      <>
-        <Menu
-          onClick={() => {}}
-          defaultSelectedKeys={["1"]}
-          mode="inline"
-          theme="light"
-          items={navItem}
-        />
-      </>
-      {center && <ActionButtons />}
-      <div className="fixed bottom-2 right-0 left-4 flex justify-center items-center">
-        <Menu
-          mode="inline"
-          theme="light"
-          // style={{
-          //   display: "flex",
-          //   alignItems: "center",
-          //   background: "none",
-          //   padding: "1rem",
-          // }}
-          // className="w-[19%] fixed z-50 bottom-0 border border-t"
-        >
-          <div className="">
-            {!routePaths.includes(router.asPath) && (
+    <div className="bg-white h-full">
+      <Menu
+        defaultSelectedKeys={["1"]}
+        mode="inline"
+        theme="light"
+        items={navItem}
+        className=" bg-red-500"
+      />
+      {center && <ActionButtons admin />}
+      <div className=" flex justify-center items-center">
+        <Menu mode="inline" theme="light">
+          <div className="flex flex-col items-center gap-4">
+            {routePaths.includes(router.asPath) && (
               <Button
                 onClick={() => setModal({ show: true })}
-                className="bg-blue-700 text-white text-center mb-6 w-[80%]"
-                color="white"
+                className="bg-blue-700 text-white w-full mb-6"
               >
-                Invite link
+                Invite Link
               </Button>
             )}
             <Link href={"/profile"}>
@@ -137,8 +125,6 @@ export const NavBarComponent: React.FC<IProps> = ({
                       backgroundColor: "#87d068",
                       width: "30px",
                       height: "30px",
-                      borderRadius: "50%",
-                      display: "inline-block",
                     }}
                     icon={<UserOutlined />}
                   />
@@ -147,7 +133,7 @@ export const NavBarComponent: React.FC<IProps> = ({
                   <p>
                     {profile?.firstName} {profile?.lastName}
                   </p>
-                  <p className="w-[70%]">{profile?.email}</p>
+                  <p>{profile?.email}</p>
                 </div>
               </div>
             </Link>
@@ -161,8 +147,7 @@ export const NavBarComponent: React.FC<IProps> = ({
             {!routePaths.includes(router.asPath) && (
               <Button
                 onClick={() => router.push("/")}
-                className="bg-blue-700 text-white text-center mt-6 w-[80%]"
-                color="white"
+                className="bg-blue-700 text-white w-full mt-6"
               >
                 Go Back
               </Button>
@@ -174,11 +159,11 @@ export const NavBarComponent: React.FC<IProps> = ({
       <ApModal
         show={modal.show}
         onDimiss={() => setModal({ show: false })}
-        containerClassName="w-1/2"
+        containerClassName="w-full sm:w-1/2"
         title="Invite Link"
       >
         <InviteLink />
       </ApModal>
-    </>
+    </div>
   );
 };

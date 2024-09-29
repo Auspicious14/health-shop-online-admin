@@ -72,7 +72,7 @@ export const SignInPage = () => {
                 label="Email"
                 name="email"
                 type="email"
-                placeHolder="Username"
+                placeHolder="Email"
               />
 
               <ApTextInput
