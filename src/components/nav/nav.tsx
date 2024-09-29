@@ -102,10 +102,9 @@ export const NavBarComponent: React.FC<IProps> = ({
         mode="inline"
         theme="light"
         items={navItem}
-        className=" bg-red-500"
       />
       {center && <ActionButtons admin />}
-      <div className=" flex justify-center items-center">
+      <div className="fixed bottom-28 right-0 left-4 flex justify-center items-center">
         <Menu mode="inline" theme="light">
           <div className="flex flex-col items-center gap-4">
             {routePaths.includes(router.asPath) && (
