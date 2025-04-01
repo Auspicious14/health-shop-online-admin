@@ -13,6 +13,8 @@ const nextConfig = {
         hostname: "images.pexels.com",
       },
     ],
+    loader: "imgix",
+    loderFile: "./imgix-loader.ts",
   },
 };
 
