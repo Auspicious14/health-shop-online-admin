@@ -24,7 +24,6 @@ export const getServerSideProps = async ({
   query: any;
 }) => {
   const cookie = req?.cookies?.token;
-  console.log({ cookie });
   if (!cookie) {
     return {
       redirect: {

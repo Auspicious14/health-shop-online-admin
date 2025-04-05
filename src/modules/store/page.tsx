@@ -40,46 +40,46 @@ export const StorePage = () => {
       title: "First Name",
       key: "fn",
       dataIndex: "firstName",
+      width: "20%",
     },
     {
       title: "Last Name",
       key: "ln",
       dataIndex: "lastName",
+      width: "20%",
     },
     {
       title: "Email",
       key: "email",
       dataIndex: "email",
+      width: "25%",
     },
     {
-      title: "Store Phone Number",
+      title: "Phone",
       key: "StorePhoneNumber",
       dataIndex: "storePhoneNumber",
+      width: "15%",
     },
-
     {
       title: "Status",
       dataIndex: "accepted",
       key: "status",
-      render: (_, { accepted }) => {
-        return (
-          <Text
-            className={
-              accepted
-                ? "bg-green-500 opacity-75 p-2 border rounded-md text-white"
-                : "bg-red-500 opacity-75 p-2 border rounded-md text-white"
-            }
-          >
-            {accepted ? "Accepted" : "Rejected"}
-          </Text>
-        );
-      },
+      width: "10%",
+      render: (_, { accepted }) => (
+        <Text
+          className={`${accepted ? "text-green-500" : "text-red-500"} 
+          opacity-75 p-1 sm:p-2 rounded-md text-xs sm:text-base`}
+        >
+          {accepted ? "Accepted" : "Rejected"}
+        </Text>
+      ),
     },
     {
-      title: "",
+      title: "Actions",
       key: "action",
+      width: "10%",
       render: (_, store) => (
-        <Space className="flex gap-8 items-center">
+        <Space className="flex gap-2 sm:gap-4 items-center">
           <Popconfirm
             title="Sure to delete?"
             onConfirm={() => deleteStore(store?._id)}
@@ -128,11 +128,17 @@ export const StorePage = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center shadow-sm p-4 ">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center shadow-sm p-4 gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Stores</h1>
-          <span>keep track of vendor</span>
+          <h1 className="text-2xl sm:text-3xl font-bold">Stores</h1>
+          <span className="text-sm sm:text-base">Keep track of vendors</span>
         </div>
+        {/* <Search
+          className="w-full sm:w-60"
+          placeholder="Search store"
+          prefix={<SearchOutlined className="text-gray-300" />}
+          onChange={(e) => setSearch(e.target.value.toLocaleLowerCase())}
+        /> */}
       </div>
       <div className="shadow-sm p-4 flex items-center justify-between">
         <h1 className=" font-bold">All Stores</h1>
@@ -143,15 +149,16 @@ export const StorePage = () => {
           onChange={(e) => setSearch(e.target.value.toLocaleLowerCase())}
         />
       </div>
-      <div>
+      <div className="overflow-x-auto px-4">
         <Table
-          //   rowSelection={rowSelection}
           columns={columns}
           dataSource={filtered}
           rowKey={(p) => p._id}
           pagination={{ pageSize: 50 }}
-          scroll={{ y: 350 }}
+          scroll={{ x: 800 }}
           loading={loading}
+          className="min-w-[800px] max-w-[100vw]"
+          size="small"
         />
       </div>
 
