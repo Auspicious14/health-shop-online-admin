@@ -36,135 +36,55 @@ export const NavItems = () => {
 
   const AdminMenuItem: MenuProps["items"] = [
     // getItem("", "sub02", <Divider />),
-    getItem(
-      "Dashboard",
-      "sub1",
-      <Link href={"/"}>
-        <MenuFoldOutlined />
-      </Link>
-    ),
-    getItem(
-      "Order",
-      "sub2",
-      <Link href={"/order"}>
-        <BsCartCheck />
-      </Link>
-    ),
-    getItem(
-      "Product",
-      "sub3",
-      <Link href={"/product"}>
-        <MailOutlined />
-      </Link>
-    ),
+    getItem("Dashboard", "/", <MenuFoldOutlined />),
+    getItem("Order", "/order", <BsCartCheck />),
+    getItem("Product", "/product", <MailOutlined />),
     getItem(
       "Category",
-      "category",
+      "/category",
       <Link href={"/category"}>
         <MailOutlined />
       </Link>
     ),
-    getItem(
-      "Store",
-      "store",
-      <Link href={"/stores"}>
-        <FaStoreAlt />
-      </Link>
-    ),
+    getItem("Store", "/stores", <FaStoreAlt />),
   ];
 
   const StoreMenuItem: MenuProps["items"] = [
-    getItem(
-      "Dashboard",
-      "/store",
-      <Link href={"/store"}>
-        <MenuFoldOutlined />
-      </Link>
-    ),
-    getItem(
-      "Detail",
-      "/store/detail",
-      <>
-        <Link className="relative" href={"/store/detail"}>
-          <FaStore />
-        </Link>
-      </>
-    ),
-    getItem(
-      "Order",
-      "/store/orders",
-      <Link href={"/store/orders"}>
-        <BsCartCheck />
-      </Link>
-    ),
-    getItem(
-      "Product",
-      "/store/products",
-      <Link href={"/store/products"}>
-        <ProductOutlined />
-      </Link>
-    ),
-    getItem(
-      "Chat Room",
-      "/store/chats",
-      <Link href={"/store/chats"}>
-        <MailOutlined />
-      </Link>
-    ),
-    getItem(
-      "Blog",
-      "/store/blog",
-      <Link href={"/store/blog"}>
-        <FaBlogger />
-      </Link>
-    ),
+    getItem("Dashboard", "/store", <MenuFoldOutlined />),
+    getItem("Detail", "/store/detail", <FaStore />),
+    getItem("Order", "/store/orders", <BsCartCheck />),
+    getItem("Product", "/store/products", <ProductOutlined />),
+    getItem("Chat Room", "/store/chats", <MailOutlined />),
+    getItem("Blog", "/store/blog", <FaBlogger />),
   ];
 
   const AdminStoreMenuItem: MenuProps["items"] = [
-    // getItem(
-    //   "Logo",
-    //   "sub0",
-    //   <>
-    //     <Link className="relative" href={"/"}>
-    //       <ApImage src={Logo} alt="logo" />
-    //     </Link>
-    //   </>
-    // ),
-    // getItem("", "sub02", <Divider />),
     getItem(
       "Dashboard",
-      "sub1",
-      <Link href={`/store/${router?.query?.storeId}/dashboard`}>
-        <MenuFoldOutlined />
-      </Link>
+      `/store/${router?.query?.storeId}/dashboard`,
+      <MenuFoldOutlined />
     ),
     getItem(
       "Detail",
-      "su1",
-      <Link href={`/store/${router?.query?.storeId}`}>
-        <FaStore />
-      </Link>
+      `/store/${router?.query?.storeId}`,
+
+      <FaStore />
     ),
     getItem(
       "Order",
-      "sub2",
-      <Link href={`/store/${router?.query?.storeId}/orders`}>
-        <BsCartCheck />
-      </Link>
+      `/store/${router?.query?.storeId}/orders`,
+
+      <BsCartCheck />
     ),
     getItem(
       "Product",
-      "sub3",
-      <Link href={`/store/${router?.query?.storeId}/products`}>
-        <ProductOutlined />
-      </Link>
+      `/store/${router?.query?.storeId}/products`,
+      <ProductOutlined />
     ),
     getItem(
       "Chat Room",
-      "sub3",
-      <Link href={`/store/${router?.query?.storeId}/chats`}>
-        <MailOutlined />
-      </Link>
+      `/store/${router?.query?.storeId}/chats`,
+      <MailOutlined />
     ),
   ];
 

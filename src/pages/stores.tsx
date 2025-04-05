@@ -28,6 +28,8 @@ export const getServerSideProps = async ({
   query: any;
 }) => {
   const cookie = req?.cookies.token;
+  console.log({ cookie });
+
   if (!cookie) {
     return {
       redirect: {
@@ -37,7 +39,7 @@ export const getServerSideProps = async ({
     };
   }
   const token: any = jwt.verify(cookie, tokenSecret);
-
+  console.log({ cookie, token });
   if (!token?.isAdmin) {
     return {
       redirect: {

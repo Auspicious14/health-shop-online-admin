@@ -1,12 +1,8 @@
 // ts-ignore
-import React from "react";
-import dynamic from "next/dynamic";
-import { ConfigProvider, Layout } from "antd";
-import { NavBarComponent } from "../../../components/nav/nav";
+import React, { useEffect, useState } from "react";
 import { NavItems } from "../../../components";
-// const Sider = require("antd/lib/locale/fr_FR");
-// const Content = require("antd/lib/locale/fr_FR");
-const { Sider, Content } = Layout;
+import { Sidebar } from "../../../components/nav/sidebar";
+import { MenuOutlined } from "@ant-design/icons";
 
 interface IProps {
   userId: string;
@@ -15,26 +11,47 @@ interface IProps {
 
 export const AdminStoreLayout: React.FC<IProps> = ({ userId, children }) => {
   const { AdminStoreMenuItem } = NavItems();
-  return (
-    <>
-      <ConfigProvider>
-        <Layout hasSider>
-          <Sider className="w-[20%]">
-            <NavBarComponent navItem={AdminStoreMenuItem} userId={userId} />
-          </Sider>
+  const [isMobile, setIsMobile] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-          <Layout>
-            <Content>
-              <div className="flex min-h-screen">
-                <div className="w-[10%] 3xl:w-[18%] cus-md2:hidden" />
-                <div className="w-[90%] 3xl:w-[82%] bg-white cus-md2:w-full flex flex-col p-[25px]">
-                  {children}
-                </div>
-              </div>
-            </Content>
-          </Layout>
-        </Layout>
-      </ConfigProvider>
-    </>
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (!mobile) setSidebarOpen(false);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return (
+    <div className="relative flex min-h-screen">
+      <Sidebar
+        isOpen={sidebarOpen}
+        toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+        userId={userId}
+        navItem={AdminStoreMenuItem}
+        center={true}
+      />
+
+      {isMobile && (
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="fixed top-4 left-4 z-40 p-2 bg-white rounded shadow-lg md:hidden"
+        >
+          <MenuOutlined className="text-lg" />
+        </button>
+      )}
+
+      <main
+        className={`flex-1 transition-all duration-300 ${
+          !isMobile ? "ml-64" : ""
+        }`}
+      >
+        <div className="p-4 md:p-6 lg:p-0 min-h-screen">{children}</div>
+      </main>
+    </div>
   );
 };

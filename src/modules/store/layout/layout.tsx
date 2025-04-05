@@ -1,7 +1,8 @@
-import { useState } from "react";
-import Sidebar from "../../../components/nav/sidebar";
-import { MenuFoldOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
+import { Sidebar } from "../../../components/nav/sidebar";
+import { MenuFoldOutlined, MenuOutlined } from "@ant-design/icons";
 import { Button } from "antd";
+import { NavItems } from "../../../components";
 
 interface IProps {
   children: React.ReactNode;
@@ -13,41 +14,48 @@ export const StoreLayoutV2: React.FC<IProps> = ({
   children,
   className,
 }) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { StoreMenuItem } = NavItems();
+  const [isMobile, setIsMobile] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (!mobile) setSidebarOpen(false);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="relative flex min-h-screen">
       <Sidebar
-        isOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
+        isOpen={sidebarOpen}
+        toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
         userId={userId}
+        navItem={StoreMenuItem}
+        center={false}
       />
 
-      <div
-        className={`fixed inset-0 bg-black opacity-50 transition-opacity ${
-          isSidebarOpen ? "block" : "hidden"
-        } z-30`}
-        onClick={toggleSidebar}
-      ></div>
+      {isMobile && (
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="fixed top-4 left-4 z-40 p-2 bg-white rounded shadow-lg md:hidden"
+        >
+          <MenuOutlined className="text-lg" />
+        </button>
+      )}
 
-      <div
-        className={`flex-1 p-4 transition-all duration-300 ease-in-out overflow-y-auto md:ml-[250px] ${className}`}
+      <main
+        className={`flex-1 transition-all duration-300 ${
+          !isMobile ? "ml-64" : ""
+        }`}
       >
-        <Button
-          type="text"
-          icon={<MenuFoldOutlined size={30} />}
-          onClick={toggleSidebar}
-          className={`text-2xl text-gray-800 md:hidden ${
-            isSidebarOpen ? "hidden" : "block"
-          }`}
-        />
-
-        <div>{children}</div>
-      </div>
+        <div className="p-4 md:p-6 lg:p-0 min-h-screen">{children}</div>
+      </main>
     </div>
   );
 };

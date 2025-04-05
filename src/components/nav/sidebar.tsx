@@ -31,8 +31,8 @@ export const Sidebar: React.FC<IProps> = ({
   toggleSidebar,
   userId,
   navItem,
+  center,
 }) => {
-  // Preserve existing profile and logout functionality
   const { profile, getProfile } = useProfileState();
   const router = useRouter();
   const [modal, setModal] = useState<{ show: boolean }>({ show: false });
@@ -48,7 +48,6 @@ export const Sidebar: React.FC<IProps> = ({
 
   return (
     <>
-      {/* Mobile overlay */}
       <div
         className={`fixed inset-0 bg-black/50 z-40 transition-opacity md:hidden ${
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -56,14 +55,18 @@ export const Sidebar: React.FC<IProps> = ({
         onClick={toggleSidebar}
       />
 
-      {/* Sidebar container */}
       <div
         className={`fixed z-50 top-0 left-0 h-full w-64 bg-white shadow-xl transform transition-transform duration-300
         ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
       >
-        {/* Preserve existing logo and close button */}
         <div className="p-4 border-b flex justify-between items-center">
-          <ApImage src={Logo} alt="logo" className="h-1/2" />
+          <ApImage
+            src={Logo}
+            alt="logo"
+            width={"200"}
+            height={"200"}
+            className="h-1/2"
+          />
           <button
             onClick={toggleSidebar}
             className="md:hidden text-gray-500 hover:text-gray-700"
@@ -72,7 +75,6 @@ export const Sidebar: React.FC<IProps> = ({
           </button>
         </div>
 
-        {/* Navigation items */}
         <nav className="p-2 space-y-1">
           {navItem.map((item: any, index: number) => (
             <Link
@@ -87,9 +89,8 @@ export const Sidebar: React.FC<IProps> = ({
           ))}
         </nav>
 
-        <ActionButtons admin />
+        {center && <ActionButtons admin />}
 
-        {/* Preserve profile section */}
         <div className="absolute bottom-0 w-full p-4 border-t bg-white">
           <div className="flex items-center gap-3">
             <Avatar

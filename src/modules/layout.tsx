@@ -35,7 +35,6 @@ export const MainLayout: React.FC<IProps> = ({ userId, children }) => {
         center={true}
       />
 
-      {/* Mobile toggle button */}
       {isMobile && (
         <button
           onClick={() => setSidebarOpen(true)}
@@ -45,7 +44,6 @@ export const MainLayout: React.FC<IProps> = ({ userId, children }) => {
         </button>
       )}
 
-      {/* Main content area */}
       <main
         className={`flex-1 transition-all duration-300 ${
           !isMobile ? "ml-64" : ""
