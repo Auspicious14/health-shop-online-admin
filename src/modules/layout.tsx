@@ -47,9 +47,11 @@ export const MainLayout: React.FC<IProps> = ({ userId, children }) => {
       <main
         className={`flex-1 transition-all duration-300 ${
           !isMobile ? "ml-64" : ""
-        }`}
+        } overflow-x-hidden`}  // Added overflow-x-hidden
       >
-        <div className="p-4 md:p-6 lg:p-0 min-h-screen">{children}</div>
+        <div className="p-4 md:p-6 lg:p-0 min-h-screen w-full max-w-[100vw]">
+          {children}
+        </div>
       </main>
     </div>
   );

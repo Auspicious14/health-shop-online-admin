@@ -191,7 +191,7 @@ export const StoreDetailPage: React.FC<IProps> = ({ store }) => {
                 placeHolder="No 4. John Doe street"
               />
             </Space>
-            <Space className="grid grid-cols-2 my-4">
+            <Space className="grid md:grid-cols-2 my-4 block">
               <ApTextInput
                 className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
                 label="Store Description"

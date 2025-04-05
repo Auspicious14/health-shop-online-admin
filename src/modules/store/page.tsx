@@ -89,28 +89,25 @@ export const StorePage = () => {
           >
             <DeleteOutlined />
           </Popconfirm>
-          <Space>
-            <EyeOutlined onClick={() => router.push(`/store/${store?._id}`)} />
-          </Space>
-          <Space>
-            {store?.accepted === true ? (
-              <button
-                onClick={() => handleAcceptOrReject(store)}
-                className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-              >
-                {store?.accepted ? "Reject" : "Accept"}
+          <EyeOutlined onClick={() => router.push(`/store/${store?._id}`)} />
+
+          {store?.accepted === true ? (
+            <button
+              onClick={() => handleAcceptOrReject(store)}
+              className="inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+            >
+              {store?.accepted ? "Reject" : "Accept"}
+            </button>
+          ) : (
+            <Popconfirm
+              title="Proceed to Accept Store"
+              onConfirm={() => acceptStore(store?._id)}
+            >
+              <button className="inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
+                {"Accept"}
               </button>
-            ) : (
-              <Popconfirm
-                title="Proceed to Accept Store"
-                onConfirm={() => acceptStore(store?._id)}
-              >
-                <button className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
-                  {"Accept"}
-                </button>
-              </Popconfirm>
-            )}
-          </Space>
+            </Popconfirm>
+          )}
         </Space>
       ),
     },
@@ -128,22 +125,16 @@ export const StorePage = () => {
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center shadow-sm p-4 gap-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center shadow-sm p-4 gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold">Stores</h1>
           <span className="text-sm sm:text-base">Keep track of vendors</span>
         </div>
-        {/* <Search
-          className="w-full sm:w-60"
-          placeholder="Search store"
-          prefix={<SearchOutlined className="text-gray-300" />}
-          onChange={(e) => setSearch(e.target.value.toLocaleLowerCase())}
-        /> */}
       </div>
-      <div className="shadow-sm p-4 flex items-center justify-between">
-        <h1 className=" font-bold">All Stores</h1>
+      <div className="shadow-sm p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <h1 className="text-lg font-bold">All Stores</h1>
         <Search
-          className="w-60"
+          className="w-full sm:w-60"
           placeholder="Search store"
           prefix={<SearchOutlined className="text-gray-300" />}
           onChange={(e) => setSearch(e.target.value.toLocaleLowerCase())}
@@ -157,7 +148,7 @@ export const StorePage = () => {
           pagination={{ pageSize: 50 }}
           scroll={{ x: 800 }}
           loading={loading}
-          className="min-w-[800px] max-w-[100vw]"
+          className="min-w-[800px] max-w-[calc(100vw-2rem)]"
           size="small"
         />
       </div>
