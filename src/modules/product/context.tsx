@@ -71,7 +71,7 @@ export const ProductContextProvider: React.FC<IProps> = ({ children }) => {
       });
       setLoading(false);
       const data = await res.res?.data?.data;
-      setProducts(data);
+      setProducts(data?.data);
     } catch (error: any) {
       toast.error(error);
     }

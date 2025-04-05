@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React from "react";
 import { FaBlog, FaBlogger, FaStore, FaStoreAlt } from "react-icons/fa";
 import { BsCartCheck } from "react-icons/bs";
 import { Divider, MenuProps } from "antd";
@@ -33,24 +33,9 @@ export const NavItems = () => {
       type,
     } as MenuItem;
   }
+
   const AdminMenuItem: MenuProps["items"] = [
-    getItem(
-      "Logo",
-      "sub0",
-      <>
-        <Link className="relative" href={"/"}>
-          {/* <RxDashboard /> */}
-          <ApImage src={Logo} alt="logo" />
-        </Link>
-      </>
-    ),
-    getItem(
-      "",
-      "sub02",
-      <>
-        <Divider />
-      </>
-    ),
+    // getItem("", "sub02", <Divider />),
     getItem(
       "Dashboard",
       "sub1",
@@ -87,6 +72,7 @@ export const NavItems = () => {
       </Link>
     ),
   ];
+
   const StoreMenuItem: MenuProps["items"] = [
     getItem(
       "Dashboard",
@@ -133,24 +119,18 @@ export const NavItems = () => {
       </Link>
     ),
   ];
+
   const AdminStoreMenuItem: MenuProps["items"] = [
-    getItem(
-      "Logo",
-      "sub0",
-      <>
-        <Link className="relative" href={"/"}>
-          {/* <RxDashboard /> */}
-          <ApImage src={Logo} alt="logo" />
-        </Link>
-      </>
-    ),
-    getItem(
-      "",
-      "sub02",
-      <>
-        <Divider />
-      </>
-    ),
+    // getItem(
+    //   "Logo",
+    //   "sub0",
+    //   <>
+    //     <Link className="relative" href={"/"}>
+    //       <ApImage src={Logo} alt="logo" />
+    //     </Link>
+    //   </>
+    // ),
+    // getItem("", "sub02", <Divider />),
     getItem(
       "Dashboard",
       "sub1",

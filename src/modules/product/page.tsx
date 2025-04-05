@@ -5,7 +5,15 @@ import {
   PlusOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { Button, Space, Table, Input, Typography, Popconfirm } from "antd";
+import {
+  Button,
+  Space,
+  Table,
+  Input,
+  Typography,
+  Popconfirm,
+  Image,
+} from "antd";
 import { ColumnsType } from "antd/es/table";
 import { ApModal } from "../../components";
 import { useProductState } from "./context";
@@ -58,7 +66,8 @@ export const ProductPage: React.FC<IProps> = ({ storeId }) => {
       sortDirections: ["descend", "ascend"],
       render: (_, { images }) => (
         <Space className="w-20 h-20">
-          <img
+          <Image
+            preview={false}
             src={images?.[0]?.uri}
             alt={images?.[0]?.uri}
             className="w-full h-full object-cover"
@@ -141,9 +150,11 @@ export const ProductPage: React.FC<IProps> = ({ storeId }) => {
     },
   ];
 
-  const filtered = products?.filter((p) =>
-    p?.name?.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-  );
+  const filtered =
+    products &&
+    products?.filter((p) =>
+      p?.name?.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+    );
   return (
     <>
       <div className="p-4">
