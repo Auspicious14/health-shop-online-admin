@@ -36,7 +36,6 @@ export const SignUpContextProvider: React.FC<IProps> = ({ children }) => {
 
   const handleSignUp = async (user: ISignUp) => {
     setLoading(true);
-    console.log(JSON.stringify(user));
     try {
       const res = await apiReqHandler({
         endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/auth/signup`,
@@ -45,7 +44,6 @@ export const SignUpContextProvider: React.FC<IProps> = ({ children }) => {
       });
       setLoading(false);
       const data = await res.res?.data;
-      console.log(data);
       if (res?.res?.status === 200) {
         if (data.error) {
           toast.error(data.error);
@@ -66,7 +64,6 @@ export const SignUpContextProvider: React.FC<IProps> = ({ children }) => {
       });
 
       const data = res?.res?.data;
-      console.log(data);
       if (data) return data;
     } catch (error: any) {
       toast.error(error);

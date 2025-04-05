@@ -36,14 +36,12 @@ export const CreateStorePage = () => {
   const handleSelectIdImage: UploadProps["onChange"] = ({
     fileList: newFileList,
   }: any) => {
-    console.log(newFileList);
     setFiles(newFileList);
   };
 
   const handleSelectStoreLogo: UploadProps["onChange"] = ({
     fileList: newFileList,
   }: any) => {
-    console.log(newFileList, "newFIleListt");
     setLogos(newFileList);
   };
 
@@ -65,14 +63,11 @@ export const CreateStorePage = () => {
       accountType: "storeOwner",
     };
 
-    console.log(payload, "payload");
     const res = createStore(payload);
     res.then((rs: any) => {
       if (rs) router.push("/auth/login");
     });
   };
-
-  console.log(show);
 
   return (
     <div className="flex justify-between">

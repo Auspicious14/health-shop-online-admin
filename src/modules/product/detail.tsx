@@ -96,12 +96,7 @@ const CreateProductPage: React.FC<IProps> = ({
       });
     }
   };
-  console.log(
-    product?.categories?.map((c) => ({
-      value: c,
-      label: c,
-    }))
-  );
+
   return (
     <div className="w-full px-4">
       <Formik
@@ -111,8 +106,8 @@ const CreateProductPage: React.FC<IProps> = ({
           name: product?.name || "",
           categories: product?.categories
             ? product?.categories?.map((c) => ({
-                value: c,
-                label: c,
+                value: c.name,
+                label: c.name,
               }))
             : [{ value: "", label: "" }],
           quantity: product?.quantity || "",
@@ -156,7 +151,6 @@ const CreateProductPage: React.FC<IProps> = ({
                       label: c.name,
                       value: c.name,
                     }))}
-                    className="block w-full rounded-md py-1.5 px-2 border ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                   />
                   <ApTextInput
                     name="brand"
@@ -181,7 +175,6 @@ const CreateProductPage: React.FC<IProps> = ({
                       { label: "lg", value: "lg" },
                       { label: "xl", value: "xl" },
                     ]}
-                    className="block w-full rounded-md py-1.5 px-2 border ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                   />
                 </Card>
                 <Card className="m-3">

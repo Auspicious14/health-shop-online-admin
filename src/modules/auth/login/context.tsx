@@ -33,7 +33,6 @@ export const SignInContextProvider: React.FC<IProps> = ({ children }) => {
 
   const handleSignIn = async (user: ISignIn) => {
     setLoading(true);
-    console.log(JSON.stringify(user));
     try {
       const response = await apiReqHandler({
         endPoint: `${process.env.NEXT_PUBLIC_API_ROUTE}/auth/login`,
@@ -42,7 +41,6 @@ export const SignInContextProvider: React.FC<IProps> = ({ children }) => {
       });
       setLoading(false);
       const data = await response.res?.data;
-      console.log(data);
       if (response?.res?.status === 200) {
         if (data.error) {
           toast.error(data.error);

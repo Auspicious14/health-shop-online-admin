@@ -157,7 +157,7 @@ export const ProductPage: React.FC<IProps> = ({ storeId }) => {
     );
   return (
     <>
-      <div className="p-4">
+      <div>
         <div className="flex sm:flex-row items-center justify-between shadow-sm mb-4">
           <div className="mb-4 sm:mb-0">
             <h1 className="text-2xl sm:text-3xl font-bold">Products</h1>
