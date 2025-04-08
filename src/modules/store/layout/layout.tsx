@@ -43,7 +43,7 @@ export const StoreLayoutV2: React.FC<IProps> = ({
       {isMobile && (
         <button
           onClick={() => setSidebarOpen(true)}
-          className="fixed top-4 left-4 z-40 p-2 bg-white rounded shadow-lg md:hidden"
+          className="fixed top-0 left-0 z-40 p-2 bg-white rounded shadow-lg md:hidden"
         >
           <MenuOutlined className="text-lg" />
         </button>

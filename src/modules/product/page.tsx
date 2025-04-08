@@ -176,7 +176,7 @@ export const ProductPage: React.FC<IProps> = ({ storeId }) => {
             </Button>
           )}
         </div>
-        <div className="shadow-sm mb-4 py-4 flex flex-col lg:justify-between sm:flex-row items-center">
+        <div className="shadow-sm mb-4 md:py-4 flex flex-col lg:justify-between sm:flex-row md:items-center">
           <h1 className="text-lg sm:text-xl font-bold">All Products</h1>
           <Search
             className="lg:w-60 w-full"
@@ -185,17 +185,17 @@ export const ProductPage: React.FC<IProps> = ({ storeId }) => {
             onChange={(e) => setSearch(e.target.value.toLowerCase())}
           />
         </div>
-        <div className="w-[20rem] sm:w-[30rem] md:w-[28rem] sm:wuto lg:w-full">
+        <div className="overflow-x-auto ">
           <Table
             rowSelection={rowSelection}
             columns={columns}
             dataSource={filtered}
             rowKey={(p) => p._id}
             pagination={{ pageSize: 50 }}
-            scroll={{ x: 350 }}
+            scroll={{ x: 800 }}
             loading={loading}
-            tableLayout="fixed"
-            rowClassName={"w-full"}
+            className="min-w-[800px] max-w-[calc(100vw-2rem)]"
+            size="small"
           />
         </div>
       </div>

@@ -87,16 +87,7 @@ export const OrderPage: React.FC<IProps> = ({ storeId }) => {
         </Space>
       ),
     },
-    {
-      title: "Order Date",
-      key: "createdAt",
-      width: "15%",
-      render: (_, { createdAt }) => (
-        <Text className="block capitalize text-xs sm:text-base">
-          {new Date(createdAt).toDateString()}
-        </Text>
-      ),
-    },
+
     {
       title: "Qty",
       key: "quantity",
@@ -107,7 +98,7 @@ export const OrderPage: React.FC<IProps> = ({ storeId }) => {
             <Text
               key={i}
               className="text-xs sm:text-base"
-            >{`x${c?.product?.quantity}`}</Text>
+            >{`x${c?.quantity}`}</Text>
           ))}
         </Space>
       ),
@@ -116,14 +107,27 @@ export const OrderPage: React.FC<IProps> = ({ storeId }) => {
       title: "Price",
       key: "price",
       width: "15%",
-      render: (_, { cart }) => (
+      render: (_, { amount }) => (
         <Space className="block capitalize ">
-          {cart?.map((c, i) => (
-            <Text key={i} className="text-xs sm:text-base">
-              {c?.product?.product?.price}
-            </Text>
-          ))}
+          <Text className="text-xs sm:text-base">
+            {parseFloat(amount).toLocaleString("en-NG", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              style: "currency",
+              currency: "NGN",
+            })}
+          </Text>
         </Space>
+      ),
+    },
+    {
+      title: "Order Date",
+      key: "createdAt",
+      width: "15%",
+      render: (_, { createdAt }) => (
+        <Text className="block capitalize text-xs sm:text-base">
+          {new Date(createdAt).toDateString()}
+        </Text>
       ),
     },
     {
@@ -193,7 +197,7 @@ export const OrderPage: React.FC<IProps> = ({ storeId }) => {
         </Card.Grid>
       </div>
 
-      <div className="overflow-x-auto px-4">
+      <div className="overflow-x-auto">
         <Table
           rowSelection={rowSelection}
           columns={columns}

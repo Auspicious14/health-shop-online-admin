@@ -24,6 +24,7 @@ interface IProps {
   toggleSidebar: () => void;
   userId: string;
   navItem: any;
+  admin?: boolean;
 }
 
 export const Sidebar: React.FC<IProps> = ({
@@ -32,6 +33,7 @@ export const Sidebar: React.FC<IProps> = ({
   userId,
   navItem,
   center,
+  admin = true,
 }) => {
   const { profile, getProfile } = useProfileState();
   const router = useRouter();
@@ -60,13 +62,15 @@ export const Sidebar: React.FC<IProps> = ({
         ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
       >
         <div className="p-4 border-b flex justify-between items-center">
-          <ApImage
-            src={Logo}
-            alt="logo"
-            width={"200"}
-            height={"200"}
-            className="h-1/2"
-          />
+          <Link href={`${admin ? "/" : "/store"}`}>
+            <ApImage
+              src={Logo}
+              alt="logo"
+              width={"200"}
+              height={"200"}
+              className="h-1/2"
+            />
+          </Link>
           <button
             onClick={toggleSidebar}
             className="md:hidden text-gray-500 hover:text-gray-700"

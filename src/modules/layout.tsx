@@ -33,12 +33,13 @@ export const MainLayout: React.FC<IProps> = ({ userId, children }) => {
         userId={userId}
         navItem={AdminMenuItem}
         center={true}
+        admin
       />
 
       {isMobile && (
         <button
           onClick={() => setSidebarOpen(true)}
-          className="fixed top-4 left-4 z-40 p-2 bg-white rounded shadow-lg md:hidden"
+          className="fixed top-0 left-0 z-40 p-2 bg-white rounded shadow-lg md:hidden"
         >
           <MenuOutlined className="text-lg" />
         </button>
@@ -47,7 +48,7 @@ export const MainLayout: React.FC<IProps> = ({ userId, children }) => {
       <main
         className={`flex-1 transition-all duration-300 ${
           !isMobile ? "ml-64" : ""
-        } overflow-x-hidden`}  // Added overflow-x-hidden
+        } overflow-x-hidden`} // Added overflow-x-hidden
       >
         <div className="p-4 md:p-6 lg:p-0 min-h-screen w-full max-w-[100vw]">
           {children}
