@@ -19,17 +19,22 @@ export const StoreIdentity: React.FC<IProps> = ({
   onPrevious,
 }) => {
   return (
-    <div>
-      <div>
-        <h1 className="font-bold">Upload Business Documents (CAC)</h1>
+    <div className="space-y-8">
+      <div className="space-y-4">
+        <h1 className="text-lg font-semibold text-gray-800">
+          Business Documents
+        </h1>
+        <p className="text-sm py-1"> Upload business documents</p>
         <Files
+          // className="w-full md:w-3/4"
           fileList={idImage}
           handleChange={(res: any) => handleSelectIdImage(res)}
         />
       </div>
 
-      <div className="mt-8">
-        <h1 className="font-bold">Upload Store Logo(s)</h1>
+      <div className="space-y-4 w-full md:w-auto">
+        <h1 className="text-lg font-semibold text-gray-800">Store Branding</h1>
+        <p className="text-sm py-1"> Upload store logo</p>
         <Files
           fileList={storeLogo}
           handleChange={(res: any) => handleSelectStoreLogo(res)}

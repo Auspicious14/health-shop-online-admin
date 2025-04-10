@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { ApBackgroundImage, ApTextInput } from "../../../components";
 import { useStoreState } from "../context";
 import Section from "../../../../public/images/Section.png";
-import { Button, Space, UploadProps } from "antd";
+import { Button, Image, Space, UploadProps } from "antd";
 import { StoreBasicInfo } from "./create/basic-info";
 import { StoreIdentity } from "./create/identity";
 import { IStoreFile } from "../model";
@@ -13,6 +13,7 @@ import { FormSchema } from "./create/validation";
 import { StoreBusinessInfo } from "./create/business-info";
 import { SocialMedia, SocialMediaDetail } from "./create/social-media";
 import { StorePayment } from "./create/payment";
+import VendifyLogo from "../../../../public/images/vendify logo white.jpg";
 
 export const CreateStorePage = () => {
   const { createStore, loading } = useStoreState();
@@ -70,11 +71,25 @@ export const CreateStorePage = () => {
   };
 
   return (
-    <div className="flex justify-between">
-      <div className="ml-4 mt-12 w-1/2">
-        <h2 className="my-6  text-center text-3xl font-bold tracking-tight text-gray-900">
-          Sign up
-        </h2>
+    <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
+      <div className="md:max-w-2xl mx-auto w-full p-4 md:p-6">
+        <div className="mb-8 text-center">
+          <Image
+            preview={false}
+            src={VendifyLogo.src}
+            alt="Vendify Logo"
+            // width={200}
+            height={100}
+            // className="w-20 h-20 md:w-40 md:h-40 mx-auto mb-4"
+          />
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+            Join Vendify Marketplace
+          </h2>
+          <p className="text-gray-600 mt-2 text-sm md:text-base">
+            Create Your Seller Account in Minutes
+          </p>
+        </div>
+
         <Formik
           initialValues={{
             firstName: "",
@@ -98,7 +113,7 @@ export const CreateStorePage = () => {
           onSubmit={handleSubmit}
         >
           {(props: FormikProps<any>) => (
-            <Form className=" Form card px-4 ">
+            <Form className="space-y-6 px-4">
               {show.type === "basic-info" && (
                 <StoreBasicInfo
                   onPrevious={() => handleRoute("basic-info")}
@@ -136,14 +151,15 @@ export const CreateStorePage = () => {
                       },
                     ])
                   }
-                  onRemove={(index: number) =>
+                  onRemove={(index: number) => {
+                    if (props?.values?.socialMedia?.length <= 1) return;
                     props.setFieldValue(
                       "socialMedia",
-                      props?.values?.socialMedia?.filter(
-                        (s: any, i: number) => i != index
+                      props.values.socialMedia.filter(
+                        (s: any, i: number) => i !== index
                       )
-                    )
-                  }
+                    );
+                  }}
                   socialMediaForm={props.values.socialMedia}
                 />
               )}
@@ -160,7 +176,7 @@ export const CreateStorePage = () => {
                   size="large"
                   htmlType="submit"
                   loading={loading}
-                  className="group relative flex w-full justify-center rounded-md bg-[#2158E8] px-3 py-2 my-4 text-sm font-semibold text-white hover:bg-blue-500"
+                  className="w-full md:w-auto text-sm md:text-base px-4 py-2"
                 >
                   Sign up
                 </Button>
@@ -169,7 +185,7 @@ export const CreateStorePage = () => {
           )}
         </Formik>
       </div>
-      <ApBackgroundImage src={Section.src} />
+      <ApBackgroundImage src={Section.src} className="!hidden !md:block" />
     </div>
   );
 };

@@ -58,6 +58,7 @@ export const SocialMediaDetail: React.FC<IProps> = ({
       </Space>
       <div className="flex flex-col gap-3 md:w-full">
         <ApTextInput
+          // className="w-full rounded-lg border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 transition-all"
           label="Platform"
           name={`socialMedia[${index}].platform`}
           type="text"

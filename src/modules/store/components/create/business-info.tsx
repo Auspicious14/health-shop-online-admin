@@ -24,10 +24,10 @@ export const StoreBusinessInfo: React.FC<IProps> = ({ onNext, onPrevious }) => {
   };
 
   return (
-    <div>
-      <Space className="w-full grid grid-cols-2 my-4">
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <ApTextInput
-          className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
+          className="w-full rounded-lg border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 transition-all"
           label="Store Name"
           name="storeName"
           type="text"
@@ -40,8 +40,8 @@ export const StoreBusinessInfo: React.FC<IProps> = ({ onNext, onPrevious }) => {
           type="text"
           placeHolder="089192929"
         />
-      </Space>
-      <Space className="w-full grid grid-cols-2 my-4">
+      </div>
+      <Space className="w-full grid grid-cols-1 md:grid-cols-2 my-4">
         <ApTextInput
           className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
           label="Store Phone Number"
@@ -57,7 +57,7 @@ export const StoreBusinessInfo: React.FC<IProps> = ({ onNext, onPrevious }) => {
           placeHolder="+2347*********"
         />
       </Space>
-      <Space className="w-full grid grid-cols-2 my-4">
+      <Space className="w-full grid grid-cols-1 md:grid-cols-2 my-4">
         <ApTextInput
           className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
           label="Store Address"
@@ -73,7 +73,7 @@ export const StoreBusinessInfo: React.FC<IProps> = ({ onNext, onPrevious }) => {
           placeHolder="No 4. John Doe street"
         />
       </Space>
-      <Space className="w-full grid grid-cols-2 my-4">
+      <Space className="w-full grid grid-cols-1 md:grid-cols-2 my-4">
         <ApTextInput
           className="relative block w-full rounded-md border-0 py-1.5 px-2 outline-blue-500  ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6"
           label="Store Description"
@@ -89,7 +89,11 @@ export const StoreBusinessInfo: React.FC<IProps> = ({ onNext, onPrevious }) => {
           placeHolder=""
         />
       </Space>
-      <StoreFormRoute onNext={handleNext} onPrevious={onPrevious} />
+      <StoreFormRoute
+        onNext={handleNext}
+        onPrevious={onPrevious}
+        // className="mt-8"
+      />
     </div>
   );
 };
