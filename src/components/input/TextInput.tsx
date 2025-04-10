@@ -8,6 +8,7 @@ interface IProps {
   className?: string;
   placeHolder?: string;
   sideLabel?: string;
+  helperText?: string;
   // onChange?:(value:string)=>void;
   props?: {
     [x: string]: any;
@@ -23,6 +24,7 @@ export const ApTextInput: React.FC<IProps> = ({
   placeHolder,
   containerClass,
   sideLabel,
+  helperText,
   ...props
 }) => {
   const [field, meta] = useField(name);
@@ -54,7 +56,7 @@ export const ApTextInput: React.FC<IProps> = ({
           placeholder={placeHolder}
         />
       )}
-
+      {helperText && <p className="text-sm py-2">{helperText}</p>}
       <ErrorMessage className="text-red-500" name={name} component="div" />
     </div>
   );

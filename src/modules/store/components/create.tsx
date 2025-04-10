@@ -185,7 +185,10 @@ export const CreateStorePage = () => {
           )}
         </Formik>
       </div>
-      <ApBackgroundImage src={Section.src} className="!hidden !md:block" />
+      <ApBackgroundImage
+        src={Section.src}
+        className="hidden md:block h-full w-full object-cover"
+      />
     </div>
   );
 };

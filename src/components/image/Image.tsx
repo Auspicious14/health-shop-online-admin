@@ -25,23 +25,22 @@ export const ApBackgroundImage: React.FC<IImageProps> = ({
   src,
 }) => {
   return (
-    <>
+    <div className={className}>
       <div
         style={{
           backgroundImage: `url(${src})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
-          width: "50%",
-          height: "38.5rem",
+          width: "100%",
+          height: "100%",
           margin: "0%",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}
-        className={className}
       >
         {children}
       </div>
-    </>
+    </div>
   );
 };

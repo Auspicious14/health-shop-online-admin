@@ -56,14 +56,15 @@ export const StoreBasicInfo: React.FC<IProps> = ({ onNext, onPrevious }) => {
           label="Password"
           name="password"
           type="password"
-          placeHolder="*******"
+          placeHolder="At least 8 characters"
+          helperText="Must contain: uppercase, lowercase, number, and special character"
         />
         <ApTextInput
           className="w-full rounded-lg border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 transition-all"
           label="Confirm Password"
           name="confirmPassword"
           type="password"
-          placeHolder="*******"
+          placeHolder="Re-enter your password"
         />
       </div>
 

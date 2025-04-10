@@ -70,7 +70,7 @@ export const StoreBusinessInfo: React.FC<IProps> = ({ onNext, onPrevious }) => {
           label="Store Type"
           name="storeType"
           type="text"
-          placeHolder="No 4. John Doe street"
+          placeHolder=""
         />
       </Space>
       <Space className="w-full grid grid-cols-1 md:grid-cols-2 my-4">

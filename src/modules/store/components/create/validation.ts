@@ -7,10 +7,19 @@ export const PersonalInfoSchema = Yup.object().shape({
     .email("Valid email is required")
     .required("Email is required"),
   // otp: Yup.string().required("OTP is required"),
-  password: Yup.string().required("Password is required"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(8, "Must be at least 8 characters")
+    .matches(/[A-Z]/, "Requires at least one uppercase letter")
+    .matches(/[a-z]/, "Requires at least one lowercase letter")
+    .matches(/[0-9]/, "Requires at least one number")
+    .matches(/[\W_]/, "Requires at least one special character"),
   confirmPassword: Yup.string()
     .required("Confirm password is required")
-    .oneOf([Yup.ref("password")], "Passwords must match"),
+    .oneOf(
+      [Yup.ref("password")],
+      "Passwords must match and meet the requirements"
+    ),
 });
 
 // export const AddressSchema = Yup.object().shape({
